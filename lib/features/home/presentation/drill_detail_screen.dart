@@ -7,7 +7,9 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../app/theme/sphere_colors.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../data/drill_completion_repository.dart';
 import '../domain/drill.dart';
+import '../domain/drill_completion_result.dart';
 import '_widgets/sphere_section_label.dart';
 import 'drill_detail_providers.dart';
 
@@ -107,6 +109,9 @@ class DrillDetailScreen extends ConsumerWidget {
                 : () => _openYoutube(context, drill.youtubeUrl!),
             onStartPractice: () =>
                 context.push('/train/drill/${drill.id}/play'),
+            onMarkComplete: () => ref
+                .read(drillCompletionRepositoryProvider)
+                .markComplete(drillId: drill.id),
           );
         },
         loading: () => const Center(
@@ -125,7 +130,7 @@ class DrillDetailScreen extends ConsumerWidget {
   }
 }
 
-class _Content extends StatelessWidget {
+class _Content extends StatefulWidget {
   const _Content({
     required this.drill,
     required this.categoryLabel,
@@ -133,6 +138,7 @@ class _Content extends StatelessWidget {
     required this.onBack,
     required this.onOpenYoutube,
     required this.onStartPractice,
+    required this.onMarkComplete,
   });
 
   final Drill drill;
@@ -141,6 +147,141 @@ class _Content extends StatelessWidget {
   final VoidCallback onBack;
   final VoidCallback? onOpenYoutube;
   final VoidCallback onStartPractice;
+  final Future<DrillCompletionResult> Function() onMarkComplete;
+
+  @override
+  State<_Content> createState() => _ContentState();
+}
+
+class _ContentState extends State<_Content> {
+  bool _completedToday = false;
+  bool _marking = false;
+  DrillCompletionResult? _result;
+
+  Future<void> _handleMarkComplete() async {
+    setState(() => _marking = true);
+    try {
+      final result = await widget.onMarkComplete();
+      setState(() {
+        _result = result;
+        _completedToday = true;
+        _marking = false;
+      });
+      if (mounted) _showCelebration(result);
+    } on DrillAlreadyCompletedToday {
+      setState(() {
+        _completedToday = true;
+        _marking = false;
+      });
+    } catch (e) {
+      setState(() => _marking = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Could not mark as watched. Try again.')),
+        );
+      }
+    }
+  }
+
+  void _showCelebration(DrillCompletionResult result) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: SphereColors.surfaceElev1,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.fromLTRB(24, 28, 24, 40),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: SphereColors.primary.withValues(alpha: 0.15),
+                border: Border.all(
+                    color: SphereColors.primary.withValues(alpha: 0.4)),
+              ),
+              child: const Icon(LucideIcons.checkCircle2,
+                  color: SphereColors.primary, size: 32),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '+${result.pointsEarned} pts',
+              style: const TextStyle(
+                color: SphereColors.primary,
+                fontSize: 28,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Drill watched. Keep it up!',
+              style: TextStyle(
+                  color: SphereColors.onSurfaceMuted, fontSize: 14),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(LucideIcons.flame,
+                    size: 16, color: SphereColors.warning),
+                const SizedBox(width: 4),
+                Text(
+                  '${result.currentStreak} day streak',
+                  style: const TextStyle(
+                    color: SphereColors.onSurface,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                if (result.isNewBest) ...[
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: SphereColors.primary.withValues(alpha: 0.18),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Text(
+                      'Personal Best',
+                      style: TextStyle(
+                        color: SphereColors.primary,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: SphereColors.primary,
+                  foregroundColor: Colors.black,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: SphereRadius.pillRect),
+                  elevation: 0,
+                ),
+                child: const Text('Continue',
+                    style: TextStyle(fontWeight: FontWeight.w700)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,9 +296,9 @@ class _Content extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              if (videoId != null)
+              if (widget.videoId != null)
                 Image.network(
-                  'https://img.youtube.com/vi/$videoId/maxresdefault.jpg',
+                  'https://img.youtube.com/vi/${widget.videoId}/maxresdefault.jpg',
                   fit: BoxFit.cover,
                   errorBuilder: (_, _, _) => _gradient(),
                 )
@@ -179,14 +320,14 @@ class _Content extends StatelessWidget {
                 ),
               ),
               // Play button overlay
-              if (videoId != null && onOpenYoutube != null)
+              if (widget.videoId != null && widget.onOpenYoutube != null)
                 Center(
                   child: Material(
                     color: SphereColors.primary,
                     shape: const CircleBorder(),
                     elevation: 6,
                     child: InkWell(
-                      onTap: onOpenYoutube,
+                      onTap: widget.onOpenYoutube,
                       customBorder: const CircleBorder(),
                       child: const Padding(
                         padding: EdgeInsets.all(18),
@@ -209,18 +350,19 @@ class _Content extends StatelessWidget {
             padding: const EdgeInsets.all(SphereSpacing.x16),
             child: _CircleIconButton(
               icon: LucideIcons.chevronLeft,
-              onTap: onBack,
+              onTap: widget.onBack,
             ),
           ),
         ),
 
-        // Scrollable content
+        // Scrollable content — extra bottom padding for two buttons
         Padding(
-          padding: const EdgeInsets.only(bottom: 170),
+          padding: const EdgeInsets.only(bottom: 220),
           child: SingleChildScrollView(
             padding: const EdgeInsets.only(top: 220),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x24),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: SphereSpacing.x24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -238,13 +380,13 @@ class _Content extends StatelessWidget {
                           spacing: 8,
                           runSpacing: 8,
                           children: [
-                            _Pill(text: categoryLabel),
-                            _Pill(text: 'Level ${drill.difficulty}'),
+                            _Pill(text: widget.categoryLabel),
+                            _Pill(text: 'Level ${widget.drill.difficulty}'),
                           ],
                         ),
                         const SizedBox(height: SphereSpacing.x12),
                         Text(
-                          drill.name,
+                          widget.drill.name,
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium
@@ -253,22 +395,24 @@ class _Content extends StatelessWidget {
                                 fontWeight: FontWeight.w700,
                               ),
                         ),
-                        if (drill.description.isNotEmpty) ...[
+                        if (widget.drill.description.isNotEmpty) ...[
                           const SizedBox(height: SphereSpacing.x12),
                           Text(
-                            drill.description,
-                            style:
-                                Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: SphereColors.onSurfaceMuted,
-                                      height: 1.5,
-                                    ),
+                            widget.drill.description,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: SphereColors.onSurfaceMuted,
+                                  height: 1.5,
+                                ),
                           ),
                         ],
                       ],
                     ),
                   ),
 
-                  if (drill.targetAttributes.isNotEmpty) ...[
+                  if (widget.drill.targetAttributes.isNotEmpty) ...[
                     const SizedBox(height: SphereSpacing.x24),
                     const SphereSectionLabel('Builds'),
                     const SizedBox(height: SphereSpacing.x12),
@@ -276,7 +420,7 @@ class _Content extends StatelessWidget {
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        for (final attr in drill.targetAttributes)
+                        for (final attr in widget.drill.targetAttributes)
                           _AttributeChip(
                             label: attr
                                 .replaceAll('_', ' ')
@@ -295,7 +439,54 @@ class _Content extends StatelessWidget {
           ),
         ),
 
-        // Sticky CTA
+        // "Mark as watched" button (outline, above Start Practice)
+        Positioned(
+          left: SphereSpacing.x16,
+          right: SphereSpacing.x16,
+          bottom: 170,
+          child: SizedBox(
+            height: 48,
+            child: OutlinedButton.icon(
+              onPressed:
+                  _completedToday || _marking ? null : _handleMarkComplete,
+              icon: _completedToday
+                  ? const Icon(LucideIcons.checkCircle2,
+                      size: 16, color: SphereColors.primary)
+                  : _marking
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation(
+                                SphereColors.primary),
+                          ),
+                        )
+                      : const Icon(LucideIcons.eye, size: 16),
+              label: Text(
+                _completedToday
+                    ? 'Watched (+${_result?.pointsEarned ?? 10} pts)'
+                    : 'Mark as watched',
+              ),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: _completedToday
+                    ? SphereColors.primary
+                    : SphereColors.onSurface,
+                side: BorderSide(
+                  color: _completedToday
+                      ? SphereColors.primary
+                      : SphereColors.borderSubtle,
+                ),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: SphereRadius.pillRect),
+                textStyle: const TextStyle(
+                    fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
+        ),
+
+        // "Start Practice" CTA (filled, below)
         Positioned(
           left: SphereSpacing.x16,
           right: SphereSpacing.x16,
@@ -303,7 +494,7 @@ class _Content extends StatelessWidget {
           child: SizedBox(
             height: 52,
             child: ElevatedButton.icon(
-              onPressed: onStartPractice,
+              onPressed: widget.onStartPractice,
               icon: const Icon(LucideIcons.play, size: 18),
               label: const Text('Start Practice'),
               style: ElevatedButton.styleFrom(
