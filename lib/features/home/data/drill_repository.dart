@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../domain/drill.dart';
 import '../domain/today_drill.dart';
 import '_daily_seed.dart';
 
@@ -24,6 +25,45 @@ class DrillRepository {
       id: pick.id,
       name: (data['name'] as String?) ?? 'Drill',
       difficulty: (data['difficulty'] as int?) ?? 1,
+    );
+  }
+
+  Stream<List<Drill>> listDrillsStream() {
+    return _db.collection('drills').snapshots().map((snap) {
+      final list = snap.docs.map(_fromFullDoc).toList();
+      list.sort((a, b) => a.difficulty.compareTo(b.difficulty));
+      return list;
+    });
+  }
+
+  Future<Drill?> drillById(String id) async {
+    final doc = await _db.collection('drills').doc(id).get();
+    if (!doc.exists) return null;
+    final data = doc.data();
+    if (data == null) return null;
+    return _fromFullMap(doc.id, data);
+  }
+
+  Drill _fromFullDoc(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+    return _fromFullMap(doc.id, doc.data());
+  }
+
+  Drill _fromFullMap(String id, Map<String, dynamic> data) {
+    final attrs = data['targetAttributes'];
+    final attrList = (attrs is List)
+        ? attrs.cast<String>().toList()
+        : const <String>[];
+    return Drill(
+      id: id,
+      name: (data['name'] as String?)?.isNotEmpty == true
+          ? data['name'] as String
+          : 'Untitled drill',
+      category: (data['category'] as String?) ?? '',
+      difficulty: (data['difficulty'] as int?) ?? 1,
+      youtubeUrl: data['youtubeUrl'] as String?,
+      description: (data['description'] as String?) ?? '',
+      targetAttributes: attrList,
+      iconName: data['iconName'] as String?,
     );
   }
 }
