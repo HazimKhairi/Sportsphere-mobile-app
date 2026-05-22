@@ -13,6 +13,7 @@ import '../features/home/presentation/drill_detail_screen.dart';
 import '../features/home/presentation/drill_player_screen.dart';
 import '../features/home/presentation/home_shell.dart';
 import '../features/home/presentation/player_home_screen.dart';
+import '../features/home/presentation/points_screen.dart';
 import '../features/home/presentation/rewards_screen.dart';
 import '../features/home/presentation/staff_home_screen.dart';
 import '../features/home/presentation/train_screen.dart';
@@ -180,6 +181,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/profile/rewards',
             builder: (_, _) => const RewardsScreen(),
+          ),
+          GoRoute(
+            path: '/profile/points',
+            builder: (_, _) => const PointsScreen(),
           ),
           GoRoute(
             path: '/profile/payments',

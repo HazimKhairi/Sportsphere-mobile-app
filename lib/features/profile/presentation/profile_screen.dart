@@ -99,6 +99,12 @@ class ProfileScreen extends ConsumerWidget {
                           GoRouter.of(context).push('/profile/rewards'),
                     ),
                     ProfileRow(
+                      icon: LucideIcons.star,
+                      label: 'Points & History',
+                      onTap: () =>
+                          GoRouter.of(context).push('/profile/points'),
+                    ),
+                    ProfileRow(
                       icon: LucideIcons.award,
                       label: 'Achievements',
                       onTap: () =>
