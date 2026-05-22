@@ -228,15 +228,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             // as a neutral browser/Google substitute.
                             icon: LucideIcons.globe,
                             label: 'Google',
-                            disabled: true,
-                            onTap: () => _showComingSoon(context),
+                            disabled: _busy,
+                            onTap: _busy ? () {} : _signInWithGoogle,
                           ),
                           const SizedBox(width: SphereSpacing.x12),
                           _SocialPill(
                             icon: LucideIcons.apple,
                             label: 'Apple',
                             disabled: true,
-                            onTap: () => _showComingSoon(context),
+                            onTap: () => _showAppleComingSoon(context),
                           ),
                         ],
                       ),
@@ -274,9 +274,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  void _showComingSoon(BuildContext context) {
+  Future<void> _signInWithGoogle() async {
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      await ref.read(authRepositoryProvider).signInWithGoogle();
+      // Router redirect will take over.
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Google Sign-In failed: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  void _showAppleComingSoon(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Coming soon.')),
+      const SnackBar(
+        content: Text('Apple Sign-In available after enrollment.'),
+      ),
     );
   }
 }
