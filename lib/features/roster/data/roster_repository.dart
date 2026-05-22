@@ -84,6 +84,40 @@ class RosterRepository {
     }
   }
 
+  Future<PlayerCard> createPlayer({
+    required String clubId,
+    required String firstName,
+    required String lastName,
+    String? email,
+    String? phone,
+    String? position,
+  }) async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        '/api/players/mobile',
+        data: {
+          'firstName': firstName,
+          'lastName': lastName,
+          if (email != null && email.isNotEmpty) 'email': email,
+          if (phone != null && phone.isNotEmpty) 'phone': phone,
+          if (position != null && position.isNotEmpty) 'position': position,
+        },
+        options: Options(headers: {'X-Club-Id': clubId}),
+      );
+      final data = res.data ?? const <String, dynamic>{};
+      final p = (data['player'] as Map<String, dynamic>?) ?? data;
+      return _fromJson(p);
+    } on DioException catch (e) {
+      throw RosterException(
+        e.response?.data is Map
+            ? (e.response!.data as Map)['error']?.toString() ??
+                'Failed to create player'
+            : 'Failed to create player',
+        statusCode: e.response?.statusCode,
+      );
+    }
+  }
+
   PlayerCard _fromJson(Map<String, dynamic> e) {
     return PlayerCard(
       id: e['id'] as String? ?? '',

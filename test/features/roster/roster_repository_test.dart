@@ -94,6 +94,109 @@ void main() {
     );
   });
 
+  // ---------------------------------------------------------------------------
+  // createPlayer
+  // ---------------------------------------------------------------------------
+
+  test('createPlayer success', () async {
+    when(() => dio.post<Map<String, dynamic>>(
+          '/api/players/mobile',
+          data: any(named: 'data'),
+          options: any(named: 'options'),
+        )).thenAnswer((_) async => Response(
+              requestOptions: RequestOptions(path: '/api/players/mobile'),
+              statusCode: 201,
+              data: {
+                'player': {
+                  'id': 'new1',
+                  'firstName': 'Ahmad',
+                  'lastName': 'Zulkifli',
+                  'email': 'ahmad@example.com',
+                  'phone': '+601123456789',
+                  'position': 'Midfielder',
+                  'teamName': '',
+                  'photoUrl': null,
+                  'dateOfBirth': null,
+                }
+              },
+            ));
+
+    final result = await repo.createPlayer(
+      clubId: 'club123',
+      firstName: 'Ahmad',
+      lastName: 'Zulkifli',
+      email: 'ahmad@example.com',
+    );
+
+    expect(result.fullName, 'Ahmad Zulkifli');
+    expect(result.id, 'new1');
+  });
+
+  test('createPlayer sends X-Club-Id header', () async {
+    Options? capturedOptions;
+
+    when(() => dio.post<Map<String, dynamic>>(
+          '/api/players/mobile',
+          data: any(named: 'data'),
+          options: any(named: 'options'),
+        )).thenAnswer((invocation) async {
+      capturedOptions = invocation.namedArguments[#options] as Options;
+      return Response(
+        requestOptions: RequestOptions(path: '/api/players/mobile'),
+        statusCode: 201,
+        data: {
+          'player': {
+            'id': 'x',
+            'firstName': 'A',
+            'lastName': 'B',
+            'email': '',
+            'phone': '',
+            'position': '',
+            'teamName': '',
+            'photoUrl': null,
+            'dateOfBirth': null,
+          }
+        },
+      );
+    });
+
+    await repo.createPlayer(
+      clubId: 'club123',
+      firstName: 'A',
+      lastName: 'B',
+    );
+
+    expect(capturedOptions, isNotNull);
+    expect(capturedOptions!.headers, isNotNull);
+    expect(capturedOptions!.headers!['X-Club-Id'], 'club123');
+  });
+
+  test('createPlayer propagates RosterException on 400', () async {
+    when(() => dio.post<Map<String, dynamic>>(
+          '/api/players/mobile',
+          data: any(named: 'data'),
+          options: any(named: 'options'),
+        )).thenThrow(DioException(
+          requestOptions: RequestOptions(path: '/api/players/mobile'),
+          response: Response(
+            requestOptions: RequestOptions(path: '/api/players/mobile'),
+            statusCode: 400,
+            data: {'error': 'Email already exists'},
+          ),
+          type: DioExceptionType.badResponse,
+        ));
+
+    expect(
+      () => repo.createPlayer(
+        clubId: 'club123',
+        firstName: 'A',
+        lastName: 'B',
+        email: 'dup@example.com',
+      ),
+      throwsA(isA<RosterException>()),
+    );
+  });
+
   test('getPlayer success', () async {
     when(() => dio.get<Map<String, dynamic>>(
           '/api/players/abc',
