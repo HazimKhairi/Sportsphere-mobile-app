@@ -32,6 +32,7 @@ import '../features/schedule/presentation/qr_scan_screen.dart';
 import '../features/schedule/presentation/schedule_screen.dart';
 import '../features/schedule/presentation/session_detail_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
+import '../features/roster/presentation/roster_screen.dart';
 import '../features/sphere_ai/presentation/sphere_ai_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -211,6 +212,25 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/sphere-ai',
             builder: (_, _) => const SphereAiScreen(),
+          ),
+          GoRoute(
+            path: '/staff/roster',
+            builder: (_, _) => const RosterScreen(),
+          ),
+          GoRoute(
+            path: '/staff/roster/:id',
+            builder: (_, state) {
+              final id = state.pathParameters['id']!;
+              return Scaffold(
+                body: Center(child: Text('Player $id — Phase 4-A2')),
+              );
+            },
+          ),
+          GoRoute(
+            path: '/staff/approvals',
+            builder: (_, _) => const Scaffold(
+              body: Center(child: Text('Approvals coming soon')),
+            ),
           ),
         ],
       ),

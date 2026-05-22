@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../app/theme/sphere_colors.dart';
@@ -122,7 +123,7 @@ class StaffHomeScreen extends ConsumerWidget {
                         SphereQuickActionChip(
                           icon: LucideIcons.scanLine,
                           label: 'Take attendance',
-                          onTap: () {},
+                          onTap: () => context.go('/schedule'),
                         ),
                         const SizedBox(width: 8),
                         SphereQuickActionChip(
@@ -164,7 +165,9 @@ class StaffHomeScreen extends ConsumerWidget {
                 const SizedBox(height: SphereSpacing.x16),
                 SphereEntrance(
                   delayMs: 340,
-                  child: Container(
+                  child: GestureDetector(
+                    onTap: () => context.push('/staff/roster'),
+                    child: Container(
                     padding: const EdgeInsets.all(SphereSpacing.x20),
                     decoration: BoxDecoration(
                       color: SphereColors.surfaceElev1,
@@ -200,6 +203,7 @@ class StaffHomeScreen extends ConsumerWidget {
                             color: SphereColors.primary, size: 20),
                       ],
                     ),
+                  ),
                   ),
                 ),
               ],
