@@ -57,3 +57,9 @@ class RosterNotifier extends _$RosterNotifier {
 
 @riverpod
 String rosterSearchQuery(RosterSearchQueryRef ref) => '';
+
+@riverpod
+Future<PlayerDetail> playerDetail(PlayerDetailRef ref,
+    {required String playerId}) {
+  return ref.watch(rosterRepositoryProvider).getPlayer(id: playerId);
+}
