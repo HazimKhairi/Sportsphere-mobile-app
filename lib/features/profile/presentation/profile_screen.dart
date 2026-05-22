@@ -10,6 +10,7 @@ import '../../auth/presentation/auth_providers.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../../role_pick/presentation/role_providers.dart';
+import '../data/photo_upload_repository.dart';
 import '_widgets/profile_row.dart';
 import '_widgets/profile_section_card.dart';
 import '_widgets/sign_out_dialog.dart';
@@ -69,6 +70,7 @@ class ProfileScreen extends ConsumerWidget {
                   email: email,
                   initials: _initialsFrom(displayName),
                   roleLabel: roleLabel,
+                  photoUrl: user?.photoUrl,
                 ),
                 const SizedBox(height: SphereSpacing.x32),
 
@@ -209,18 +211,92 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-class _IdentityCard extends StatelessWidget {
+class _IdentityCard extends ConsumerStatefulWidget {
   const _IdentityCard({
     required this.displayName,
     required this.email,
     required this.initials,
     required this.roleLabel,
+    this.photoUrl,
   });
 
   final String displayName;
   final String email;
   final String initials;
   final String roleLabel;
+  final String? photoUrl;
+
+  @override
+  ConsumerState<_IdentityCard> createState() => _IdentityCardState();
+}
+
+class _IdentityCardState extends ConsumerState<_IdentityCard> {
+  bool _uploading = false;
+
+  Future<void> _pickAndUpload(bool fromCamera) async {
+    final repo = ref.read(photoUploadRepositoryProvider);
+    final file = await repo.pickPhoto(fromCamera: fromCamera);
+    if (file == null || !mounted) return;
+    setState(() => _uploading = true);
+    try {
+      await repo.uploadPhoto(file);
+      if (mounted) {
+        ref.invalidate(currentUserProvider);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Photo upload failed. Try again.')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _uploading = false);
+    }
+  }
+
+  void _showPhotoOptions() {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: SphereColors.surfaceElev1,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: SphereColors.borderSubtle,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ListTile(
+              leading: const Icon(LucideIcons.camera, color: SphereColors.onSurface),
+              title: const Text('Take photo', style: TextStyle(color: SphereColors.onSurface)),
+              onTap: () {
+                Navigator.pop(context);
+                _pickAndUpload(true);
+              },
+            ),
+            ListTile(
+              leading: const Icon(LucideIcons.image, color: SphereColors.onSurface),
+              title: const Text('Choose from gallery', style: TextStyle(color: SphereColors.onSurface)),
+              onTap: () {
+                Navigator.pop(context);
+                _pickAndUpload(false);
+              },
+            ),
+            const SizedBox(height: 12),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -241,24 +317,83 @@ class _IdentityCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 72,
-            height: 72,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: SphereColors.primary.withValues(alpha: 0.18),
-              border: Border.all(
-                color: SphereColors.primary.withValues(alpha: 0.4),
-                width: 1,
-              ),
-            ),
-            child: Text(
-              initials,
-              style: const TextStyle(
-                color: SphereColors.primary,
-                fontSize: 24,
-                fontWeight: FontWeight.w800,
+          GestureDetector(
+            onTap: _showPhotoOptions,
+            child: SizedBox(
+              width: 72,
+              height: 72,
+              child: Stack(
+                children: [
+                  Container(
+                    width: 72,
+                    height: 72,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: SphereColors.primary.withValues(alpha: 0.18),
+                      border: Border.all(
+                        color: SphereColors.primary.withValues(alpha: 0.4),
+                        width: 1,
+                      ),
+                    ),
+                    child: widget.photoUrl != null && !_uploading
+                        ? ClipOval(
+                            child: Image.network(
+                              widget.photoUrl!,
+                              width: 72,
+                              height: 72,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, e, s) => Text(
+                                widget.initials,
+                                style: const TextStyle(
+                                  color: SphereColors.primary,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                          )
+                        : _uploading
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+                                ),
+                              )
+                            : Text(
+                                widget.initials,
+                                style: const TextStyle(
+                                  color: SphereColors.primary,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                  ),
+                  if (!_uploading)
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: SphereColors.primary,
+                          border: Border.all(
+                            color: SphereColors.surface,
+                            width: 2,
+                          ),
+                        ),
+                        child: const Icon(
+                          LucideIcons.pencil,
+                          size: 10,
+                          color: SphereColors.onPrimary,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
@@ -268,7 +403,7 @@ class _IdentityCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  displayName,
+                  widget.displayName,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: SphereColors.onSurface,
                         fontWeight: FontWeight.w700,
@@ -287,7 +422,7 @@ class _IdentityCard extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    roleLabel.toUpperCase(),
+                    widget.roleLabel.toUpperCase(),
                     style: const TextStyle(
                       color: SphereColors.primary,
                       fontSize: 10,
@@ -296,10 +431,10 @@ class _IdentityCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (email.isNotEmpty) ...[
+                if (widget.email.isNotEmpty) ...[
                   const SizedBox(height: 8),
                   Text(
-                    email,
+                    widget.email,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: SphereColors.onSurfaceMuted,
                         ),
