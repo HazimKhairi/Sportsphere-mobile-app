@@ -19,5 +19,12 @@ class AuthRepository {
     });
   }
 
+  Future<void> signInWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    await _auth.signInWithEmailAndPassword(email: email, password: password);
+  }
+
   Future<void> signOut() => _auth.signOut();
 }
