@@ -87,6 +87,12 @@ class ProfileScreen extends ConsumerWidget {
                       onTap: () => GoRouter.of(context).push('/programs'),
                     ),
                     ProfileRow(
+                      icon: LucideIcons.receipt,
+                      label: 'Payment history',
+                      onTap: () =>
+                          GoRouter.of(context).push('/profile/payments'),
+                    ),
+                    ProfileRow(
                       icon: LucideIcons.arrowRightLeft,
                       label: 'Switch club',
                       onTap: () => SwitchClubSheet.show(context),

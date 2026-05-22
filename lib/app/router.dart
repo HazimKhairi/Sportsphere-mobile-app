@@ -10,6 +10,7 @@ import '../features/home/presentation/staff_home_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/payments/presentation/cash_pay_screen.dart';
 import '../features/payments/presentation/payment_failure_screen.dart';
+import '../features/payments/presentation/payment_history_screen.dart';
 import '../features/payments/presentation/payment_success_screen.dart';
 import '../features/profile/presentation/profile_screen.dart';
 import '../features/programs/presentation/program_detail_screen.dart';
@@ -121,6 +122,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/profile',
             builder: (_, _) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: '/profile/payments',
+            builder: (_, _) => const PaymentHistoryScreen(),
           ),
           GoRoute(
             path: '/programs',
