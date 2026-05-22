@@ -11,6 +11,7 @@ import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../../role_pick/presentation/role_providers.dart';
 import '_widgets/profile_row.dart';
 import '_widgets/profile_section_card.dart';
+import 'switch_club_sheet.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -80,7 +81,7 @@ class ProfileScreen extends ConsumerWidget {
                     ProfileRow(
                       icon: LucideIcons.arrowRightLeft,
                       label: 'Switch club',
-                      onTap: () => _comingSoon(context, 'Switch club (T13)'),
+                      onTap: () => SwitchClubSheet.show(context),
                     ),
                     ProfileRow(
                       icon: LucideIcons.bell,
