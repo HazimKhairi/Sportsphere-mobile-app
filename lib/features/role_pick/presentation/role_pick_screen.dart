@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../app/theme/sphere_colors.dart';
+import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
-import '../../../core/widgets/role_switcher_card.dart';
 import 'role_providers.dart';
 
 class RolePickScreen extends ConsumerWidget {
@@ -13,46 +14,222 @@ class RolePickScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      backgroundColor: SphereColors.surface,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(SphereSpacing.x24),
+          padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x24),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: SphereSpacing.x16),
+              const SizedBox(height: SphereSpacing.x8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _CircleIconButton(
+                    icon: LucideIcons.chevronLeft,
+                    onTap: () {
+                      if (context.canPop()) {
+                        context.pop();
+                      } else {
+                        context.go('/onboarding');
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 28,
+                    child: Image.asset(
+                      'assets/brand/sphere_wordmark.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: SphereSpacing.x32),
               Text(
-                'Pilih role kau',
-                style: Theme.of(context).textTheme.headlineMedium,
+                'Pick your role',
+                style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                      color: SphereColors.onSurface,
+                    ),
               ),
               const SizedBox(height: SphereSpacing.x8),
               Text(
-                'Boleh tukar nanti dalam Settings.',
-                style: Theme.of(context).textTheme.bodyMedium,
+                'You can switch this later in Settings.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: SphereColors.onSurfaceMuted,
+                    ),
               ),
               const SizedBox(height: SphereSpacing.x32),
-              RoleSwitcherCard(
+              _RoleHeroCard(
                 icon: LucideIcons.user,
                 title: 'Player',
                 subtitle: 'Training, drills, schedule, AI coach.',
                 onTap: () async {
-                  await ref.read(selectedRoleProvider.notifier).set(AppRole.player);
+                  await ref
+                      .read(selectedRoleProvider.notifier)
+                      .set(AppRole.player);
                   if (context.mounted) context.go('/auth/login');
                 },
               ),
-              const SizedBox(height: SphereSpacing.x12),
-              RoleSwitcherCard(
+              const SizedBox(height: SphereSpacing.x16),
+              _RoleHeroCard(
                 icon: LucideIcons.userCog,
                 title: 'Staff',
                 subtitle: 'Attendance, roster, approvals.',
                 onTap: () async {
-                  await ref.read(selectedRoleProvider.notifier).set(AppRole.staff);
+                  await ref
+                      .read(selectedRoleProvider.notifier)
+                      .set(AppRole.staff);
                   if (context.mounted) context.go('/auth/login');
                 },
+              ),
+              const Spacer(),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: SphereSpacing.x16),
+                  child: Text(
+                    'Welcome to your academy.',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: SphereColors.onSurfaceMuted,
+                        ),
+                  ),
+                ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _CircleIconButton extends StatelessWidget {
+  const _CircleIconButton({required this.icon, required this.onTap});
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: SphereColors.surfaceElev1.withValues(alpha: 0.85),
+      shape: const CircleBorder(),
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Icon(icon, size: 20, color: SphereColors.onSurface),
+        ),
+      ),
+    );
+  }
+}
+
+class _RoleHeroCard extends StatefulWidget {
+  const _RoleHeroCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  @override
+  State<_RoleHeroCard> createState() => _RoleHeroCardState();
+}
+
+class _RoleHeroCardState extends State<_RoleHeroCard> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) => setState(() => _pressed = false),
+      onTapCancel: () => setState(() => _pressed = false),
+      onTap: widget.onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        curve: Curves.easeOutCubic,
+        padding: const EdgeInsets.all(SphereSpacing.x20),
+        decoration: BoxDecoration(
+          color: _pressed
+              ? SphereColors.surfaceElev2
+              : SphereColors.surfaceElev1,
+          borderRadius: SphereRadius.cardRect,
+          border: Border.all(
+            color: _pressed
+                ? SphereColors.primary.withValues(alpha: 0.4)
+                : SphereColors.borderSubtle,
+            width: 1,
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x40000000),
+              blurRadius: 16,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            _RoleIconBadge(icon: widget.icon),
+            const SizedBox(width: SphereSpacing.x16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.title,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: SphereColors.onSurface,
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    widget.subtitle,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: SphereColors.onSurfaceMuted,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: SphereSpacing.x8),
+            const Icon(
+              LucideIcons.arrowRight,
+              size: 22,
+              color: SphereColors.primary,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RoleIconBadge extends StatelessWidget {
+  const _RoleIconBadge({required this.icon});
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 64,
+      height: 64,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: SphereColors.primary.withValues(alpha: 0.12),
+        border: Border.all(
+          color: SphereColors.primary.withValues(alpha: 0.30),
+          width: 1,
+        ),
+      ),
+      child: Icon(icon, size: 30, color: SphereColors.primary),
     );
   }
 }
