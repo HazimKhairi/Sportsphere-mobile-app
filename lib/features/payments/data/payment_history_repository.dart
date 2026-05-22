@@ -43,6 +43,7 @@ class PaymentHistoryRepository {
       createdAt: ts is Timestamp ? ts.toDate() : DateTime.now(),
       programId: data['programId'] as String?,
       programName: data['programName'] as String?,
+      receiptUrl: data['receiptUrl'] as String?,
     );
   }
 }

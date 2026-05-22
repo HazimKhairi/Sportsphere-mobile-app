@@ -81,6 +81,7 @@ class PaymentRecord {
     required this.createdAt,
     this.programId,
     this.programName,
+    this.receiptUrl,
   });
 
   final String id;
@@ -91,6 +92,7 @@ class PaymentRecord {
   final DateTime createdAt;
   final String? programId;
   final String? programName;
+  final String? receiptUrl;
 
   String get displayAmount {
     final amount = amountCents / 100;

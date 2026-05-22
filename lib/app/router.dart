@@ -9,6 +9,7 @@ import '../features/home/presentation/player_home_screen.dart';
 import '../features/home/presentation/staff_home_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/payments/presentation/cash_pay_screen.dart';
+import '../features/payments/presentation/payment_detail_screen.dart';
 import '../features/payments/presentation/payment_failure_screen.dart';
 import '../features/payments/presentation/payment_history_screen.dart';
 import '../features/payments/presentation/payment_success_screen.dart';
@@ -126,6 +127,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/profile/payments',
             builder: (_, _) => const PaymentHistoryScreen(),
+          ),
+          GoRoute(
+            path: '/profile/payments/:id',
+            builder: (_, state) {
+              final id = state.pathParameters['id']!;
+              return PaymentDetailScreen(paymentId: id);
+            },
           ),
           GoRoute(
             path: '/programs',
