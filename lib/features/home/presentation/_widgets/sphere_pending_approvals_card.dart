@@ -11,18 +11,25 @@ class SpherePendingApprovalsCard extends StatelessWidget {
     super.key,
     required this.count,
     this.onTap,
+    this.loading = false,
   });
   final int count;
   final VoidCallback? onTap;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
-    final urgency = (count / 5).clamp(0.0, 1.0);
+    final urgency = loading ? 0.0 : (count / 5).clamp(0.0, 1.0);
+    final subtitle = loading
+        ? 'Loading approvals…'
+        : (count == 0
+            ? 'You are all caught up.'
+            : '$count payment${count == 1 ? '' : 's'} need a look.');
     return Material(
       color: SphereColors.surfaceElev1,
       borderRadius: SphereRadius.cardRect,
       child: InkWell(
-        onTap: onTap,
+        onTap: loading ? null : onTap,
         borderRadius: SphereRadius.cardRect,
         child: Container(
           padding: const EdgeInsets.all(SphereSpacing.x20),
@@ -36,14 +43,23 @@ class SpherePendingApprovalsCard extends StatelessWidget {
                 size: 80,
                 value: urgency,
                 strokeWidth: 5,
-                child: SphereCountUp(
-                  value: count,
-                  style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                        color: SphereColors.primary,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w700,
+                child: loading
+                    ? Text(
+                        '--',
+                        style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                              color: SphereColors.onSurfaceMuted,
+                              fontSize: 32,
+                              fontWeight: FontWeight.w700,
+                            ),
+                      )
+                    : SphereCountUp(
+                        value: count,
+                        style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                              color: SphereColors.primary,
+                              fontSize: 32,
+                              fontWeight: FontWeight.w700,
+                            ),
                       ),
-                ),
               ),
               const SizedBox(width: SphereSpacing.x16),
               Expanded(
@@ -59,7 +75,7 @@ class SpherePendingApprovalsCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '3 payments need a look.',
+                      subtitle,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: SphereColors.onSurfaceMuted,
                           ),

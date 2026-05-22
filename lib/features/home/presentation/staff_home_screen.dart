@@ -12,6 +12,7 @@ import '_widgets/sphere_next_session_card.dart';
 import '_widgets/sphere_pending_approvals_card.dart';
 import '_widgets/sphere_quick_action_chip.dart';
 import '_widgets/sphere_section_label.dart';
+import 'staff_home_providers.dart';
 
 class StaffHomeScreen extends ConsumerWidget {
   const StaffHomeScreen({super.key});
@@ -35,6 +36,18 @@ class StaffHomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider).valueOrNull;
     final firstName = (user?.displayName ?? 'Coach').split(' ').first;
+
+    final pendingApprovalsAsync = ref.watch(staffPendingApprovalsProvider);
+    final nextSessionAsync = ref.watch(staffNextSessionProvider);
+    final rosterCountAsync = ref.watch(staffRosterCountProvider);
+
+    final pendingCount = pendingApprovalsAsync.valueOrNull ?? 0;
+    final pendingLoading = pendingApprovalsAsync.isLoading;
+
+    final nextSession = nextSessionAsync.valueOrNull;
+    final nextSessionLoading = nextSessionAsync.isLoading;
+
+    final rosterCount = rosterCountAsync.valueOrNull ?? 0;
 
     return Stack(
       children: [
@@ -92,7 +105,8 @@ class StaffHomeScreen extends ConsumerWidget {
                 SphereEntrance(
                   delayMs: 80,
                   child: SpherePendingApprovalsCard(
-                    count: 3,
+                    count: pendingCount,
+                    loading: pendingLoading,
                     onTap: () {},
                   ),
                 ),
@@ -135,7 +149,11 @@ class StaffHomeScreen extends ConsumerWidget {
                 const SizedBox(height: SphereSpacing.x16),
                 SphereEntrance(
                   delayMs: 240,
-                  child: SphereNextSessionCard(onCheckIn: () {}),
+                  child: SphereNextSessionCard(
+                    session: nextSession,
+                    loading: nextSessionLoading,
+                    onCheckIn: () {},
+                  ),
                 ),
                 const SizedBox(height: SphereSpacing.x32),
 
@@ -155,14 +173,14 @@ class StaffHomeScreen extends ConsumerWidget {
                     ),
                     child: Row(
                       children: [
-                        const SphereAvatarStack(total: 47),
+                        SphereAvatarStack(total: rosterCount),
                         const SizedBox(width: SphereSpacing.x16),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '47 active players',
+                                '$rosterCount active player${rosterCount == 1 ? '' : 's'}',
                                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                       color: SphereColors.onSurface,
                                       fontWeight: FontWeight.w700,
