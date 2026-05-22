@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../features/auth/presentation/auth_providers.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/signup_screen.dart';
+import '../features/home/presentation/drill_detail_screen.dart';
 import '../features/home/presentation/home_shell.dart';
 import '../features/home/presentation/player_home_screen.dart';
 import '../features/home/presentation/staff_home_screen.dart';
@@ -34,7 +35,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       final loc = state.matchedLocation;
       if (loc == '/splash' ||
           loc.startsWith('/qr-scan') ||
-          loc.startsWith('/payment/')) {
+          loc.startsWith('/payment/') ||
+          loc.endsWith('/play')) {
         return null;
       }
 
@@ -84,6 +86,24 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
+        path: '/train/drill/:id/play',
+        builder: (_, state) {
+          final id = state.pathParameters['id']!;
+          return Scaffold(
+            backgroundColor: const Color(0xFF0A0A0A),
+            body: SafeArea(
+              child: Center(
+                child: Text(
+                  'Drill player for $id\n(lands in T5)',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+      GoRoute(
         path: '/payment/success/:id',
         builder: (_, state) {
           final id = state.pathParameters['id']!;
@@ -121,9 +141,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/train/drill/:id',
             builder: (_, state) {
               final id = state.pathParameters['id']!;
-              return Scaffold(
-                body: Center(child: Text('Drill $id detail in T3')),
-              );
+              return DrillDetailScreen(drillId: id);
             },
           ),
           GoRoute(
