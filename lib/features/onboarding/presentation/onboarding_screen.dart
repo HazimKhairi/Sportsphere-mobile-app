@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../app/theme/sphere_colors.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import 'sphere_onboarding_illustration.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -18,17 +20,23 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   static const _slides = [
     (
-      title: 'Selamat datang ke SportSphere',
-      body: 'Satu app untuk training, scheduling, dan analytics akademi kau.',
+      title: 'Welcome to SportSphere',
+      body: 'One app for training, scheduling, and analytics across your academy.',
     ),
     (
       title: 'Train smart with Sphere AI',
-      body: 'Drill analyzer dalam phone, AI coach yang faham game kau.',
+      body: 'Drill analyzer in your phone. An AI coach that gets your game.',
     ),
     (
-      title: 'Satu otak. Dua interface.',
-      body: 'Player atau staff, semua dalam satu app.',
+      title: 'One brain. Two interfaces.',
+      body: 'Player or staff, everything in one app.',
     ),
+  ];
+
+  static const _slideIcons = [
+    LucideIcons.zap,
+    LucideIcons.sparkles,
+    LucideIcons.users,
   ];
 
   @override
@@ -56,15 +64,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Lottie placeholder; replace in Phase 5.
-                        Container(
-                          width: 200,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            color: SphereColors.surfaceElev1,
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                        ),
+                        SphereOnboardingIllustration(icon: _slideIcons[i]),
                         const SizedBox(height: SphereSpacing.x32),
                         Text(
                           s.title,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/theme/sphere_colors.dart';
@@ -22,8 +23,15 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(milliseconds: 600),
     )..forward();
 
-    Future.delayed(const Duration(milliseconds: 900), () {
-      if (mounted) context.go('/onboarding');
+    // Wait for pulse, remove native splash, then navigate.
+    Future.delayed(const Duration(milliseconds: 1200), () {
+      if (!mounted) return;
+      try {
+        FlutterNativeSplash.remove();
+      } catch (_) {
+        // No-op in widget tests where the native splash was never preserved.
+      }
+      context.go('/onboarding');
     });
   }
 
