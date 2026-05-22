@@ -1,11 +1,17 @@
+import 'dart:io' show File;
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../app/theme/sphere_colors.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../data/chat_persistence_repository.dart';
 import '../domain/chat_message.dart';
 import 'ai_chat_providers.dart';
 
@@ -20,8 +26,10 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
   final _composer = TextEditingController();
   final _scroll = ScrollController();
   final _messages = <ChatMessage>[];
-  late final String _threadId;
+  late String _threadId;
   bool _busy = false;
+  bool _attaching = false;
+  String? _uid;
 
   static const _suggestions = [
     'How can I improve my ball control?',
@@ -33,7 +41,18 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
   @override
   void initState() {
     super.initState();
-    _threadId = 'mob_${DateTime.now().millisecondsSinceEpoch}';
+    _uid = FirebaseAuth.instance.currentUser?.uid ?? 'anon';
+    // Day-keyed thread ID: same thread all day, new thread each day
+    _threadId =
+        'mob_${_uid}_${DateTime.now().millisecondsSinceEpoch ~/ 86400000}';
+    // Load persisted thread
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final repo = ref.read(chatPersistenceRepositoryProvider);
+      final saved = await repo.loadThread(uid: _uid!);
+      if (saved.isNotEmpty && mounted) {
+        setState(() => _messages.addAll(saved));
+      }
+    });
   }
 
   @override
@@ -86,6 +105,9 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
           _busy = false;
         });
         _jumpToBottom();
+        // Persist after response completes
+        final repo = ref.read(chatPersistenceRepositoryProvider);
+        await repo.saveThread(uid: _uid!, messages: _messages);
       }
     }
   }
@@ -99,6 +121,57 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
         curve: Curves.easeOutCubic,
       );
     });
+  }
+
+  Future<void> _clearChat() async {
+    if (_uid == null) return;
+    await ref.read(chatPersistenceRepositoryProvider).clearThread(uid: _uid!);
+    setState(() {
+      _messages.clear();
+      _threadId = 'mob_${_uid}_${DateTime.now().millisecondsSinceEpoch}';
+    });
+  }
+
+  Future<void> _attachImage() async {
+    if (_attaching || _busy) return;
+    setState(() => _attaching = true);
+    try {
+      final picker = ImagePicker();
+      final file = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+        maxWidth: 1280,
+      );
+      if (file == null || !mounted) return;
+
+      // Upload to Firebase Storage
+      final uid = _uid ?? 'anon';
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final storageRef = FirebaseStorage.instance
+          .ref('chat-attachments/$uid/$timestamp.jpg');
+      final bytes = await File(file.path).readAsBytes();
+      await storageRef.putData(
+        bytes,
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+      final url = await storageRef.getDownloadURL();
+
+      // Append URL to composer text
+      if (mounted) {
+        final current = _composer.text;
+        _composer.text = current.isEmpty
+            ? '[Image: $url]'
+            : '$current\n[Image: $url]';
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not attach image. Try again.')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _attaching = false);
+    }
   }
 
   @override
@@ -140,6 +213,16 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                     'Sphere AI',
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(
+                      LucideIcons.rotateCcw,
+                      size: 18,
+                      color: SphereColors.onSurfaceMuted,
+                    ),
+                    tooltip: 'New chat',
+                    onPressed: _clearChat,
+                  ),
                 ],
               ),
             ),
@@ -173,8 +256,9 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
               ),
               child: _Composer(
                 controller: _composer,
-                busy: _busy,
+                busy: _busy || _attaching,
                 onSubmit: _send,
+                onAttach: _attachImage,
               ),
             ),
           ],
@@ -453,10 +537,12 @@ class _Composer extends StatelessWidget {
     required this.controller,
     required this.busy,
     required this.onSubmit,
+    this.onAttach,
   });
   final TextEditingController controller;
   final bool busy;
   final ValueChanged<String> onSubmit;
+  final VoidCallback? onAttach;
 
   @override
   Widget build(BuildContext context) {
@@ -466,9 +552,29 @@ class _Composer extends StatelessWidget {
         borderRadius: SphereRadius.pillRect,
         border: Border.all(color: SphereColors.borderSubtle),
       ),
-      padding: const EdgeInsets.fromLTRB(18, 4, 6, 4),
+      padding: const EdgeInsets.fromLTRB(6, 4, 6, 4),
       child: Row(
         children: [
+          // Attach button
+          Material(
+            color: Colors.transparent,
+            shape: const CircleBorder(),
+            child: InkWell(
+              onTap: busy ? null : onAttach,
+              customBorder: const CircleBorder(),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Icon(
+                  LucideIcons.paperclip,
+                  size: 18,
+                  color: busy
+                      ? SphereColors.onSurfaceMuted.withValues(alpha: 0.4)
+                      : SphereColors.onSurfaceMuted,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 4),
           Expanded(
             child: TextField(
               controller: controller,
