@@ -32,6 +32,7 @@ import '../features/schedule/presentation/qr_scan_screen.dart';
 import '../features/schedule/presentation/schedule_screen.dart';
 import '../features/schedule/presentation/session_detail_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
+import '../features/approvals/presentation/approvals_screen.dart';
 import '../features/roster/presentation/player_detail_screen.dart';
 import '../features/roster/presentation/roster_screen.dart';
 import '../features/sphere_ai/presentation/sphere_ai_screen.dart';
@@ -227,9 +228,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/staff/approvals',
-            builder: (_, _) => const Scaffold(
-              body: Center(child: Text('Approvals coming soon')),
-            ),
+            builder: (_, _) => const ApprovalsScreen(),
           ),
         ],
       ),

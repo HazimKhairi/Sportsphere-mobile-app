@@ -108,7 +108,7 @@ class StaffHomeScreen extends ConsumerWidget {
                   child: SpherePendingApprovalsCard(
                     count: pendingCount,
                     loading: pendingLoading,
-                    onTap: () {},
+                    onTap: () => context.push('/staff/approvals'),
                   ),
                 ),
                 const SizedBox(height: SphereSpacing.x16),
