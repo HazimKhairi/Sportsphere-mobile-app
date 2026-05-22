@@ -79,6 +79,10 @@
 				</array>
 			</dict>
 		</array>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>SportSphere needs access to your photo library to upload a profile photo.</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>SportSphere may save processed photos to your library.</string>
 		<key>NSCameraUsageDescription</key>
 		<string>We use your camera to scan QR codes for training session check-in. Video is not uploaded.</string>
 	</dict>
