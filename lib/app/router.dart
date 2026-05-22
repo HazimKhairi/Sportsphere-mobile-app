@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../features/auth/presentation/auth_providers.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/signup_screen.dart';
+import '../features/home/presentation/drill_complete_screen.dart';
 import '../features/home/presentation/drill_detail_screen.dart';
 import '../features/home/presentation/drill_player_screen.dart';
 import '../features/home/presentation/home_shell.dart';
@@ -37,7 +38,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (loc == '/splash' ||
           loc.startsWith('/qr-scan') ||
           loc.startsWith('/payment/') ||
-          loc.endsWith('/play')) {
+          loc.endsWith('/play') ||
+          loc.endsWith('/complete')) {
         return null;
       }
 
@@ -91,6 +93,19 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) {
           final id = state.pathParameters['id']!;
           return DrillPlayerScreen(drillId: id);
+        },
+      ),
+      GoRoute(
+        path: '/train/drill/:id/complete',
+        builder: (_, state) {
+          final id = state.pathParameters['id']!;
+          final reps = int.tryParse(state.uri.queryParameters['reps'] ?? '') ?? 0;
+          final streak = int.tryParse(state.uri.queryParameters['streak'] ?? '') ?? 0;
+          return DrillCompleteScreen(
+            drillId: id,
+            reps: reps,
+            streakDays: streak,
+          );
         },
       ),
       GoRoute(

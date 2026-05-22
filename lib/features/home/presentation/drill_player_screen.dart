@@ -17,6 +17,8 @@ import '../data/drill_analyzer/drill_mode_runner.dart';
 import '../data/drill_analyzer/ml_kit_adapter.dart';
 import '../domain/drill.dart';
 import 'drill_detail_providers.dart';
+import 'drill_session_providers.dart';
+import 'player_home_providers.dart';
 
 class DrillPlayerScreen extends ConsumerStatefulWidget {
   const DrillPlayerScreen({super.key, required this.drillId});
@@ -33,6 +35,7 @@ class _DrillPlayerScreenState extends ConsumerState<DrillPlayerScreen>
   CameraController? _camera;
   PoseDetector? _detector;
   DrillModeRunner? _runner;
+  int? _sessionStartedMs;
 
   bool _processing = false;
   String? _initError;
@@ -115,6 +118,7 @@ class _DrillPlayerScreenState extends ConsumerState<DrillPlayerScreen>
         _initError = null;
       });
       _runner!.start(DateTime.now().millisecondsSinceEpoch);
+      _sessionStartedMs = DateTime.now().millisecondsSinceEpoch;
       await controller.startImageStream(_onCameraImage);
     } catch (e) {
       setState(() => _initError = 'Camera error: $e');
@@ -193,17 +197,38 @@ class _DrillPlayerScreenState extends ConsumerState<DrillPlayerScreen>
   Future<void> _completeSession() async {
     unawaited(HapticFeedback.heavyImpact());
     await _shutdownCamera();
-    if (!mounted) return;
-    // T6 will write the drill_sessions doc + show celebration screen.
-    // For now: pop back to detail.
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Drill complete. Session save in T6.')),
-    );
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go('/train');
+
+    final drill = ref.read(drillDetailProvider(drillId: widget.drillId)).valueOrNull;
+    final runner = _runner;
+    final started = _sessionStartedMs ?? DateTime.now().millisecondsSinceEpoch;
+    final reps = runner?.reps ?? 0;
+    final durationMs = DateTime.now().millisecondsSinceEpoch - started;
+    final mode = runner?.mode.name ?? 'kneeLine';
+
+    int streakDays = 0;
+    if (drill != null && reps > 0) {
+      try {
+        final result = await ref
+            .read(drillSessionRepositoryProvider)
+            .recordSession(
+              drillId: drill.id,
+              reps: reps,
+              durationMs: durationMs,
+              mode: mode,
+            );
+        streakDays = result.streakDays;
+      } catch (_) {
+        // Best-effort: still navigate to celebration even if server save fails.
+      }
     }
+
+    // Invalidate today drill provider so home shows fresh state.
+    ref.invalidate(todayDrillProvider);
+
+    if (!mounted) return;
+    context.go(
+      '/train/drill/${widget.drillId}/complete?reps=$reps&streak=$streakDays',
+    );
   }
 
   void _exit() async {
