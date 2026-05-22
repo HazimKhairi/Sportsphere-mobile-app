@@ -7,6 +7,8 @@ import '../../../app/theme/sphere_colors.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/player_card.dart';
+import '../../home/presentation/staff_home_providers.dart';
+import 'add_player_sheet.dart';
 import 'roster_providers.dart';
 
 class RosterScreen extends ConsumerStatefulWidget {
@@ -168,11 +170,41 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: SphereColors.primary,
-        foregroundColor: Colors.black,
-        child: const Icon(LucideIcons.userPlus),
+      floatingActionButton: Consumer(
+        builder: (context, ref, _) {
+          final clubId = ref.watch(activeClubIdProvider).valueOrNull;
+          return FloatingActionButton(
+            onPressed: clubId == null
+                ? null
+                : () {
+                    AddPlayerSheet.show(
+                      context,
+                      onSubmit: ({
+                        required firstName,
+                        required lastName,
+                        email,
+                        phone,
+                        position,
+                      }) async {
+                        await ref
+                            .read(rosterRepositoryProvider)
+                            .createPlayer(
+                              clubId: clubId,
+                              firstName: firstName,
+                              lastName: lastName,
+                              email: email,
+                              phone: phone,
+                              position: position,
+                            );
+                        ref.invalidate(rosterNotifierProvider);
+                      },
+                    );
+                  },
+            backgroundColor: SphereColors.primary,
+            foregroundColor: Colors.black,
+            child: const Icon(LucideIcons.userPlus),
+          );
+        },
       ),
     );
   }
