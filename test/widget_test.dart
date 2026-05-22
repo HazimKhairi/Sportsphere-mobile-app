@@ -1,12 +1,12 @@
-// Smoke test: SphereApp renders the brand mark.
-
+// Smoke test: SphereApp boots into the onboarding placeholder.
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sportsphere_mobile/app/app.dart';
 
 void main() {
-  testWidgets('SphereApp renders brand mark', (WidgetTester tester) async {
-    await tester.pumpWidget(const SphereApp());
-
-    expect(find.text('SportSphere'), findsOneWidget);
+  testWidgets('SphereApp boots into onboarding', (WidgetTester tester) async {
+    await tester.pumpWidget(const ProviderScope(child: SphereApp()));
+    await tester.pump(); // settle initial frame
+    expect(find.text('Onboarding placeholder'), findsOneWidget);
   });
 }

@@ -1,37 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'theme/sphere_colors.dart';
+import '../features/role_pick/presentation/role_providers.dart';
+import 'router.dart';
 import 'theme/sphere_theme.dart';
 
-class SphereApp extends StatelessWidget {
+class SphereApp extends ConsumerStatefulWidget {
   const SphereApp({super.key});
 
   @override
+  ConsumerState<SphereApp> createState() => _SphereAppState();
+}
+
+class _SphereAppState extends ConsumerState<SphereApp> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => ref.read(selectedRoleProvider.notifier).load());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final router = ref.watch(routerProvider);
+    return MaterialApp.router(
       title: 'SportSphere',
       debugShowCheckedModeBanner: false,
       theme: buildSphereTheme(),
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'SportSphere',
-                style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                      color: SphereColors.primary,
-                    ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text('Get Started'),
-              ),
-            ],
-          ),
-        ),
-      ),
+      routerConfig: router,
     );
   }
 }
