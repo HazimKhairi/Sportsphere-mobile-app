@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -50,10 +52,8 @@ class _ProgramDetailScreenState extends ConsumerState<ProgramDetailScreen> {
       return;
     }
     if (method == PaymentMethod.cash) {
-      // C4 wires this — for now snackbar.
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Cash payment lands in C4.')),
-      );
+      if (!mounted) return;
+      unawaited(context.push('/payment/cash/${program.id}'));
       setState(() => _busy = false);
       return;
     }

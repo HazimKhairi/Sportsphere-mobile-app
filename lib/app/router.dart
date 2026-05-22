@@ -8,6 +8,7 @@ import '../features/home/presentation/home_shell.dart';
 import '../features/home/presentation/player_home_screen.dart';
 import '../features/home/presentation/staff_home_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
+import '../features/payments/presentation/cash_pay_screen.dart';
 import '../features/profile/presentation/profile_screen.dart';
 import '../features/programs/presentation/program_detail_screen.dart';
 import '../features/programs/presentation/programs_list_screen.dart';
@@ -65,6 +66,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) {
           final id = state.pathParameters['id']!;
           return QrScanScreen(sessionId: id);
+        },
+      ),
+      GoRoute(
+        path: '/payment/cash/:programId',
+        builder: (_, state) {
+          final id = state.pathParameters['programId']!;
+          return CashPayScreen(programId: id);
         },
       ),
       GoRoute(
