@@ -35,9 +35,10 @@ class HomeShell extends ConsumerWidget {
 
     int currentIndex = 0;
     if (loc.startsWith('/schedule')) currentIndex = 2;
+    if (loc.startsWith('/sphere-ai')) currentIndex = 3;
     if (loc.startsWith('/profile')) currentIndex = 4;
     // T11 adds /qr-scan but that hides the navbar, so no index needed.
-    // Tasks for Train (1), Sphere AI (3) wired later.
+    // Task for Train (1) wired later.
 
     return Scaffold(
       body: Stack(
@@ -54,6 +55,7 @@ class HomeShell extends ConsumerWidget {
               onTap: (i) {
                 if (i == 0) context.go('/home');
                 if (i == 2) context.go('/schedule');
+                if (i == 3) context.go('/sphere-ai');
                 if (i == 4) context.go('/profile');
               },
             ),

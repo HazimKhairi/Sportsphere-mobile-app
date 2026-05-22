@@ -23,6 +23,7 @@ import '../features/schedule/presentation/qr_scan_screen.dart';
 import '../features/schedule/presentation/schedule_screen.dart';
 import '../features/schedule/presentation/session_detail_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
+import '../features/sphere_ai/presentation/sphere_ai_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -147,6 +148,10 @@ final routerProvider = Provider<GoRouter>((ref) {
               final id = state.pathParameters['id']!;
               return ProgramDetailScreen(programId: id);
             },
+          ),
+          GoRoute(
+            path: '/sphere-ai',
+            builder: (_, _) => const SphereAiScreen(),
           ),
         ],
       ),
