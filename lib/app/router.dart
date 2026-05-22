@@ -10,6 +10,7 @@ import '../features/home/presentation/staff_home_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/role_pick/presentation/role_pick_screen.dart';
 import '../features/role_pick/presentation/role_providers.dart';
+import '../features/schedule/presentation/schedule_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -63,6 +64,19 @@ final routerProvider = Provider<GoRouter>((ref) {
                       ? const StaffHomeScreen()
                       : const PlayerHomeScreen();
                 },
+              );
+            },
+          ),
+          GoRoute(
+            path: '/schedule',
+            builder: (_, _) => const ScheduleScreen(),
+          ),
+          GoRoute(
+            path: '/schedule/session/:id',
+            builder: (_, state) {
+              final id = state.pathParameters['id']!;
+              return Scaffold(
+                body: Center(child: Text('Session $id detail in T10')),
               );
             },
           ),

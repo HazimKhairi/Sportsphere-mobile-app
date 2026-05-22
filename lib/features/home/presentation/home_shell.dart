@@ -31,8 +31,13 @@ class HomeShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final role = ref.watch(selectedRoleProvider);
     final tabs = role == AppRole.staff ? _staffTabs : _playerTabs;
+    final loc = GoRouterState.of(context).matchedLocation;
 
-    // Phase 1: only tab 0 (Home) is wired. Other tabs no-op until Phase 2.
+    int currentIndex = 0;
+    if (loc.startsWith('/schedule')) currentIndex = 2;
+    // T11 adds /qr-scan but that hides the navbar, so no index needed.
+    // Tasks for Train (1), Sphere AI (3), Profile (4) wired later.
+
     return Scaffold(
       body: Stack(
         children: [
@@ -44,10 +49,10 @@ class HomeShell extends ConsumerWidget {
             alignment: Alignment.bottomCenter,
             child: SphereFloatingNavBar(
               tabs: tabs,
-              currentIndex: 0,
+              currentIndex: currentIndex,
               onTap: (i) {
                 if (i == 0) context.go('/home');
-                // future: navigate to /train /schedule etc.
+                if (i == 2) context.go('/schedule');
               },
             ),
           ),
