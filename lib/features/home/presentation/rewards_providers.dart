@@ -5,6 +5,7 @@ import '../../../core/config/sphere_config.dart';
 import '../../auth/presentation/auth_providers.dart';
 import '../data/rewards_repository.dart';
 import '../domain/reward.dart';
+import '../domain/voucher.dart';
 import 'staff_home_providers.dart';
 
 part 'rewards_providers.g.dart';
@@ -30,4 +31,9 @@ Stream<int> myPointsBalance(MyPointsBalanceRef ref) {
   return ref.watch(rewardsRepositoryProvider).pointsBalanceStream(
         playerId: user.uid,
       );
+}
+
+@riverpod
+Future<List<Voucher>> myVouchers(MyVouchersRef ref) {
+  return ref.watch(rewardsRepositoryProvider).fetchMyVouchers();
 }

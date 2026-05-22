@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -7,13 +8,21 @@ import '../../../app/theme/sphere_colors.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/reward.dart';
+import '../domain/voucher.dart';
 import '_widgets/reward_redeem_sheet.dart';
 import '_widgets/sphere_hero_gradient.dart';
 import '_widgets/sphere_section_label.dart';
 import 'rewards_providers.dart';
 
-class RewardsScreen extends ConsumerWidget {
+class RewardsScreen extends ConsumerStatefulWidget {
   const RewardsScreen({super.key});
+
+  @override
+  ConsumerState<RewardsScreen> createState() => _RewardsScreenState();
+}
+
+class _RewardsScreenState extends ConsumerState<RewardsScreen> {
+  int _tabIndex = 0;
 
   IconData _iconFor(Reward r) {
     switch (r.iconName) {
@@ -32,8 +41,33 @@ class RewardsScreen extends ConsumerWidget {
     }
   }
 
+  void _copyCode(BuildContext context, String code) {
+    Clipboard.setData(ClipboardData(text: code));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Code copied!')),
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${date.day} ${months[date.month - 1]} ${date.year}';
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final rewardsAsync = ref.watch(myRewardsCatalogProvider);
     final balanceAsync = ref.watch(myPointsBalanceProvider);
     final balance = balanceAsync.valueOrNull ?? 0;
@@ -98,102 +132,383 @@ class RewardsScreen extends ConsumerWidget {
 
                 _BalanceCard(balance: balance),
                 const SizedBox(height: SphereSpacing.x24),
-                const SphereSectionLabel('Catalog'),
-                const SizedBox(height: SphereSpacing.x16),
 
-                rewardsAsync.when(
-                  data: (rewards) {
-                    if (rewards.isEmpty) {
-                      return Container(
-                        padding: const EdgeInsets.all(SphereSpacing.x20),
-                        decoration: BoxDecoration(
-                          color: SphereColors.surfaceElev1,
-                          borderRadius: SphereRadius.cardRect,
-                          border:
-                              Border.all(color: SphereColors.borderSubtle),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'No rewards yet',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                    color: SphereColors.onSurface,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                // Tab toggle
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => setState(() => _tabIndex = 0),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          decoration: BoxDecoration(
+                            color: _tabIndex == 0
+                                ? SphereColors.primary
+                                : SphereColors.surfaceElev2,
+                            borderRadius: SphereRadius.pillRect,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Rewards',
+                            style: TextStyle(
+                              color: _tabIndex == 0
+                                  ? Colors.black
+                                  : SphereColors.onSurfaceMuted,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Your coach can publish rewards from the dashboard.',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: SphereColors.onSurfaceMuted,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: SphereSpacing.x12,
-                        crossAxisSpacing: SphereSpacing.x12,
-                        childAspectRatio: 0.78,
-                      ),
-                      itemCount: rewards.length,
-                      itemBuilder: (context, i) {
-                        final r = rewards[i];
-                        return _RewardCard(
-                          reward: r,
-                          icon: _iconFor(r),
-                          balance: balance,
-                          onTap: () {
-                            if (!r.available) return;
-                            RewardRedeemSheet.show(
-                              context,
-                              reward: r,
-                              currentBalance: balance,
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                  loading: () => const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 32),
-                    child: Center(
-                      child: SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor:
-                              AlwaysStoppedAnimation(SphereColors.primary),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  error: (_, _) => Text(
-                    'Could not load rewards.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                    const SizedBox(width: SphereSpacing.x8),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => setState(() => _tabIndex = 1),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          decoration: BoxDecoration(
+                            color: _tabIndex == 1
+                                ? SphereColors.primary
+                                : SphereColors.surfaceElev2,
+                            borderRadius: SphereRadius.pillRect,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'My Vouchers',
+                            style: TextStyle(
+                              color: _tabIndex == 1
+                                  ? Colors.black
+                                  : SphereColors.onSurfaceMuted,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
                         ),
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: SphereSpacing.x24),
+
+                if (_tabIndex == 0) ...[
+                  const SphereSectionLabel('Catalog'),
+                  const SizedBox(height: SphereSpacing.x16),
+                  rewardsAsync.when(
+                    data: (rewards) {
+                      if (rewards.isEmpty) {
+                        return Container(
+                          padding: const EdgeInsets.all(SphereSpacing.x20),
+                          decoration: BoxDecoration(
+                            color: SphereColors.surfaceElev1,
+                            borderRadius: SphereRadius.cardRect,
+                            border: Border.all(
+                                color: SphereColors.borderSubtle),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'No rewards yet',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color: SphereColors.onSurface,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Your coach can publish rewards from the dashboard.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: SphereColors.onSurfaceMuted,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: SphereSpacing.x12,
+                          crossAxisSpacing: SphereSpacing.x12,
+                          childAspectRatio: 0.78,
+                        ),
+                        itemCount: rewards.length,
+                        itemBuilder: (context, i) {
+                          final r = rewards[i];
+                          return _RewardCard(
+                            reward: r,
+                            icon: _iconFor(r),
+                            balance: balance,
+                            onTap: () {
+                              if (!r.available) return;
+                              RewardRedeemSheet.show(
+                                context,
+                                reward: r,
+                                currentBalance: balance,
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                    loading: () => const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32),
+                      child: Center(
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation(
+                                SphereColors.primary),
+                          ),
+                        ),
+                      ),
+                    ),
+                    error: (_, _) => Text(
+                      'Could not load rewards.',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: SphereColors.onSurfaceMuted),
+                    ),
+                  ),
+                ] else ...[
+                  _VouchersTab(
+                    copyCode: _copyCode,
+                    formatDate: _formatDate,
+                  ),
+                ],
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _VouchersTab extends ConsumerWidget {
+  const _VouchersTab({
+    required this.copyCode,
+    required this.formatDate,
+  });
+
+  final void Function(BuildContext context, String code) copyCode;
+  final String Function(DateTime date) formatDate;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final vouchersAsync = ref.watch(myVouchersProvider);
+
+    return vouchersAsync.when(
+      data: (vouchers) {
+        if (vouchers.isEmpty) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 48),
+              child: Text(
+                'You haven\'t redeemed any rewards yet.',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: SphereColors.onSurfaceMuted,
+                    ),
+              ),
+            ),
+          );
+        }
+        return Column(
+          children: vouchers
+              .map((v) => Padding(
+                    padding:
+                        const EdgeInsets.only(bottom: SphereSpacing.x12),
+                    child: _VoucherCard(
+                      voucher: v,
+                      copyCode: copyCode,
+                      formatDate: formatDate,
+                    ),
+                  ))
+              .toList(),
+        );
+      },
+      loading: () => const Padding(
+        padding: EdgeInsets.symmetric(vertical: 48),
+        child: Center(
+          child: SizedBox(
+            width: 24,
+            height: 24,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+            ),
+          ),
+        ),
+      ),
+      error: (_, _) => Text(
+        'Could not load vouchers.',
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: SphereColors.onSurfaceMuted,
+            ),
+      ),
+    );
+  }
+}
+
+class _VoucherCard extends StatelessWidget {
+  const _VoucherCard({
+    required this.voucher,
+    required this.copyCode,
+    required this.formatDate,
+  });
+
+  final Voucher voucher;
+  final void Function(BuildContext context, String code) copyCode;
+  final String Function(DateTime date) formatDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(SphereSpacing.x16),
+      decoration: BoxDecoration(
+        color: SphereColors.surfaceElev1,
+        borderRadius: SphereRadius.cardRect,
+        border: Border.all(color: SphereColors.borderSubtle),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  voucher.rewardName,
+                  style: const TextStyle(
+                    color: SphereColors.onSurface,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: SphereSpacing.x8),
+              _StatusBadge(status: voucher.status),
+            ],
+          ),
+          const SizedBox(height: SphereSpacing.x8),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: SphereColors.surfaceElev2,
+                    borderRadius: SphereRadius.pillRect,
+                    border: Border.all(color: SphereColors.borderSubtle),
+                  ),
+                  child: Text(
+                    voucher.code,
+                    style: const TextStyle(
+                      fontFamily: 'monospace',
+                      color: SphereColors.onSurface,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: SphereSpacing.x8),
+              IconButton(
+                icon: const Icon(LucideIcons.copy, size: 18),
+                color: SphereColors.primary,
+                onPressed: () => copyCode(context, voucher.code),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              const Icon(
+                LucideIcons.calendar,
+                size: 12,
+                color: SphereColors.onSurfaceMuted,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                'Expires ${formatDate(voucher.expiresAt)}',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: SphereColors.onSurfaceMuted,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                voucher.discountValue,
+                style: const TextStyle(
+                  color: SphereColors.primary,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatusBadge extends StatelessWidget {
+  const _StatusBadge({required this.status});
+
+  final String status;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color bg;
+    final Color textColor;
+    final String label;
+
+    switch (status) {
+      case 'used':
+        bg = SphereColors.onSurfaceMuted.withValues(alpha: 0.15);
+        textColor = SphereColors.onSurfaceMuted;
+        label = 'Used';
+      case 'expired':
+        bg = SphereColors.danger.withValues(alpha: 0.15);
+        textColor = SphereColors.danger;
+        label = 'Expired';
+      default: // 'active'
+        bg = SphereColors.primary.withValues(alpha: 0.15);
+        textColor = SphereColors.primary;
+        label = 'Active';
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: SphereRadius.pillRect,
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
     );
   }
 }
@@ -271,9 +586,10 @@ class _BalanceCard extends StatelessWidget {
                     const SizedBox(width: 6),
                     Text(
                       'pts',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: SphereColors.onSurfaceMuted,
+                              ),
                     ),
                   ],
                 ),

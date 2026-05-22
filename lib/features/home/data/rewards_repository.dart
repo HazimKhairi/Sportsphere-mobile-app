@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 
 import '../domain/redemption_result.dart';
 import '../domain/reward.dart';
+import '../domain/voucher.dart';
 
 class RewardsRepository {
   RewardsRepository({
@@ -63,6 +64,37 @@ class RewardsRepository {
             ? (e.response!.data as Map)['error']?.toString() ??
                 'Redeem failed'
             : 'Redeem failed',
+        statusCode: e.response?.statusCode,
+      );
+    }
+  }
+
+  Future<List<Voucher>> fetchMyVouchers() async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+        '/api/player-app/rewards/my-vouchers',
+      );
+      final data = res.data ?? const <String, dynamic>{};
+      final rawList = data['vouchers'] as List<dynamic>? ?? [];
+      return rawList
+          .whereType<Map<String, dynamic>>()
+          .map((e) => Voucher(
+                id: e['id'] as String? ?? '',
+                code: e['code'] as String? ?? '',
+                rewardName: e['rewardName'] as String? ?? '',
+                discountValue: e['discountValue'] as String? ?? '',
+                expiresAt:
+                    DateTime.tryParse(e['expiresAt'] as String? ?? '') ??
+                        DateTime(0),
+                status: e['status'] as String? ?? 'active',
+              ))
+          .toList();
+    } on DioException catch (e) {
+      throw RewardsException(
+        e.response?.data is Map
+            ? (e.response!.data as Map)['error']?.toString() ??
+                'Failed to load vouchers'
+            : 'Failed to load vouchers',
         statusCode: e.response?.statusCode,
       );
     }

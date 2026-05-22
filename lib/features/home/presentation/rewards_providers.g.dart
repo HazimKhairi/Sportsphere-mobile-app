@@ -58,5 +58,22 @@ final myPointsBalanceProvider = AutoDisposeStreamProvider<int>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef MyPointsBalanceRef = AutoDisposeStreamProviderRef<int>;
+String _$myVouchersHash() => r'b256effbaa94d717af38031f8dc51b6a7f48aff4';
+
+/// See also [myVouchers].
+@ProviderFor(myVouchers)
+final myVouchersProvider = AutoDisposeFutureProvider<List<Voucher>>.internal(
+  myVouchers,
+  name: r'myVouchersProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$myVouchersHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef MyVouchersRef = AutoDisposeFutureProviderRef<List<Voucher>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
