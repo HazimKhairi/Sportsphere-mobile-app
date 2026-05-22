@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -240,16 +241,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           _SocialPill(
-                            // Lucide doesn't ship a 'chrome' icon — use `globe`
-                            // as a neutral browser/Google substitute.
-                            icon: LucideIcons.globe,
+                            iconBuilder: (_) => SvgPicture.asset(
+                              'assets/brand/google_g.svg',
+                              width: 18,
+                              height: 18,
+                            ),
                             label: 'Google',
                             disabled: _busy,
                             onTap: _busy ? () {} : _signInWithGoogle,
                           ),
                           const SizedBox(width: SphereSpacing.x12),
                           _SocialPill(
-                            icon: LucideIcons.apple,
+                            iconBuilder: (color) => SvgPicture.asset(
+                              'assets/brand/apple_logo.svg',
+                              width: 18,
+                              height: 18,
+                              colorFilter: ColorFilter.mode(
+                                color,
+                                BlendMode.srcIn,
+                              ),
+                            ),
                             label: 'Apple',
                             disabled: true,
                             onTap: () => _showAppleComingSoon(context),
@@ -478,13 +489,16 @@ class _DividerWithLabel extends StatelessWidget {
 
 class _SocialPill extends StatelessWidget {
   const _SocialPill({
-    required this.icon,
+    required this.iconBuilder,
     required this.label,
     required this.onTap,
     this.disabled = false,
   });
 
-  final IconData icon;
+  /// Returns the icon widget given the resolved label color, so monochrome
+  /// icons can inherit the muted state but full-color brand icons (Google G)
+  /// can ignore it.
+  final Widget Function(Color color) iconBuilder;
   final String label;
   final VoidCallback onTap;
   final bool disabled;
@@ -506,7 +520,11 @@ class _SocialPill extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: color, size: 20),
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: Center(child: iconBuilder(color)),
+            ),
             const SizedBox(width: 8),
             Text(
               label,
