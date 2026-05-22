@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../features/auth/presentation/auth_providers.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/signup_screen.dart';
+import '../features/home/presentation/achievements_screen.dart';
 import '../features/home/presentation/drill_complete_screen.dart';
 import '../features/home/presentation/drill_detail_screen.dart';
 import '../features/home/presentation/drill_player_screen.dart';
@@ -163,6 +164,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/profile',
             builder: (_, _) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: '/profile/achievements',
+            builder: (_, _) => const AchievementsScreen(),
           ),
           GoRoute(
             path: '/profile/payments',
