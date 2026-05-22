@@ -10,15 +10,20 @@ import '../features/home/presentation/staff_home_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/role_pick/presentation/role_pick_screen.dart';
 import '../features/role_pick/presentation/role_providers.dart';
+import '../features/splash/presentation/splash_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/onboarding',
+    initialLocation: '/splash',
     refreshListenable: _RouterRefresh(ref),
     redirect: (context, state) {
+      final loc = state.matchedLocation;
+
+      final atSplash = loc == '/splash';
+      if (atSplash) return null;
+
       final user = ref.read(currentUserProvider).valueOrNull;
       final role = ref.read(selectedRoleProvider);
-      final loc = state.matchedLocation;
 
       final atOnboarding = loc == '/onboarding';
       final atRolePick = loc == '/role-pick';
@@ -36,6 +41,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      GoRoute(path: '/splash', builder: (_, _) => const SplashScreen()),
       GoRoute(path: '/onboarding', builder: (_, _) => const OnboardingScreen()),
       GoRoute(path: '/role-pick', builder: (_, _) => const RolePickScreen()),
       GoRoute(path: '/auth/login', builder: (_, _) => const LoginScreen()),
