@@ -85,5 +85,9 @@ class AuthRepository {
   // Blocked on Apple Developer Program enrollment + "Sign in with Apple"
   // capability in Xcode. See docs/RELEASE_RUNBOOK.md prerequisites.
 
+  Future<void> sendPasswordReset({required String email}) async {
+    await _auth.sendPasswordResetEmail(email: email);
+  }
+
   Future<void> signOut() => _auth.signOut();
 }

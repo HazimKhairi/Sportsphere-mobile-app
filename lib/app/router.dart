@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/auth/presentation/auth_providers.dart';
+import '../features/auth/presentation/forgot_password_screen.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/signup_screen.dart';
 import '../features/home/presentation/achievements_screen.dart';
@@ -77,6 +78,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/role-pick', builder: (_, _) => const RolePickScreen()),
       GoRoute(path: '/auth/login', builder: (_, _) => const LoginScreen()),
       GoRoute(path: '/auth/signup', builder: (_, _) => const SignupScreen()),
+      GoRoute(path: '/auth/forgot-password', builder: (_, _) => const ForgotPasswordScreen()),
       GoRoute(
         path: '/qr-scan/:id',
         builder: (_, state) {

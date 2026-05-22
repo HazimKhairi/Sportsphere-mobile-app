@@ -207,14 +207,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () {
-                            // TODO: Phase 2 — forgot password flow
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Forgot password coming soon.'),
-                              ),
-                            );
-                          },
+                          onPressed: () => context.push('/auth/forgot-password'),
                           child: const Text(
                             'Forgot password?',
                             style: TextStyle(color: SphereColors.primary),
