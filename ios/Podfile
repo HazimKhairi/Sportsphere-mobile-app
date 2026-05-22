@@ -83,49 +83,59 @@ post_install do |installer|
     next unless File.exist?(binary)
 
     file_info = `file "#{binary}" 2>/dev/null`
-    next unless file_info.include?('ar archive') && file_info.include?('arm64')
 
-    tmp = "/tmp/fw_patch_#{fw_name}"
-    FileUtils.rm_rf(tmp)
-    FileUtils.mkdir_p(tmp)
-
-    begin
-      arm64_a = File.join(tmp, 'arm64.a')
-      next unless system("lipo '#{binary}' -thin arm64 -output '#{arm64_a}' 2>/dev/null")
-
-      obj_dir = File.join(tmp, 'objs')
-      FileUtils.mkdir_p(obj_dir)
-      system("cd '#{obj_dir}' && ar x '#{arm64_a}' 2>/dev/null")
-
-      objs = Dir.glob(File.join(obj_dir, '*.o'))
-      next if objs.empty?
-
-      patched_any = false
-      objs.each do |obj|
-        out = `python3 '#{patcher_path}' '#{obj}' 2>&1`
-        patched_any = true if out.include?('patched:')
-      end
-      next unless patched_any
-
-      sim_a    = File.join(tmp, 'sim_arm64.a')
-      obj_list = objs.map { |o| "'#{o}'" }.join(' ')
-      system("ar rcs '#{sim_a}' #{obj_list} 2>/dev/null")
-      system("ranlib '#{sim_a}' 2>/dev/null")
-
-      x86_a   = File.join(tmp, 'x86_64.a')
-      has_x86 = system("lipo '#{binary}' -thin x86_64 -output '#{x86_a}' 2>/dev/null")
-
-      if has_x86 && File.exist?(x86_a) && File.size(x86_a) > 0
-        system("lipo -create '#{x86_a}' '#{sim_a}' -output '#{binary}'")
-      else
-        FileUtils.cp(sim_a, binary)
+    if file_info.include?('Mach-O') && file_info.include?('arm64')
+      # Mach-O binary (object/dylib) — vtool can patch directly
+      build_info = `vtool -show-build "#{binary}" 2>/dev/null`
+      if build_info.include?('platform IOS') && !build_info.include?('platform IOSSIMULATOR')
+        system("vtool -arch arm64 -set-build-version iossim 15.5 15.5 -replace -output '#{binary}' '#{binary}' 2>/dev/null")
+        puts "  ✓ #{fw_name} patched (vtool) for arm64 simulator"
       end
 
-      puts "  ✓ #{fw_name} patched for arm64 simulator"
-    rescue => e
-      puts "  ✗ #{fw_name} patch failed: #{e.message}"
-    ensure
+    elsif file_info.include?('ar archive') && file_info.include?('arm64')
+      # Static archive — extract .o files and binary-patch each one
+      tmp = "/tmp/fw_patch_#{fw_name}"
       FileUtils.rm_rf(tmp)
+      FileUtils.mkdir_p(tmp)
+
+      begin
+        arm64_a = File.join(tmp, 'arm64.a')
+        next unless system("lipo '#{binary}' -thin arm64 -output '#{arm64_a}' 2>/dev/null")
+
+        obj_dir = File.join(tmp, 'objs')
+        FileUtils.mkdir_p(obj_dir)
+        system("cd '#{obj_dir}' && ar x '#{arm64_a}' 2>/dev/null")
+
+        objs = Dir.glob(File.join(obj_dir, '*.o'))
+        next if objs.empty?
+
+        patched_any = false
+        objs.each do |obj|
+          out = `python3 '#{patcher_path}' '#{obj}' 2>&1`
+          patched_any = true if out.include?('patched:')
+        end
+        next unless patched_any
+
+        sim_a    = File.join(tmp, 'sim_arm64.a')
+        obj_list = objs.map { |o| "'#{o}'" }.join(' ')
+        system("ar rcs '#{sim_a}' #{obj_list} 2>/dev/null")
+        system("ranlib '#{sim_a}' 2>/dev/null")
+
+        x86_a   = File.join(tmp, 'x86_64.a')
+        has_x86 = system("lipo '#{binary}' -thin x86_64 -output '#{x86_a}' 2>/dev/null")
+
+        if has_x86 && File.exist?(x86_a) && File.size(x86_a) > 0
+          system("lipo -create '#{x86_a}' '#{sim_a}' -output '#{binary}'")
+        else
+          FileUtils.cp(sim_a, binary)
+        end
+
+        puts "  ✓ #{fw_name} patched (ar+py) for arm64 simulator"
+      rescue => e
+        puts "  ✗ #{fw_name} patch failed: #{e.message}"
+      ensure
+        FileUtils.rm_rf(tmp)
+      end
     end
   end
 end
