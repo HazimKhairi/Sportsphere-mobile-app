@@ -7,7 +7,7 @@ part of 'club_membership_providers.dart';
 // **************************************************************************
 
 String _$clubMembershipRepositoryHash() =>
-    r'0adbedb5b75a11c75854e2eb2c194f3ce358cca1';
+    r'8b75993d2ca25c1fc7de32bd884e1bad4ac89b38';
 
 /// See also [clubMembershipRepository].
 @ProviderFor(clubMembershipRepository)

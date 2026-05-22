@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../app/theme/sphere_colors.dart';
@@ -79,6 +80,11 @@ class ProfileScreen extends ConsumerWidget {
                       icon: LucideIcons.userPen,
                       label: 'Edit profile',
                       onTap: () => _comingSoon(context, 'Edit profile'),
+                    ),
+                    ProfileRow(
+                      icon: LucideIcons.layoutGrid,
+                      label: 'Browse programs',
+                      onTap: () => GoRouter.of(context).push('/programs'),
                     ),
                     ProfileRow(
                       icon: LucideIcons.arrowRightLeft,

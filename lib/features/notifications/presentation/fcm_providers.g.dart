@@ -6,7 +6,7 @@ part of 'fcm_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fcmRepositoryHash() => r'5de69d026faf227a7fa170eaff8e29c2ed3b332e';
+String _$fcmRepositoryHash() => r'bbcaa9794ee61b44cc6d764f10c3958e5e378bca';
 
 /// See also [fcmRepository].
 @ProviderFor(fcmRepository)
