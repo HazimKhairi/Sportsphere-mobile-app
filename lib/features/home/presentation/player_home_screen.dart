@@ -11,6 +11,7 @@ import '_widgets/sphere_entrance.dart';
 import '_widgets/sphere_hero_gradient.dart';
 import '_widgets/sphere_section_label.dart';
 import '_widgets/sphere_streak_card.dart';
+import 'player_home_providers.dart';
 
 class PlayerHomeScreen extends ConsumerWidget {
   const PlayerHomeScreen({super.key});
@@ -22,10 +23,24 @@ class PlayerHomeScreen extends ConsumerWidget {
     return 'Good evening';
   }
 
+  String _timeAgo(DateTime when) {
+    final diff = DateTime.now().difference(when);
+    if (diff.inMinutes < 1) return 'just now';
+    if (diff.inMinutes < 60) return '${diff.inMinutes} min ago';
+    if (diff.inHours < 24) return '${diff.inHours} h ago';
+    if (diff.inDays < 2) return 'Yesterday';
+    if (diff.inDays < 7) return '${diff.inDays} d ago';
+    return '${(diff.inDays / 7).floor()} w ago';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider).valueOrNull;
     final firstName = (user?.displayName ?? 'Player').split(' ').first;
+
+    final streakAsync = ref.watch(playerStreakProvider);
+    final drillAsync = ref.watch(todayDrillProvider);
+    final activityAsync = ref.watch(activityTimelineProvider);
 
     return Stack(
       children: [
@@ -73,15 +88,49 @@ class PlayerHomeScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: SphereSpacing.x32),
 
+                // Streak card
                 SphereEntrance(
                   delayMs: 80,
-                  child: SphereStreakCard(streakDays: 7, onTap: () {}),
+                  child: streakAsync.when(
+                    data: (streak) => SphereStreakCard(
+                      streakDays: streak.days,
+                      goal: streak.goal,
+                      onTap: () {},
+                    ),
+                    loading: () => const SphereStreakCard(
+                      streakDays: 0,
+                      goal: 10,
+                      loading: true,
+                    ),
+                    error: (_, _) => const SphereStreakCard(
+                      streakDays: 0,
+                      goal: 10,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: SphereSpacing.x16),
 
+                // Drill of day
                 SphereEntrance(
                   delayMs: 140,
-                  child: SphereDrillOfDayCard(onTap: () {}),
+                  child: drillAsync.when(
+                    data: (drill) => SphereDrillOfDayCard(
+                      drillName: drill?.name ?? '',
+                      drillSubtitle: drill == null
+                          ? 'New drill drops tomorrow.'
+                          : '5 min · level ${drill.difficulty} ball control',
+                      onTap: () {},
+                    ),
+                    loading: () => const SphereDrillOfDayCard(
+                      drillName: '',
+                      drillSubtitle: '',
+                      loading: true,
+                    ),
+                    error: (_, _) => const SphereDrillOfDayCard(
+                      drillName: 'Couldn’t load drill',
+                      drillSubtitle: 'Try again later.',
+                    ),
+                  ),
                 ),
                 const SizedBox(height: SphereSpacing.x32),
 
@@ -91,27 +140,56 @@ class PlayerHomeScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: SphereSpacing.x16),
 
-                const SphereEntrance(
+                // Activity timeline
+                SphereEntrance(
                   delayMs: 260,
-                  child: Column(
-                    children: [
-                      SphereActivityTimelineItem(
-                        title: 'Checked in to Training 7pm',
-                        timeAgo: '12 min ago',
-                        icon: LucideIcons.check,
+                  child: activityAsync.when(
+                    data: (items) {
+                      if (items.isEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            'No activity yet. Train today to start your streak.',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: SphereColors.onSurfaceMuted,
+                                ),
+                          ),
+                        );
+                      }
+                      return Column(
+                        children: [
+                          for (var i = 0; i < items.length; i++)
+                            SphereActivityTimelineItem(
+                              title: items[i].title,
+                              timeAgo: _timeAgo(items[i].createdAt),
+                              icon: items[i].icon,
+                              isLast: i == items.length - 1,
+                            ),
+                        ],
+                      );
+                    },
+                    loading: () => const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Center(
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+                          ),
+                        ),
                       ),
-                      SphereActivityTimelineItem(
-                        title: 'Match scheduled tomorrow',
-                        timeAgo: '2 h ago',
-                        icon: LucideIcons.calendar,
+                    ),
+                    error: (_, _) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        'Couldn’t load activity.',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: SphereColors.onSurfaceMuted,
+                            ),
                       ),
-                      SphereActivityTimelineItem(
-                        title: 'Earned badge: First Drill',
-                        timeAgo: 'Yesterday',
-                        icon: LucideIcons.award,
-                        isLast: true,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ],

@@ -5,16 +5,30 @@ import '../../../../app/theme/sphere_radius.dart';
 import '../../../../app/theme/sphere_spacing.dart';
 
 class SphereDrillOfDayCard extends StatelessWidget {
-  const SphereDrillOfDayCard({super.key, this.onTap});
+  const SphereDrillOfDayCard({
+    super.key,
+    this.onTap,
+    this.drillName = 'Juggle 50 reps',
+    this.drillSubtitle = '5 min · level 2 ball control',
+    this.loading = false,
+  });
   final VoidCallback? onTap;
+  final String drillName;
+  final String drillSubtitle;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
+    final bool hasDrill = drillName.isNotEmpty;
+    final String resolvedTitle = hasDrill ? drillName : 'Coming soon';
+    final String resolvedSubtitle =
+        hasDrill ? drillSubtitle : 'New drill drops tomorrow.';
+
     return Material(
       color: Colors.transparent,
       borderRadius: SphereRadius.cardRect,
       child: InkWell(
-        onTap: onTap,
+        onTap: loading ? null : onTap,
         borderRadius: SphereRadius.cardRect,
         child: Container(
           height: 180,
@@ -68,42 +82,65 @@ class SphereDrillOfDayCard extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  Text(
-                    'Juggle 50 reps',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: SphereColors.onSurface,
-                          fontWeight: FontWeight.w700,
-                        ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    '5 min · level 2 ball control',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
-                        ),
-                  ),
+                  if (loading) ...[
+                    Container(
+                      width: 200,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: SphereColors.surfaceElev2,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      width: 140,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: SphereColors.surfaceElev2,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ] else ...[
+                    Text(
+                      resolvedTitle,
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            color: SphereColors.onSurface,
+                            fontWeight: FontWeight.w700,
+                          ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      resolvedSubtitle,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: SphereColors.onSurfaceMuted,
+                          ),
+                    ),
+                  ],
                   const SizedBox(height: SphereSpacing.x16),
                   Row(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                        decoration: const BoxDecoration(
-                          color: SphereColors.primary,
-                          borderRadius: SphereRadius.pillRect,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(LucideIcons.play, size: 14, color: SphereColors.onPrimary),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Start',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: SphereColors.onPrimary,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
-                          ],
+                      Opacity(
+                        opacity: loading ? 0.5 : 1,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                          decoration: const BoxDecoration(
+                            color: SphereColors.primary,
+                            borderRadius: SphereRadius.pillRect,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(LucideIcons.play, size: 14, color: SphereColors.onPrimary),
+                              const SizedBox(width: 6),
+                              Text(
+                                'Start',
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: SphereColors.onPrimary,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],

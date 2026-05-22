@@ -12,19 +12,26 @@ class SphereStreakCard extends StatelessWidget {
     required this.streakDays,
     this.goal = 10,
     this.onTap,
+    this.loading = false,
   });
   final int streakDays;
   final int goal;
   final VoidCallback? onTap;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
-    final progress = (streakDays / goal).clamp(0.0, 1.0);
+    final progress = loading ? 0.0 : (streakDays / goal).clamp(0.0, 1.0);
+    final subtitle = loading
+        ? 'Loading your streak…'
+        : (streakDays == 0
+            ? 'Start your streak today.'
+            : 'One more session and you hit your personal best.');
     return Material(
       color: SphereColors.surfaceElev1,
       borderRadius: SphereRadius.cardRect,
       child: InkWell(
-        onTap: onTap,
+        onTap: loading ? null : onTap,
         borderRadius: SphereRadius.cardRect,
         child: Container(
           padding: const EdgeInsets.all(SphereSpacing.x20),
@@ -61,14 +68,24 @@ class SphereStreakCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: [
-                        SphereCountUp(
-                          value: streakDays,
-                          style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                                color: SphereColors.onSurface,
-                                fontSize: 36,
-                                height: 1,
-                              ),
-                        ),
+                        if (loading)
+                          Text(
+                            '--',
+                            style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                                  color: SphereColors.onSurfaceMuted,
+                                  fontSize: 36,
+                                  height: 1,
+                                ),
+                          )
+                        else
+                          SphereCountUp(
+                            value: streakDays,
+                            style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                                  color: SphereColors.onSurface,
+                                  fontSize: 36,
+                                  height: 1,
+                                ),
+                          ),
                         const SizedBox(width: 6),
                         Text(
                           'days',
@@ -80,7 +97,7 @@ class SphereStreakCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'One more session and you hit your personal best.',
+                      subtitle,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: SphereColors.onSurfaceMuted,
                             height: 1.4,
