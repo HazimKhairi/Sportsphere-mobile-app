@@ -24,7 +24,11 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: _RouterRefresh(ref),
     redirect: (context, state) {
       final loc = state.matchedLocation;
-      if (loc == '/splash' || loc.startsWith('/qr-scan')) return null;
+      if (loc == '/splash' ||
+          loc.startsWith('/qr-scan') ||
+          loc.startsWith('/payment/')) {
+        return null;
+      }
 
       final user = ref.read(currentUserProvider).valueOrNull;
       final role = ref.read(selectedRoleProvider);
@@ -61,6 +65,80 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) {
           final id = state.pathParameters['id']!;
           return QrScanScreen(sessionId: id);
+        },
+      ),
+      GoRoute(
+        path: '/payment/success/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return Scaffold(
+            backgroundColor: const Color(0xFF0A0A0A),
+            body: SafeArea(
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.check_circle,
+                        size: 64, color: Color(0xFF22C55E)),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Payment success',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Registration $id',
+                      style: const TextStyle(color: Color(0xFFA1A1AA)),
+                    ),
+                    const SizedBox(height: 32),
+                    TextButton(
+                      onPressed: () => context.go('/home'),
+                      child: const Text('Go to home'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/payment/failure',
+        builder: (context, state) {
+          final reason = state.uri.queryParameters['reason'] ?? 'Unknown error';
+          return Scaffold(
+            backgroundColor: const Color(0xFF0A0A0A),
+            body: SafeArea(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.error,
+                          size: 64, color: Color(0xFFEF4444)),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Payment failed',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        reason,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: Color(0xFFA1A1AA)),
+                      ),
+                      const SizedBox(height: 32),
+                      TextButton(
+                        onPressed: () => context.pop(),
+                        child: const Text('Try again'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
         },
       ),
       ShellRoute(

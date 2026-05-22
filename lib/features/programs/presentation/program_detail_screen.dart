@@ -7,16 +7,29 @@ import '../../../app/theme/sphere_colors.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
+import '../../payments/presentation/payment_method_sheet.dart';
+import '../../payments/presentation/stripe_checkout_flow.dart';
 import '../domain/program.dart';
 import 'program_detail_providers.dart';
+import 'registration_providers.dart';
 
-class ProgramDetailScreen extends ConsumerWidget {
+class ProgramDetailScreen extends ConsumerStatefulWidget {
   const ProgramDetailScreen({super.key, required this.programId});
   final String programId;
 
+  @override
+  ConsumerState<ProgramDetailScreen> createState() =>
+      _ProgramDetailScreenState();
+}
+
+class _ProgramDetailScreenState extends ConsumerState<ProgramDetailScreen> {
+  bool _busy = false;
+
   String _formatDate(DateTime dt) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    ];
     return '${dt.day} ${months[dt.month - 1]} ${dt.year}';
   }
 
@@ -28,24 +41,53 @@ class ProgramDetailScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _register(Program program) async {
+    setState(() => _busy = true);
+    final method = await PaymentMethodSheet.show(context);
+    if (!mounted) return;
+    if (method == null) {
+      setState(() => _busy = false);
+      return;
+    }
+    if (method == PaymentMethod.cash) {
+      // C4 wires this — for now snackbar.
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Cash payment lands in C4.')),
+      );
+      setState(() => _busy = false);
+      return;
+    }
+    // Card flow
+    await runStripeCheckout(
+      context: context,
+      ref: ref,
+      programId: program.id,
+      amountCents: program.basePriceCents,
+      currency: program.currency,
+    );
+    if (mounted) setState(() => _busy = false);
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final detailAsync = ref.watch(programDetailProvider(programId: programId));
+  Widget build(BuildContext context) {
+    final detailAsync =
+        ref.watch(programDetailProvider(programId: widget.programId));
     return Scaffold(
       backgroundColor: SphereColors.surface,
       body: detailAsync.when(
         data: (program) {
           if (program == null) return _NotFound(onBack: () => _back(context));
+          final alreadyRegistered = ref
+                  .watch(isRegisteredForProvider(programId: program.id))
+                  .valueOrNull ??
+              false;
           return _Content(
             program: program,
             formatDate: _formatDate,
             onBack: () => _back(context),
-            onRegister: () {
-              // TODO C3: replace with payment-method bottom sheet flow
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Payment flow lands in C3.')),
-              );
-            },
+            onRegister: _busy ? null : () => _register(program),
+            busy: _busy,
+            alreadyRegistered: alreadyRegistered,
           );
         },
         loading: () => const Center(
@@ -70,11 +112,15 @@ class _Content extends StatelessWidget {
     required this.formatDate,
     required this.onBack,
     required this.onRegister,
+    this.busy = false,
+    this.alreadyRegistered = false,
   });
   final Program program;
   final String Function(DateTime) formatDate;
   final VoidCallback onBack;
-  final VoidCallback onRegister;
+  final VoidCallback? onRegister;
+  final bool busy;
+  final bool alreadyRegistered;
 
   @override
   Widget build(BuildContext context) {
@@ -238,21 +284,58 @@ class _Content extends StatelessWidget {
           bottom: 110,
           child: SizedBox(
             height: 52,
-            child: ElevatedButton.icon(
-              onPressed: onRegister,
-              icon: const Icon(LucideIcons.userPlus, size: 18),
-              label: const Text('Register'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: SphereColors.primary,
-                foregroundColor: SphereColors.onPrimary,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: SphereRadius.pillRect,
-                ),
-                elevation: 0,
-                textStyle:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-              ),
-            ),
+            child: alreadyRegistered
+                ? Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: SphereColors.primary.withValues(alpha: 0.18),
+                      borderRadius: SphereRadius.pillRect,
+                      border: Border.all(
+                        color: SphereColors.primary.withValues(alpha: 0.4),
+                      ),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(LucideIcons.check,
+                            size: 18, color: SphereColors.primary),
+                        SizedBox(width: 8),
+                        Text(
+                          "You're in",
+                          style: TextStyle(
+                            color: SphereColors.primary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : ElevatedButton.icon(
+                    onPressed: busy ? null : onRegister,
+                    icon: busy
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor:
+                                  AlwaysStoppedAnimation(SphereColors.onPrimary),
+                            ),
+                          )
+                        : const Icon(LucideIcons.userPlus, size: 18),
+                    label: Text(busy ? 'Starting...' : 'Register'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: SphereColors.primary,
+                      foregroundColor: SphereColors.onPrimary,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: SphereRadius.pillRect,
+                      ),
+                      elevation: 0,
+                      textStyle: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w700),
+                    ),
+                  ),
           ),
         ),
       ],
