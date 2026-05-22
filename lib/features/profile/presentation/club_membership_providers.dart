@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/api/api_client.dart';
+import '../../../core/config/sphere_config.dart';
 import '../../auth/presentation/auth_providers.dart';
 import '../data/club_membership_repository.dart';
 import '../domain/club_membership.dart';
@@ -12,7 +13,7 @@ ClubMembershipRepository clubMembershipRepository(
   ClubMembershipRepositoryRef ref,
 ) {
   return ClubMembershipRepository(
-    dio: buildApiClient(baseUrl: 'https://sprtsphr.app'),
+    dio: buildApiClient(baseUrl: SphereConfig.apiBaseUrl),
   );
 }
 

@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/api/api_client.dart';
+import '../../../core/config/sphere_config.dart';
 import '../data/fcm_repository.dart';
 
 part 'fcm_providers.g.dart';
@@ -13,7 +14,7 @@ const _kFcmDeviceIdKey = 'fcm_device_id';
 
 @Riverpod(keepAlive: true)
 FcmRepository fcmRepository(FcmRepositoryRef ref) {
-  return FcmRepository(dio: buildApiClient(baseUrl: 'https://sprtsphr.app'));
+  return FcmRepository(dio: buildApiClient(baseUrl: SphereConfig.apiBaseUrl));
 }
 
 @Riverpod(keepAlive: true)
