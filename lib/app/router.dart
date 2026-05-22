@@ -10,6 +10,7 @@ import '../features/home/presentation/staff_home_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/role_pick/presentation/role_pick_screen.dart';
 import '../features/role_pick/presentation/role_providers.dart';
+import '../features/schedule/presentation/qr_scan_screen.dart';
 import '../features/schedule/presentation/schedule_screen.dart';
 import '../features/schedule/presentation/session_detail_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
@@ -20,7 +21,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: _RouterRefresh(ref),
     redirect: (context, state) {
       final loc = state.matchedLocation;
-      if (loc == '/splash') return null;
+      if (loc == '/splash' || loc.startsWith('/qr-scan')) return null;
 
       final user = ref.read(currentUserProvider).valueOrNull;
       final role = ref.read(selectedRoleProvider);
@@ -52,6 +53,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/onboarding', builder: (_, _) => const OnboardingScreen()),
       GoRoute(path: '/role-pick', builder: (_, _) => const RolePickScreen()),
       GoRoute(path: '/auth/login', builder: (_, _) => const LoginScreen()),
+      GoRoute(
+        path: '/qr-scan/:id',
+        builder: (_, state) {
+          final id = state.pathParameters['id']!;
+          return QrScanScreen(sessionId: id);
+        },
+      ),
       ShellRoute(
         builder: (context, state, child) => HomeShell(child: child),
         routes: [

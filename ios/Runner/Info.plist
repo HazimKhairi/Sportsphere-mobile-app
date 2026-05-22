@@ -79,5 +79,7 @@
 				</array>
 			</dict>
 		</array>
+		<key>NSCameraUsageDescription</key>
+		<string>We use your camera to scan QR codes for training session check-in. Video is not uploaded.</string>
 	</dict>
 </plist>
