@@ -42,34 +42,52 @@ post_install do |installer|
 
   require 'fileutils'
 
-  # Patch device-only arm64 static frameworks to work with arm64 iOS Simulator.
-  # MLKit and related pods ship only an iOS-device arm64 slice; we binary-patch
-  # the LC_BUILD_VERSION platform field from PLATFORM_IOS(2) to
-  # PLATFORM_IOSSIMULATOR(7) in each object file so Xcode's linker accepts them.
+  # Patch device-only arm64 frameworks for arm64 iOS Simulator compatibility.
+  # Strategy:
+  #   Mach-O binaries  → vtool (has space for load command rewrite)
+  #   Static archives  → scan binary in-place for embedded Mach-O headers and
+  #                      patch LC_BUILD_VERSION platform IOS(2)→IOSSIM(7)
+  #                      without extract/repack (avoids broken symbol tables)
   patcher_path = '/tmp/patch_ios_to_sim.py'
   File.write(patcher_path, <<~'PYTHON')
     import struct, sys, os
-    LC_BUILD_VERSION  = 0x32
-    PLATFORM_IOS      = 2
-    PLATFORM_IOSSIM   = 7
+    LC_BUILD_VERSION = 0x32
+    PLATFORM_IOS     = 2
+    PLATFORM_IOSSIM  = 7
+    MACHO64_LE       = 0xFEEDFACF
+
+    def patch_macho_at(data, base):
+        if base + 32 > len(data): return False
+        if struct.unpack_from('<I', data, base)[0] != MACHO64_LE: return False
+        ncmds  = struct.unpack_from('<I', data, base + 16)[0]
+        off    = base + 32
+        hit    = False
+        for _ in range(ncmds):
+            if off + 8 > len(data): break
+            cmd     = struct.unpack_from('<I', data, off)[0]
+            cmdsize = struct.unpack_from('<I', data, off + 4)[0]
+            if cmd == LC_BUILD_VERSION and off + 12 <= len(data):
+                if struct.unpack_from('<I', data, off + 8)[0] == PLATFORM_IOS:
+                    struct.pack_into('<I', data, off + 8, PLATFORM_IOSSIM)
+                    hit = True
+            if cmdsize == 0: break
+            off += cmdsize
+        return hit
+
     path = sys.argv[1]
     with open(path, 'rb') as f:
         data = bytearray(f.read())
-    if struct.unpack_from('<I', data, 0)[0] != 0xFEEDFACF:
-        sys.exit(0)
-    ncmds  = struct.unpack_from('<I', data, 16)[0]
-    offset = 32
+
     patched = False
-    for _ in range(ncmds):
-        if offset + 8 > len(data): break
-        cmd     = struct.unpack_from('<I', data, offset)[0]
-        cmdsize = struct.unpack_from('<I', data, offset + 4)[0]
-        if cmd == LC_BUILD_VERSION and offset + 12 <= len(data):
-            if struct.unpack_from('<I', data, offset + 8)[0] == PLATFORM_IOS:
-                struct.pack_into('<I', data, offset + 8, PLATFORM_IOSSIM)
-                patched = True
-        if cmdsize == 0: break
-        offset += cmdsize
+    i = 0
+    target = struct.pack('<I', MACHO64_LE)
+    while True:
+        idx = data.find(target, i)
+        if idx == -1: break
+        if patch_macho_at(data, idx):
+            patched = True
+        i = idx + 4
+
     if patched:
         with open(path, 'wb') as f: f.write(data)
         print(f"patched:{os.path.basename(path)}")
@@ -84,57 +102,32 @@ post_install do |installer|
 
     file_info = `file "#{binary}" 2>/dev/null`
 
-    if file_info.include?('Mach-O') && file_info.include?('arm64')
-      # Mach-O binary (object/dylib) — vtool can patch directly
+    # Check ar archive FIRST — fat binaries with ar slices also contain "Mach-O"
+    # in their file description, so we must distinguish before vtool branch.
+    if file_info.include?('ar archive') && file_info.include?('arm64')
+      tmp     = "/tmp/fw_arm64_#{fw_name}.a"
+      next unless system("lipo '#{binary}' -thin arm64 -output '#{tmp}' 2>/dev/null")
+
+      out = `python3 '#{patcher_path}' '#{tmp}' 2>&1`
+      if out.include?('patched:')
+        x86_a = "/tmp/fw_x86_#{fw_name}.a"
+        has_x86 = system("lipo '#{binary}' -thin x86_64 -output '#{x86_a}' 2>/dev/null")
+        if has_x86 && File.exist?(x86_a) && File.size(x86_a) > 0
+          system("lipo -create '#{x86_a}' '#{tmp}' -output '#{binary}'")
+          File.delete(x86_a)
+        else
+          FileUtils.cp(tmp, binary)
+        end
+        puts "  ✓ #{fw_name} patched (in-place ar scan)"
+      end
+      File.delete(tmp) if File.exist?(tmp)
+
+    elsif file_info.include?('Mach-O') && file_info.include?('arm64')
+      # Pure Mach-O binary (not ar archive) — vtool patches it directly
       build_info = `vtool -show-build "#{binary}" 2>/dev/null`
       if build_info.include?('platform IOS') && !build_info.include?('platform IOSSIMULATOR')
         system("vtool -arch arm64 -set-build-version iossim 15.5 15.5 -replace -output '#{binary}' '#{binary}' 2>/dev/null")
-        puts "  ✓ #{fw_name} patched (vtool) for arm64 simulator"
-      end
-
-    elsif file_info.include?('ar archive') && file_info.include?('arm64')
-      # Static archive — extract .o files and binary-patch each one
-      tmp = "/tmp/fw_patch_#{fw_name}"
-      FileUtils.rm_rf(tmp)
-      FileUtils.mkdir_p(tmp)
-
-      begin
-        arm64_a = File.join(tmp, 'arm64.a')
-        next unless system("lipo '#{binary}' -thin arm64 -output '#{arm64_a}' 2>/dev/null")
-
-        obj_dir = File.join(tmp, 'objs')
-        FileUtils.mkdir_p(obj_dir)
-        system("cd '#{obj_dir}' && ar x '#{arm64_a}' 2>/dev/null")
-
-        objs = Dir.glob(File.join(obj_dir, '*.o'))
-        next if objs.empty?
-
-        patched_any = false
-        objs.each do |obj|
-          out = `python3 '#{patcher_path}' '#{obj}' 2>&1`
-          patched_any = true if out.include?('patched:')
-        end
-        next unless patched_any
-
-        sim_a    = File.join(tmp, 'sim_arm64.a')
-        obj_list = objs.map { |o| "'#{o}'" }.join(' ')
-        system("ar rcs '#{sim_a}' #{obj_list} 2>/dev/null")
-        system("ranlib '#{sim_a}' 2>/dev/null")
-
-        x86_a   = File.join(tmp, 'x86_64.a')
-        has_x86 = system("lipo '#{binary}' -thin x86_64 -output '#{x86_a}' 2>/dev/null")
-
-        if has_x86 && File.exist?(x86_a) && File.size(x86_a) > 0
-          system("lipo -create '#{x86_a}' '#{sim_a}' -output '#{binary}'")
-        else
-          FileUtils.cp(sim_a, binary)
-        end
-
-        puts "  ✓ #{fw_name} patched (ar+py) for arm64 simulator"
-      rescue => e
-        puts "  ✗ #{fw_name} patch failed: #{e.message}"
-      ensure
-        FileUtils.rm_rf(tmp)
+        puts "  ✓ #{fw_name} patched (vtool)"
       end
     end
   end
