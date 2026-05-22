@@ -8,6 +8,7 @@ import '../features/home/presentation/home_shell.dart';
 import '../features/home/presentation/player_home_screen.dart';
 import '../features/home/presentation/staff_home_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
+import '../features/profile/presentation/profile_screen.dart';
 import '../features/role_pick/presentation/role_pick_screen.dart';
 import '../features/role_pick/presentation/role_providers.dart';
 import '../features/schedule/presentation/qr_scan_screen.dart';
@@ -86,6 +87,10 @@ final routerProvider = Provider<GoRouter>((ref) {
               final id = state.pathParameters['id']!;
               return SessionDetailScreen(sessionId: id);
             },
+          ),
+          GoRoute(
+            path: '/profile',
+            builder: (_, _) => const ProfileScreen(),
           ),
         ],
       ),
