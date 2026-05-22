@@ -85,33 +85,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
 
           // Hero overlay: back button + wordmark.
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: SphereSpacing.x16,
-                vertical: SphereSpacing.x8,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _CircleIconButton(
-                    icon: LucideIcons.chevronLeft,
-                    onTap: () {
-                      if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.go('/role-pick');
-                      }
-                    },
-                  ),
-                  SizedBox(
-                    height: 28,
-                    child: Image.asset(
-                      'assets/brand/sphere_wordmark.png',
-                      fit: BoxFit.contain,
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SphereSpacing.x16,
+                  vertical: SphereSpacing.x8,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _CircleIconButton(
+                      icon: LucideIcons.chevronLeft,
+                      onTap: () {
+                        if (context.canPop()) {
+                          context.pop();
+                        } else {
+                          context.go('/role-pick');
+                        }
+                      },
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: 28,
+                      child: Image.asset(
+                        'assets/brand/sphere_wordmark.png',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -123,14 +128,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             right: 0,
             bottom: 0,
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: SphereColors.surfaceElev1,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+                border: Border(
+                  top: BorderSide(
+                    color: SphereColors.primary.withValues(alpha: 0.18),
+                    width: 1,
+                  ),
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0x80000000),
-                    blurRadius: 20,
-                    offset: Offset(0, -8),
+                    color: SphereColors.primary.withValues(alpha: 0.08),
+                    blurRadius: 24,
+                    offset: const Offset(0, -4),
+                  ),
+                  const BoxShadow(
+                    color: Color(0xCC000000),
+                    blurRadius: 24,
+                    offset: Offset(0, -10),
                   ),
                 ],
               ),
