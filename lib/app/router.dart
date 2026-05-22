@@ -9,6 +9,7 @@ import '../features/home/presentation/player_home_screen.dart';
 import '../features/home/presentation/staff_home_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/profile/presentation/profile_screen.dart';
+import '../features/programs/presentation/program_detail_screen.dart';
 import '../features/programs/presentation/programs_list_screen.dart';
 import '../features/role_pick/presentation/role_pick_screen.dart';
 import '../features/role_pick/presentation/role_providers.dart';
@@ -101,9 +102,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/programs/:id',
             builder: (_, state) {
               final id = state.pathParameters['id']!;
-              return Scaffold(
-                body: Center(child: Text('Program $id detail in B3')),
-              );
+              return ProgramDetailScreen(programId: id);
             },
           ),
         ],
