@@ -8,6 +8,7 @@ import '../features/auth/presentation/signup_screen.dart';
 import '../features/home/presentation/home_shell.dart';
 import '../features/home/presentation/player_home_screen.dart';
 import '../features/home/presentation/staff_home_screen.dart';
+import '../features/home/presentation/train_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/payments/presentation/cash_pay_screen.dart';
 import '../features/payments/presentation/payment_detail_screen.dart';
@@ -109,6 +110,19 @@ final routerProvider = Provider<GoRouter>((ref) {
                       ? const StaffHomeScreen()
                       : const PlayerHomeScreen();
                 },
+              );
+            },
+          ),
+          GoRoute(
+            path: '/train',
+            builder: (_, _) => const TrainScreen(),
+          ),
+          GoRoute(
+            path: '/train/drill/:id',
+            builder: (_, state) {
+              final id = state.pathParameters['id']!;
+              return Scaffold(
+                body: Center(child: Text('Drill $id detail in T3')),
               );
             },
           ),
