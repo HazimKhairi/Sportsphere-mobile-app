@@ -94,6 +94,38 @@ void main() {
     );
   });
 
+  test('getPlayer success', () async {
+    when(() => dio.get<Map<String, dynamic>>(
+          '/api/players/abc',
+        )).thenAnswer((_) async => Response(
+              requestOptions: RequestOptions(path: '/api/players/abc'),
+              statusCode: 200,
+              data: {
+                'player': {
+                  'id': 'abc',
+                  'firstName': 'Ahmad',
+                  'lastName': 'Zulkifli',
+                  'email': 'ahmad@example.com',
+                  'phone': '+601123456789',
+                  'position': 'Midfielder',
+                  'teamName': 'U12 Team A',
+                  'photoUrl': null,
+                  'dateOfBirth': '2012-03-15',
+                  'availability': 'injured',
+                  'jerseyNumber': 10,
+                  'parentName': 'Zulkifli Hamid',
+                  'parentPhone': '+601198765432',
+                }
+              },
+            ));
+
+    final detail = await repo.getPlayer(id: 'abc');
+
+    expect(detail.fullName, 'Ahmad Zulkifli');
+    expect(detail.availability, 'injured');
+    expect(detail.jerseyNumber, 10);
+  });
+
   test('listPlayers passes X-Club-Id header', () async {
     Options? capturedOptions;
 
