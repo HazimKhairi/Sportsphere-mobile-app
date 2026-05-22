@@ -6,6 +6,7 @@ import '../features/auth/presentation/auth_providers.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/signup_screen.dart';
 import '../features/home/presentation/achievements_screen.dart';
+import '../features/home/presentation/body_composition_screen.dart';
 import '../features/home/presentation/drill_complete_screen.dart';
 import '../features/home/presentation/drill_detail_screen.dart';
 import '../features/home/presentation/drill_player_screen.dart';
@@ -168,6 +169,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/profile/achievements',
             builder: (_, _) => const AchievementsScreen(),
+          ),
+          GoRoute(
+            path: '/profile/body-composition',
+            builder: (_, _) => const BodyCompositionScreen(),
           ),
           GoRoute(
             path: '/profile/payments',

@@ -99,6 +99,12 @@ class ProfileScreen extends ConsumerWidget {
                           GoRouter.of(context).push('/profile/achievements'),
                     ),
                     ProfileRow(
+                      icon: LucideIcons.activity,
+                      label: 'Body composition',
+                      onTap: () => GoRouter.of(context)
+                          .push('/profile/body-composition'),
+                    ),
+                    ProfileRow(
                       icon: LucideIcons.arrowRightLeft,
                       label: 'Switch club',
                       onTap: () => SwitchClubSheet.show(context),
