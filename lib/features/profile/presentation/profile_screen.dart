@@ -11,6 +11,8 @@ import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../../role_pick/presentation/role_providers.dart';
 import '_widgets/profile_row.dart';
 import '_widgets/profile_section_card.dart';
+import '_widgets/sign_out_dialog.dart';
+import 'sign_out_flow.dart';
 import 'switch_club_sheet.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -128,7 +130,7 @@ class ProfileScreen extends ConsumerWidget {
                       icon: LucideIcons.logOut,
                       label: 'Sign out',
                       danger: true,
-                      onTap: () => _comingSoon(context, 'Sign out (T14)'),
+                      onTap: () => _confirmSignOut(context, ref),
                     ),
                   ],
                 ),
@@ -154,6 +156,20 @@ class ProfileScreen extends ConsumerWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('$label coming soon.')),
     );
+  }
+
+  Future<void> _confirmSignOut(BuildContext context, WidgetRef ref) async {
+    final confirmed = await SignOutDialog.show(context);
+    if (!confirmed) return;
+    try {
+      await runSignOut(ref);
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sign out failed: $e')),
+        );
+      }
+    }
   }
 }
 

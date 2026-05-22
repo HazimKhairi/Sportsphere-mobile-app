@@ -23,4 +23,10 @@ class SelectedRole extends _$SelectedRole {
       state = AppRole.values.byName(v);
     }
   }
+
+  Future<void> clear() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('selected_role');
+    state = null;
+  }
 }
