@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../features/auth/presentation/auth_providers.dart';
 import '../features/auth/presentation/login_screen.dart';
+import '../features/auth/presentation/signup_screen.dart';
 import '../features/home/presentation/home_shell.dart';
 import '../features/home/presentation/player_home_screen.dart';
 import '../features/home/presentation/staff_home_screen.dart';
@@ -65,6 +66,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/onboarding', builder: (_, _) => const OnboardingScreen()),
       GoRoute(path: '/role-pick', builder: (_, _) => const RolePickScreen()),
       GoRoute(path: '/auth/login', builder: (_, _) => const LoginScreen()),
+      GoRoute(path: '/auth/signup', builder: (_, _) => const SignupScreen()),
       GoRoute(
         path: '/qr-scan/:id',
         builder: (_, state) {

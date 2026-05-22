@@ -269,24 +269,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       const SizedBox(height: SphereSpacing.x24),
                       Center(
-                        child: Text.rich(
-                          TextSpan(
-                            text: 'New here? ',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: SphereColors.onSurfaceMuted,
+                        child: GestureDetector(
+                          onTap: () => context.push('/auth/signup'),
+                          behavior: HitTestBehavior.opaque,
+                          child: Text.rich(
+                            TextSpan(
+                              text: 'New here? ',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color: SphereColors.onSurfaceMuted,
+                                  ),
+                              children: const [
+                                TextSpan(
+                                  text: 'Sign up',
+                                  style: TextStyle(
+                                    color: SphereColors.primary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                            children: const [
-                              TextSpan(
-                                text: 'Sign up',
-                                style: TextStyle(
-                                  color: SphereColors.primary,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),

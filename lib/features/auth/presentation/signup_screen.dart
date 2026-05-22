@@ -1,0 +1,538 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+
+import '../../../app/theme/sphere_colors.dart';
+import '../../../app/theme/sphere_radius.dart';
+import '../../../app/theme/sphere_spacing.dart';
+import '../../role_pick/presentation/role_providers.dart';
+import 'auth_providers.dart';
+
+class SignupScreen extends ConsumerStatefulWidget {
+  const SignupScreen({super.key});
+
+  @override
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends ConsumerState<SignupScreen> {
+  final _name = TextEditingController();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  final _confirm = TextEditingController();
+  bool _busy = false;
+  bool _passwordVisible = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _email.dispose();
+    _password.dispose();
+    _confirm.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    setState(() => _error = null);
+
+    final name = _name.text.trim();
+    final email = _email.text.trim();
+    final password = _password.text;
+    final confirm = _confirm.text;
+
+    if (name.isEmpty) {
+      setState(() => _error = 'Please enter your name.');
+      return;
+    }
+    if (email.isEmpty || !email.contains('@')) {
+      setState(() => _error = 'Please enter a valid email.');
+      return;
+    }
+    if (password.length < 8) {
+      setState(() => _error = 'Password must be at least 8 characters.');
+      return;
+    }
+    if (password != confirm) {
+      setState(() => _error = 'Passwords do not match.');
+      return;
+    }
+
+    setState(() => _busy = true);
+    try {
+      await ref.read(authRepositoryProvider).signUpWithEmail(
+            email: email,
+            password: password,
+            displayName: name,
+          );
+      // Router redirect picks up the new user.
+    } on FirebaseAuthException catch (e) {
+      setState(() => _error = e.message ?? 'Sign up failed. Try again.');
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final role = ref.watch(selectedRoleProvider);
+
+    return Scaffold(
+      backgroundColor: SphereColors.surface,
+      body: Stack(
+        children: [
+          // Hero image.
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 320,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Image.asset(
+                  'assets/brand/login_hero.webp',
+                  fit: BoxFit.cover,
+                ),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        SphereColors.surface.withValues(alpha: 0.55),
+                        SphereColors.surface.withValues(alpha: 0.25),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Header overlay.
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SphereSpacing.x16,
+                  vertical: SphereSpacing.x8,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _CircleIconButton(
+                      icon: LucideIcons.chevronLeft,
+                      onTap: () {
+                        if (context.canPop()) {
+                          context.pop();
+                        } else {
+                          context.go('/auth/login');
+                        }
+                      },
+                    ),
+                    SizedBox(
+                      height: 28,
+                      child: Image.asset(
+                        'assets/brand/sphere_wordmark.png',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // Sliding card.
+          Positioned(
+            top: 260,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: SphereColors.surfaceElev1,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(28)),
+                border: Border(
+                  top: BorderSide(
+                    color: SphereColors.primary.withValues(alpha: 0.18),
+                    width: 1,
+                  ),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: SphereColors.primary.withValues(alpha: 0.08),
+                    blurRadius: 24,
+                    offset: const Offset(0, -4),
+                  ),
+                  const BoxShadow(
+                    color: Color(0xCC000000),
+                    blurRadius: 24,
+                    offset: Offset(0, -10),
+                  ),
+                ],
+              ),
+              child: SafeArea(
+                top: false,
+                child: role == AppRole.staff
+                    ? _StaffInviteOnly(onLogin: () => context.go('/auth/login'))
+                    : _PlayerSignupForm(
+                        nameCtrl: _name,
+                        emailCtrl: _email,
+                        passwordCtrl: _password,
+                        confirmCtrl: _confirm,
+                        passwordVisible: _passwordVisible,
+                        onTogglePassword: () => setState(
+                          () => _passwordVisible = !_passwordVisible,
+                        ),
+                        busy: _busy,
+                        error: _error,
+                        onSubmit: _submit,
+                        onLogin: () => context.go('/auth/login'),
+                      ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PlayerSignupForm extends StatelessWidget {
+  const _PlayerSignupForm({
+    required this.nameCtrl,
+    required this.emailCtrl,
+    required this.passwordCtrl,
+    required this.confirmCtrl,
+    required this.passwordVisible,
+    required this.onTogglePassword,
+    required this.busy,
+    required this.error,
+    required this.onSubmit,
+    required this.onLogin,
+  });
+
+  final TextEditingController nameCtrl;
+  final TextEditingController emailCtrl;
+  final TextEditingController passwordCtrl;
+  final TextEditingController confirmCtrl;
+  final bool passwordVisible;
+  final VoidCallback onTogglePassword;
+  final bool busy;
+  final String? error;
+  final VoidCallback onSubmit;
+  final VoidCallback onLogin;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(
+        SphereSpacing.x24,
+        SphereSpacing.x32,
+        SphereSpacing.x24,
+        SphereSpacing.x24,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Create your account',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          const SizedBox(height: SphereSpacing.x8),
+          Text(
+            'Join your academy on SportSphere.',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: SphereColors.onSurfaceMuted,
+                ),
+          ),
+          const SizedBox(height: SphereSpacing.x24),
+          const _FieldLabel('Full name'),
+          const SizedBox(height: 6),
+          _SphereInput(controller: nameCtrl, hint: 'Your full name'),
+          const SizedBox(height: SphereSpacing.x16),
+          const _FieldLabel('Email'),
+          const SizedBox(height: 6),
+          _SphereInput(
+            controller: emailCtrl,
+            hint: 'name@example.com',
+            keyboardType: TextInputType.emailAddress,
+          ),
+          const SizedBox(height: SphereSpacing.x16),
+          const _FieldLabel('Password'),
+          const SizedBox(height: 6),
+          _SphereInput(
+            controller: passwordCtrl,
+            hint: 'At least 8 characters',
+            obscureText: !passwordVisible,
+            trailing: IconButton(
+              icon: Icon(
+                passwordVisible ? LucideIcons.eyeOff : LucideIcons.eye,
+                color: SphereColors.onSurfaceMuted,
+                size: 20,
+              ),
+              onPressed: onTogglePassword,
+            ),
+          ),
+          const SizedBox(height: SphereSpacing.x16),
+          const _FieldLabel('Confirm password'),
+          const SizedBox(height: 6),
+          _SphereInput(
+            controller: confirmCtrl,
+            hint: 'Re-type your password',
+            obscureText: !passwordVisible,
+          ),
+          if (error != null) ...[
+            const SizedBox(height: SphereSpacing.x12),
+            Text(
+              error!,
+              style: const TextStyle(color: SphereColors.danger),
+            ),
+          ],
+          const SizedBox(height: SphereSpacing.x24),
+          _PillButton(
+            label: 'Create account',
+            busy: busy,
+            onTap: busy ? null : onSubmit,
+          ),
+          const SizedBox(height: SphereSpacing.x24),
+          Center(
+            child: GestureDetector(
+              onTap: onLogin,
+              behavior: HitTestBehavior.opaque,
+              child: Text.rich(
+                TextSpan(
+                  text: 'Already have an account? ',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: SphereColors.onSurfaceMuted,
+                      ),
+                  children: const [
+                    TextSpan(
+                      text: 'Log in',
+                      style: TextStyle(
+                        color: SphereColors.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StaffInviteOnly extends StatelessWidget {
+  const _StaffInviteOnly({required this.onLogin});
+  final VoidCallback onLogin;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        SphereSpacing.x24,
+        SphereSpacing.x32,
+        SphereSpacing.x24,
+        SphereSpacing.x24,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Staff is invite only',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          const SizedBox(height: SphereSpacing.x8),
+          Text(
+            'Your club admin will email you an invitation to set up your '
+            'staff account. Check your inbox, then log in with the '
+            'credentials you set up via the email link.',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: SphereColors.onSurfaceMuted,
+                  height: 1.5,
+                ),
+          ),
+          const SizedBox(height: SphereSpacing.x24),
+          Container(
+            padding: const EdgeInsets.all(SphereSpacing.x16),
+            decoration: BoxDecoration(
+              color: SphereColors.primary.withValues(alpha: 0.06),
+              borderRadius: SphereRadius.cardRect,
+              border: Border.all(
+                color: SphereColors.primary.withValues(alpha: 0.2),
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  LucideIcons.mail,
+                  color: SphereColors.primary,
+                  size: 20,
+                ),
+                const SizedBox(width: SphereSpacing.x12),
+                Expanded(
+                  child: Text(
+                    'Ask your club admin if you haven’t received an '
+                    'invite.',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: SphereColors.onSurface,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: SphereSpacing.x32),
+          _PillButton(
+            label: 'Got an invite? Log in',
+            onTap: onLogin,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CircleIconButton extends StatelessWidget {
+  const _CircleIconButton({required this.icon, required this.onTap});
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: SphereColors.surfaceElev1.withValues(alpha: 0.85),
+      shape: const CircleBorder(),
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Icon(icon, size: 20, color: SphereColors.onSurface),
+        ),
+      ),
+    );
+  }
+}
+
+class _FieldLabel extends StatelessWidget {
+  const _FieldLabel(this.text);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: SphereColors.onSurface,
+            fontWeight: FontWeight.w600,
+            fontSize: 13,
+          ),
+    );
+  }
+}
+
+class _SphereInput extends StatelessWidget {
+  const _SphereInput({
+    required this.controller,
+    required this.hint,
+    this.keyboardType,
+    this.obscureText = false,
+    this.trailing,
+  });
+
+  final TextEditingController controller;
+  final String hint;
+  final TextInputType? keyboardType;
+  final bool obscureText;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: SphereColors.surfaceElev2,
+        borderRadius: SphereRadius.pillRect,
+        border: Border.all(color: SphereColors.borderSubtle),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: controller,
+              keyboardType: keyboardType,
+              obscureText: obscureText,
+              style: const TextStyle(color: SphereColors.onSurface),
+              decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: const TextStyle(color: SphereColors.onSurfaceMuted),
+                border: InputBorder.none,
+                isCollapsed: true,
+                contentPadding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+            ),
+          ),
+          ?trailing,
+        ],
+      ),
+    );
+  }
+}
+
+class _PillButton extends StatelessWidget {
+  const _PillButton({
+    required this.label,
+    required this.onTap,
+    this.busy = false,
+  });
+  final String label;
+  final VoidCallback? onTap;
+  final bool busy;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 52,
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: SphereColors.primary,
+          foregroundColor: SphereColors.onPrimary,
+          shape:
+              const RoundedRectangleBorder(borderRadius: SphereRadius.pillRect),
+          elevation: 0,
+          disabledBackgroundColor: SphereColors.primary.withValues(alpha: 0.5),
+        ),
+        child: busy
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation(SphereColors.onPrimary),
+                ),
+              )
+            : Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: SphereColors.onPrimary,
+                ),
+              ),
+      ),
+    );
+  }
+}

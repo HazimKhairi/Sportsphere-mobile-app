@@ -32,6 +32,28 @@ class AuthRepository {
     await _auth.signInWithEmailAndPassword(email: email, password: password);
   }
 
+  /// Creates a new Firebase Auth user with email + password, then attaches
+  /// the [displayName] to the credential. Empty [displayName] skips the
+  /// updateDisplayName call.
+  ///
+  /// NOTE: this is the mobile v1 client-first signup path. The web team
+  /// still needs to add a backend endpoint that writes the Firestore user
+  /// doc + initial club_users membership. Until then, mobile signups create
+  /// orphan Auth accounts — see the `signup-orphan-accounts` memory note.
+  Future<void> signUpWithEmail({
+    required String email,
+    required String password,
+    required String displayName,
+  }) async {
+    final credential = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    if (displayName.isNotEmpty) {
+      await credential.user?.updateDisplayName(displayName);
+    }
+  }
+
   /// Google Sign-In via google_sign_in 7.x.
   ///
   /// The v7 API splits initialization, authentication, and authorization. We
