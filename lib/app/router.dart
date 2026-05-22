@@ -18,9 +18,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: _RouterRefresh(ref),
     redirect: (context, state) {
       final loc = state.matchedLocation;
-
-      final atSplash = loc == '/splash';
-      if (atSplash) return null;
+      if (loc == '/splash') return null;
 
       final user = ref.read(currentUserProvider).valueOrNull;
       final role = ref.read(selectedRoleProvider);
@@ -29,13 +27,20 @@ final routerProvider = Provider<GoRouter>((ref) {
       final atRolePick = loc == '/role-pick';
       final atLogin = loc.startsWith('/auth');
 
-      if (role == null && !atOnboarding && !atRolePick) {
+      // No role: route through onboarding then role pick.
+      if (role == null) {
+        if (atOnboarding || atRolePick) return null;
         return '/onboarding';
       }
-      if (role != null && user == null && !atLogin && !atRolePick) {
+
+      // Role chosen, not authenticated yet: force login.
+      if (user == null) {
+        if (atLogin || atRolePick) return null;
         return '/auth/login';
       }
-      if (user != null && (atOnboarding || atLogin || atRolePick)) {
+
+      // Fully ready: leaving pre-home surfaces lands on home.
+      if (atOnboarding || atLogin || atRolePick) {
         return '/home';
       }
       return null;
