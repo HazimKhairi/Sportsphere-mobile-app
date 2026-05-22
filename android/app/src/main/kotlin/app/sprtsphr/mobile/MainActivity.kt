@@ -1,4 +1,4 @@
-package app.sprtsphr.sportsphere_mobile
+package app.sprtsphr.mobile
 
 import io.flutter.embedding.android.FlutterActivity
 
