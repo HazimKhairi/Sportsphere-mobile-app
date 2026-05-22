@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import 'theme/sphere_colors.dart';
+import 'theme/sphere_theme.dart';
 
 class SphereApp extends StatelessWidget {
   const SphereApp({super.key});
@@ -9,16 +11,24 @@ class SphereApp extends StatelessWidget {
     return MaterialApp(
       title: 'SportSphere',
       debugShowCheckedModeBanner: false,
+      theme: buildSphereTheme(),
       home: Scaffold(
-        backgroundColor: const Color(0xFF0A0A0A),
         body: Center(
-          child: Text(
-            'SportSphere',
-            style: GoogleFonts.geist(
-              color: const Color(0xFF39FF14),
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'SportSphere',
+                style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                      color: SphereColors.primary,
+                    ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text('Get Started'),
+              ),
+            ],
           ),
         ),
       ),
