@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../../../app/theme/sphere_theme_ext.dart';
 import '../../auth/presentation/auth_providers.dart';
+import '../../player_card/presentation/_widgets/sphere_player_fifa_card.dart';
+import '../../player_card/presentation/player_card_providers.dart';
 import '../../scout/presentation/scout_providers.dart';
 import '_widgets/sphere_activity_timeline_item.dart';
 import '_widgets/sphere_entrance.dart';
@@ -44,6 +46,7 @@ class PlayerHomeScreen extends ConsumerWidget {
     final streakAsync = ref.watch(playerStreakProvider);
     final scoutAsync = ref.watch(scoutProfileNotifierProvider);
     final activityAsync = ref.watch(activityTimelineProvider);
+    final cardAsync = ref.watch(playerCardProvider);
 
     return Stack(
       children: [
@@ -141,12 +144,43 @@ class PlayerHomeScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: SphereSpacing.x16),
+                const SizedBox(height: SphereSpacing.x24),
 
-                // My Card banner
+                // My Player Card section
                 SphereEntrance(
                   delayMs: 180,
-                  child: _PlayerCardBanner(onTap: () => context.push('/player-card')),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const SphereSectionLabel('My Card'),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () => context.push('/player-card'),
+                            child: Text(
+                              'Full View',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: context.sc.primary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: SphereSpacing.x12),
+                      GestureDetector(
+                        onTap: () => context.push('/player-card'),
+                        child: cardAsync.when(
+                          data: (data) => SphereFifaCard(card: data.card),
+                          loading: () => _CardShimmer(),
+                          error: (e, st) => _CardPlaceholder(
+                            onTap: () => context.push('/player-card'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: SphereSpacing.x32),
 
@@ -220,57 +254,72 @@ class PlayerHomeScreen extends ConsumerWidget {
   }
 }
 
-class _PlayerCardBanner extends StatelessWidget {
-  const _PlayerCardBanner({required this.onTap});
+class _CardShimmer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final w = (MediaQuery.sizeOf(context).width - 48).clamp(240.0, 340.0);
+    final h = w / (280 / 380);
+    return Center(
+      child: Container(
+        width: w,
+        height: h,
+        decoration: BoxDecoration(
+          color: context.sc.surfaceElev1,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Center(
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            valueColor: AlwaysStoppedAnimation(context.sc.primary),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CardPlaceholder extends StatelessWidget {
+  const _CardPlaceholder({required this.onTap});
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: SphereSpacing.x16,
-          vertical: SphereSpacing.x16,
-        ),
-        decoration: BoxDecoration(
-          color: context.sc.onSurface,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Icon(LucideIcons.idCard, size: 20, color: Colors.white),
+    final w = (MediaQuery.sizeOf(context).width - 48).clamp(240.0, 340.0);
+    final h = w / (280 / 380);
+    return Center(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: w,
+          height: h,
+          decoration: BoxDecoration(
+            color: context.sc.surfaceElev1,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: context.sc.borderSubtle,
+              style: BorderStyle.solid,
             ),
-            const SizedBox(width: SphereSpacing.x12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'My Player Card',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                        ),
-                  ),
-                  Text(
-                    'View stats, OVR and skill profile',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.white54,
-                        ),
-                  ),
-                ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(LucideIcons.idCard, size: 40, color: context.sc.onSurfaceMuted),
+              const SizedBox(height: 12),
+              Text(
+                'No card yet',
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: context.sc.onSurfaceMuted,
+                    ),
               ),
-            ),
-            const Icon(LucideIcons.chevronRight, size: 18, color: Colors.white38),
-          ],
+              const SizedBox(height: 4),
+              Text(
+                'Get rated by a coach to unlock',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: context.sc.onSurfaceSubtle,
+                    ),
+              ),
+            ],
+          ),
         ),
       ),
     );
