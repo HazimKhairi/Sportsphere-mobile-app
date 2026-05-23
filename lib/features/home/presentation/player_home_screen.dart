@@ -6,10 +6,11 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../auth/presentation/auth_providers.dart';
+import '../../scout/presentation/scout_providers.dart';
 import '_widgets/sphere_activity_timeline_item.dart';
-import '_widgets/sphere_drill_of_day_card.dart';
 import '_widgets/sphere_entrance.dart';
 import '_widgets/sphere_hero_gradient.dart';
+import '_widgets/sphere_skill_radar_card.dart';
 import '_widgets/session_live_banner.dart';
 import '_widgets/sphere_section_label.dart';
 import '_widgets/sphere_streak_card.dart';
@@ -41,7 +42,7 @@ class PlayerHomeScreen extends ConsumerWidget {
     final firstName = (user?.displayName ?? 'Player').split(' ').first;
 
     final streakAsync = ref.watch(playerStreakProvider);
-    final drillAsync = ref.watch(todayDrillProvider);
+    final scoutAsync = ref.watch(scoutProfileNotifierProvider);
     final activityAsync = ref.watch(activityTimelineProvider);
 
     return Stack(
@@ -116,29 +117,22 @@ class PlayerHomeScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: SphereSpacing.x16),
 
-                // Drill of day
+                // Skill radar
                 SphereEntrance(
                   delayMs: 140,
-                  child: drillAsync.when(
-                    data: (drill) => SphereDrillOfDayCard(
-                      drillName: drill?.name ?? '',
-                      drillSubtitle: drill == null
-                          ? 'New drill drops tomorrow.'
-                          : '5 min · level ${drill.difficulty} ball control',
-                      onTap: drill == null ? null : () => context.push('/train/drill/${drill.id}/play'),
+                  child: scoutAsync.when(
+                    data: (profile) => SphereSkillRadarCard(
+                      skills: profile?.skills ?? const {},
+                      onTap: () => context.push('/scout'),
                     ),
-                    loading: () => const SphereDrillOfDayCard(
-                      drillName: '',
-                      drillSubtitle: '',
+                    loading: () => const SphereSkillRadarCard(
+                      skills: {},
                       loading: true,
                     ),
-                    error: (e, st) {
-                      debugPrint('[home] drill error: $e\n$st');
-                      return const SphereDrillOfDayCard(
-                        drillName: 'Couldn\'t load drill',
-                        drillSubtitle: 'Try again later.',
-                      );
-                    },
+                    error: (_, __) => SphereSkillRadarCard(
+                      skills: const {},
+                      onTap: () => context.push('/scout'),
+                    ),
                   ),
                 ),
                 const SizedBox(height: SphereSpacing.x32),
