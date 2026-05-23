@@ -16,9 +16,10 @@ class ClubRepository {
 
   Future<ClubInfo?> fetchMyClub() async {
     final res = await _dio.get<Map<String, dynamic>>('/api/club/mobile');
-    final data = res.data?['club'] as Map<String, dynamic>?;
-    if (data == null) return null;
-    return ClubInfo.fromJson(data);
+    final body = res.data;
+    if (body == null || body['id'] == null) return null;
+    // Backend returns club fields at root level (not nested under 'club' key)
+    return ClubInfo.fromJson(body);
   }
 }
 
