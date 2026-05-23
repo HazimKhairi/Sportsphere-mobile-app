@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
@@ -124,7 +125,7 @@ class PlayerHomeScreen extends ConsumerWidget {
                       drillSubtitle: drill == null
                           ? 'New drill drops tomorrow.'
                           : '5 min · level ${drill.difficulty} ball control',
-                      onTap: () {},
+                      onTap: drill == null ? null : () => context.push('/train/drill/${drill.id}/play'),
                     ),
                     loading: () => const SphereDrillOfDayCard(
                       drillName: '',
