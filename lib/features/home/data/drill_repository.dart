@@ -24,7 +24,7 @@ class DrillRepository {
     return TodayDrill(
       id: pick.id,
       name: (data['name'] as String?) ?? 'Drill',
-      difficulty: (data['difficulty'] as int?) ?? 1,
+      difficulty: _parseDifficulty(data['difficulty']),
     );
   }
 
@@ -44,6 +44,14 @@ class DrillRepository {
     return _fromFullMap(doc.id, data);
   }
 
+  // Firestore stores difficulty as int or String — handle both.
+  static int _parseDifficulty(dynamic v) {
+    if (v is int) return v;
+    if (v is num) return v.toInt();
+    if (v is String) return int.tryParse(v) ?? 1;
+    return 1;
+  }
+
   Drill _fromFullDoc(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     return _fromFullMap(doc.id, doc.data());
   }
@@ -59,7 +67,7 @@ class DrillRepository {
           ? data['name'] as String
           : 'Untitled drill',
       category: (data['category'] as String?) ?? '',
-      difficulty: (data['difficulty'] as int?) ?? 1,
+      difficulty: _parseDifficulty(data['difficulty']),
       youtubeUrl: data['youtubeUrl'] as String?,
       description: (data['description'] as String?) ?? '',
       targetAttributes: attrList,

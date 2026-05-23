@@ -8,11 +8,17 @@ class PlayerHomeRepository {
   final FirebaseFirestore _db;
 
   Stream<PlayerStreak> streakStream({required String playerId}) {
-    return _db.collection('players').doc(playerId).snapshots().map((snap) {
-      final data = snap.data() ?? <String, dynamic>{};
+    return _db
+        .collection('players')
+        .where('userId', isEqualTo: playerId)
+        .limit(1)
+        .snapshots()
+        .map((snap) {
+      if (snap.docs.isEmpty) return const PlayerStreak(days: 0, goal: 10);
+      final data = snap.docs.first.data();
       return PlayerStreak(
-        days: (data['currentStreak'] as int?) ?? 0,
-        goal: (data['streakGoal'] as int?) ?? 10,
+        days: (data['currentStreak'] as num?)?.toInt() ?? 0,
+        goal: (data['streakGoal'] as num?)?.toInt() ?? 10,
       );
     });
   }
