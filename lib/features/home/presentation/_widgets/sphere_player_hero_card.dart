@@ -387,7 +387,7 @@ class _SphereIconFallback extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(6),
-        child: Image.asset('assets/brand/sphere_icon.png', fit: BoxFit.contain),
+        child: Image.asset('assets/brand/app_icon.png', fit: BoxFit.contain, filterQuality: FilterQuality.high),
       );
 }
 

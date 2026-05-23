@@ -53,9 +53,9 @@ class _SplashScreenState extends State<SplashScreen>
           child: FadeTransition(
             opacity: _ctrl,
             child: Image.asset(
-              'assets/brand/sphere_icon.png',
-              width: 96,
-              height: 96,
+              'assets/brand/app_icon.png',
+              width: 120,
+              height: 120,
               filterQuality: FilterQuality.high,
             ),
           ),
