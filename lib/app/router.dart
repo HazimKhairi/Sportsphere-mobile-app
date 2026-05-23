@@ -20,6 +20,8 @@ import '../features/home/presentation/train_hub_screen.dart';
 import '../features/home/presentation/train_screen.dart';
 import '../features/strength/presentation/strength_screen.dart';
 import '../features/strength/presentation/active_workout_screen.dart';
+import '../features/training_plans/presentation/plans_screen.dart';
+import '../features/training_plans/presentation/plan_detail_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/payments/presentation/cash_pay_screen.dart';
 import '../features/payments/presentation/payment_detail_screen.dart';
@@ -194,6 +196,17 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, state) {
               final id = state.pathParameters['id']!;
               return ActiveWorkoutScreen(templateId: id);
+            },
+          ),
+          GoRoute(
+            path: '/train/plans',
+            builder: (_, _) => const PlansScreen(),
+          ),
+          GoRoute(
+            path: '/train/plans/:planId',
+            builder: (_, state) {
+              final id = state.pathParameters['planId']!;
+              return PlanDetailScreen(planId: id);
             },
           ),
           GoRoute(
