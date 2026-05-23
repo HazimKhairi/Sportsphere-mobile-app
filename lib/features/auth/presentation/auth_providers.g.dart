@@ -40,5 +40,25 @@ final currentUserProvider = StreamProvider<AppUser?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CurrentUserRef = StreamProviderRef<AppUser?>;
+String _$userDisplayNameHash() => r'bb4da32173553f9ce0bcd7a68f012292edf8cf98';
+
+/// Fetches the real display name from Firestore via /api/user/profile.
+/// Falls back to Firebase Auth displayName if the call fails.
+///
+/// Copied from [userDisplayName].
+@ProviderFor(userDisplayName)
+final userDisplayNameProvider = AutoDisposeFutureProvider<String>.internal(
+  userDisplayName,
+  name: r'userDisplayNameProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$userDisplayNameHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef UserDisplayNameRef = AutoDisposeFutureProviderRef<String>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
