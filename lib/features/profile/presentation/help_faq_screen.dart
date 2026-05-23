@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
@@ -76,17 +76,17 @@ class HelpFaqScreen extends StatelessWidget {
                   Row(
                     children: [
                       Material(
-                        color: SphereColors.surfaceElev1,
+                        color: context.sc.surfaceElev1,
                         shape: const CircleBorder(),
                         child: InkWell(
                           onTap: () => context.canPop()
                               ? context.pop()
                               : context.go('/profile'),
                           customBorder: const CircleBorder(),
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.all(10),
                             child: Icon(LucideIcons.chevronLeft,
-                                size: 20, color: SphereColors.onSurface),
+                                size: 20, color: context.sc.onSurface),
                           ),
                         ),
                       ),
@@ -101,7 +101,7 @@ class HelpFaqScreen extends StatelessWidget {
                   Text(
                     'Common questions and answers.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                   const SizedBox(height: SphereSpacing.x32),
@@ -109,9 +109,9 @@ class HelpFaqScreen extends StatelessWidget {
                   const SizedBox(height: SphereSpacing.x12),
                   Container(
                     decoration: BoxDecoration(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       borderRadius: SphereRadius.cardRect,
-                      border: Border.all(color: SphereColors.borderSubtle),
+                      border: Border.all(color: context.sc.borderSubtle),
                     ),
                     child: Column(
                       children: [
@@ -121,8 +121,8 @@ class HelpFaqScreen extends StatelessWidget {
                             answer: _faqs[i].$2,
                           ),
                           if (i < _faqs.length - 1)
-                            const Divider(
-                                color: SphereColors.borderSubtle, height: 1),
+                            Divider(
+                                color: context.sc.borderSubtle, height: 1),
                         ],
                       ],
                     ),
@@ -131,9 +131,9 @@ class HelpFaqScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(SphereSpacing.x20),
                     decoration: BoxDecoration(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       borderRadius: SphereRadius.cardRect,
-                      border: Border.all(color: SphereColors.borderSubtle),
+                      border: Border.all(color: context.sc.borderSubtle),
                     ),
                     child: Row(
                       children: [
@@ -143,10 +143,10 @@ class HelpFaqScreen extends StatelessWidget {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: SphereColors.primary.withValues(alpha: 0.12),
+                            color: context.sc.primary.withValues(alpha: 0.12),
                           ),
-                          child: const Icon(LucideIcons.mail,
-                              color: SphereColors.primary, size: 20),
+                          child: Icon(LucideIcons.mail,
+                              color: context.sc.primary, size: 20),
                         ),
                         const SizedBox(width: SphereSpacing.x16),
                         Expanded(
@@ -159,7 +159,7 @@ class HelpFaqScreen extends StatelessWidget {
                                     .textTheme
                                     .titleMedium
                                     ?.copyWith(
-                                      color: SphereColors.onSurface,
+                                      color: context.sc.onSurface,
                                       fontWeight: FontWeight.w700,
                                     ),
                               ),
@@ -170,7 +170,7 @@ class HelpFaqScreen extends StatelessWidget {
                                     .textTheme
                                     .bodySmall
                                     ?.copyWith(
-                                      color: SphereColors.primary,
+                                      color: context.sc.primary,
                                     ),
                               ),
                             ],
@@ -218,7 +218,7 @@ class _FaqItemState extends State<_FaqItem> {
                   child: Text(
                     widget.question,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurface,
+                          color: context.sc.onSurface,
                           fontWeight: FontWeight.w600,
                         ),
                   ),
@@ -226,7 +226,7 @@ class _FaqItemState extends State<_FaqItem> {
                 Icon(
                   _expanded ? LucideIcons.chevronUp : LucideIcons.chevronDown,
                   size: 16,
-                  color: SphereColors.onSurfaceMuted,
+                  color: context.sc.onSurfaceMuted,
                 ),
               ],
             ),
@@ -235,7 +235,7 @@ class _FaqItemState extends State<_FaqItem> {
               Text(
                 widget.answer,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                       height: 1.5,
                     ),
               ),

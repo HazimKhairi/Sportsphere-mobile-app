@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_entrance.dart';
@@ -53,7 +53,7 @@ class ProgramsListScreen extends ConsumerWidget {
                         child: Text(
                           'Programs',
                           style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                                color: SphereColors.onSurface,
+                                color: context.sc.onSurface,
                                 height: 1.1,
                               ),
                         ),
@@ -67,7 +67,7 @@ class ProgramsListScreen extends ConsumerWidget {
                   child: Text(
                     'Find a session you want to join.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                 ),
@@ -85,9 +85,9 @@ class ProgramsListScreen extends ConsumerWidget {
                       return Container(
                         padding: const EdgeInsets.all(SphereSpacing.x20),
                         decoration: BoxDecoration(
-                          color: SphereColors.surfaceElev1,
+                          color: context.sc.surfaceElev1,
                           borderRadius: SphereRadius.cardRect,
-                          border: Border.all(color: SphereColors.borderSubtle),
+                          border: Border.all(color: context.sc.borderSubtle),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +95,7 @@ class ProgramsListScreen extends ConsumerWidget {
                             Text(
                               'Nothing open right now',
                               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: SphereColors.onSurface,
+                                    color: context.sc.onSurface,
                                     fontWeight: FontWeight.w700,
                                   ),
                             ),
@@ -103,7 +103,7 @@ class ProgramsListScreen extends ConsumerWidget {
                             Text(
                               'Check back later or ask your coach to publish a new program.',
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: SphereColors.onSurfaceMuted,
+                                    color: context.sc.onSurfaceMuted,
                                   ),
                             ),
                           ],
@@ -123,7 +123,7 @@ class ProgramsListScreen extends ConsumerWidget {
                       ],
                     );
                   },
-                  loading: () => const Center(
+                  loading: () => Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 32),
                       child: SizedBox(
@@ -131,7 +131,7 @@ class ProgramsListScreen extends ConsumerWidget {
                         height: 24,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+                          valueColor: AlwaysStoppedAnimation(context.sc.primary),
                         ),
                       ),
                     ),
@@ -139,7 +139,7 @@ class ProgramsListScreen extends ConsumerWidget {
                   error: (_, _) => Text(
                     'Couldn’t load programs.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                 ),
@@ -162,16 +162,16 @@ class _ProgramCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1,
+      color: context.sc.surfaceElev1,
       borderRadius: SphereRadius.cardRect,
       child: InkWell(
         onTap: () => context.push('/programs/${program.id}'),
         borderRadius: SphereRadius.cardRect,
         child: Container(
           decoration: BoxDecoration(
-            color: SphereColors.surfaceElev1,
+            color: context.sc.surfaceElev1,
             borderRadius: SphereRadius.cardRect,
-            border: Border.all(color: SphereColors.borderSubtle),
+            border: Border.all(color: context.sc.borderSubtle),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,7 +196,7 @@ class _ProgramCard extends StatelessWidget {
                           child: Text(
                             program.name,
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  color: SphereColors.onSurface,
+                                  color: context.sc.onSurface,
                                   fontWeight: FontWeight.w700,
                                 ),
                             maxLines: 1,
@@ -212,7 +212,7 @@ class _ProgramCard extends StatelessWidget {
                       Text(
                         program.description,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: SphereColors.onSurfaceMuted,
+                              color: context.sc.onSurfaceMuted,
                             ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -222,25 +222,25 @@ class _ProgramCard extends StatelessWidget {
                     Row(
                       children: [
                         if (program.capacity != null) ...[
-                          const Icon(
+                          Icon(
                             LucideIcons.users,
                             size: 14,
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '${program.currentRegistrants}/${program.capacity}',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: SphereColors.onSurfaceMuted,
+                                  color: context.sc.onSurfaceMuted,
                                 ),
                           ),
                           const Spacer(),
                         ] else
                           const Spacer(),
-                        const Icon(
+                        Icon(
                           LucideIcons.arrowRight,
                           size: 18,
-                          color: SphereColors.primary,
+                          color: context.sc.primary,
                         ),
                       ],
                     ),
@@ -290,7 +290,7 @@ class _CoverArt extends StatelessWidget {
         child: Icon(
           LucideIcons.dumbbell,
           size: 48,
-          color: SphereColors.primary.withValues(alpha: 0.4),
+          color: context.sc.primary.withValues(alpha: 0.4),
         ),
       ),
     );
@@ -306,14 +306,14 @@ class _PriceChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: SphereColors.primary.withValues(alpha: 0.18),
+        color: context.sc.primary.withValues(alpha: 0.18),
         borderRadius: SphereRadius.pillRect,
-        border: Border.all(color: SphereColors.primary.withValues(alpha: 0.4)),
+        border: Border.all(color: context.sc.primary.withValues(alpha: 0.4)),
       ),
       child: Text(
         text,
-        style: const TextStyle(
-          color: SphereColors.primary,
+        style: TextStyle(
+          color: context.sc.primary,
           fontSize: 12,
           fontWeight: FontWeight.w700,
         ),
@@ -330,14 +330,14 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1,
+      color: context.sc.surfaceElev1,
       shape: const CircleBorder(),
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 20, color: SphereColors.onSurface),
+          child: Icon(icon, size: 20, color: context.sc.onSurface),
         ),
       ),
     );

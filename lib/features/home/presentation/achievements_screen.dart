@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/achievement.dart';
@@ -14,7 +14,7 @@ import 'achievements_providers.dart';
 class AchievementsScreen extends ConsumerWidget {
   const AchievementsScreen({super.key});
 
-  Color _tierColor(AchievementTier t) {
+  Color _tierColor(BuildContext context, AchievementTier t) {
     switch (t) {
       case AchievementTier.platinum:
         return const Color(0xFFB9D7FF);
@@ -25,7 +25,7 @@ class AchievementsScreen extends ConsumerWidget {
       case AchievementTier.bronze:
         return const Color(0xFFC9824B);
       case AchievementTier.unknown:
-        return SphereColors.onSurfaceMuted;
+        return context.sc.onSurfaceMuted;
     }
   }
 
@@ -70,7 +70,7 @@ class AchievementsScreen extends ConsumerWidget {
                 Row(
                   children: [
                     Material(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       shape: const CircleBorder(),
                       child: InkWell(
                         onTap: () {
@@ -81,12 +81,12 @@ class AchievementsScreen extends ConsumerWidget {
                           }
                         },
                         customBorder: const CircleBorder(),
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(10),
                           child: Icon(
                             LucideIcons.chevronLeft,
                             size: 20,
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                           ),
                         ),
                       ),
@@ -104,7 +104,7 @@ class AchievementsScreen extends ConsumerWidget {
                 Text(
                   'Earn badges as you train. The harder the tier, the rarer the unlock.',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                         height: 1.4,
                       ),
                 ),
@@ -116,9 +116,9 @@ class AchievementsScreen extends ConsumerWidget {
                       return Container(
                         padding: const EdgeInsets.all(SphereSpacing.x20),
                         decoration: BoxDecoration(
-                          color: SphereColors.surfaceElev1,
+                          color: context.sc.surfaceElev1,
                           borderRadius: SphereRadius.cardRect,
-                          border: Border.all(color: SphereColors.borderSubtle),
+                          border: Border.all(color: context.sc.borderSubtle),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +129,7 @@ class AchievementsScreen extends ConsumerWidget {
                                   .textTheme
                                   .titleMedium
                                   ?.copyWith(
-                                    color: SphereColors.onSurface,
+                                    color: context.sc.onSurface,
                                     fontWeight: FontWeight.w700,
                                   ),
                             ),
@@ -138,7 +138,7 @@ class AchievementsScreen extends ConsumerWidget {
                               'Your coach can publish achievements from the dashboard.',
                               style:
                                   Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: SphereColors.onSurfaceMuted,
+                                        color: context.sc.onSurfaceMuted,
                                       ),
                             ),
                           ],
@@ -152,15 +152,15 @@ class AchievementsScreen extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(SphereSpacing.x20),
                           decoration: BoxDecoration(
-                            color: SphereColors.surfaceElev1,
+                            color: context.sc.surfaceElev1,
                             borderRadius: SphereRadius.cardRect,
-                            border: Border.all(color: SphereColors.borderSubtle),
+                            border: Border.all(color: context.sc.borderSubtle),
                             gradient: LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                               colors: [
-                                SphereColors.surfaceElev1,
-                                SphereColors.primary.withValues(alpha: 0.04),
+                                context.sc.surfaceElev1,
+                                context.sc.primary.withValues(alpha: 0.04),
                               ],
                             ),
                           ),
@@ -172,15 +172,15 @@ class AchievementsScreen extends ConsumerWidget {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: SphereColors.primary.withValues(alpha: 0.18),
+                                  color: context.sc.primary.withValues(alpha: 0.18),
                                   border: Border.all(
-                                    color: SphereColors.primary.withValues(alpha: 0.4),
+                                    color: context.sc.primary.withValues(alpha: 0.4),
                                   ),
                                 ),
                                 child: Text(
                                   '$unlockedCount',
-                                  style: const TextStyle(
-                                    color: SphereColors.primary,
+                                  style: TextStyle(
+                                    color: context.sc.primary,
                                     fontSize: 22,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -197,7 +197,7 @@ class AchievementsScreen extends ConsumerWidget {
                                           .textTheme
                                           .titleLarge
                                           ?.copyWith(
-                                            color: SphereColors.onSurface,
+                                            color: context.sc.onSurface,
                                             fontWeight: FontWeight.w700,
                                           ),
                                     ),
@@ -208,7 +208,7 @@ class AchievementsScreen extends ConsumerWidget {
                                           .textTheme
                                           .bodyMedium
                                           ?.copyWith(
-                                            color: SphereColors.onSurfaceMuted,
+                                            color: context.sc.onSurfaceMuted,
                                           ),
                                     ),
                                   ],
@@ -237,14 +237,14 @@ class AchievementsScreen extends ConsumerWidget {
                             return _BadgeCard(
                               achievement: a,
                               icon: _iconFor(a),
-                              tierColor: _tierColor(a.tier),
+                              tierColor: _tierColor(context, a.tier),
                             );
                           },
                         ),
                       ],
                     );
                   },
-                  loading: () => const Padding(
+                  loading: () => Padding(
                     padding: EdgeInsets.symmetric(vertical: 32),
                     child: Center(
                       child: SizedBox(
@@ -253,7 +253,7 @@ class AchievementsScreen extends ConsumerWidget {
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor:
-                              AlwaysStoppedAnimation(SphereColors.primary),
+                              AlwaysStoppedAnimation(context.sc.primary),
                         ),
                       ),
                     ),
@@ -261,7 +261,7 @@ class AchievementsScreen extends ConsumerWidget {
                   error: (_, _) => Text(
                     'Couldn\'t load achievements.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                 ),
@@ -291,12 +291,12 @@ class _BadgeCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(SphereSpacing.x16),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
         border: Border.all(
           color: unlocked
               ? tierColor.withValues(alpha: 0.5)
-              : SphereColors.borderSubtle,
+              : context.sc.borderSubtle,
         ),
       ),
       child: Column(
@@ -310,18 +310,18 @@ class _BadgeCard extends StatelessWidget {
               shape: BoxShape.circle,
               color: unlocked
                   ? tierColor.withValues(alpha: 0.2)
-                  : SphereColors.surfaceElev2,
+                  : context.sc.surfaceElev2,
               border: Border.all(
                 color: unlocked
                     ? tierColor
-                    : SphereColors.borderSubtle,
+                    : context.sc.borderSubtle,
                 width: 1.5,
               ),
             ),
             child: Icon(
               unlocked ? icon : LucideIcons.lock,
               size: 26,
-              color: unlocked ? tierColor : SphereColors.onSurfaceMuted,
+              color: unlocked ? tierColor : context.sc.onSurfaceMuted,
             ),
           ),
           const SizedBox(height: SphereSpacing.x12),
@@ -329,8 +329,8 @@ class _BadgeCard extends StatelessWidget {
             achievement.name,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: unlocked
-                      ? SphereColors.onSurface
-                      : SphereColors.onSurfaceMuted,
+                      ? context.sc.onSurface
+                      : context.sc.onSurfaceMuted,
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
                 ),
@@ -344,7 +344,7 @@ class _BadgeCard extends StatelessWidget {
                   ? achievement.requirement
                   : achievement.description,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                     fontSize: 11,
                     height: 1.35,
                   ),
@@ -361,7 +361,7 @@ class _BadgeCard extends StatelessWidget {
                   size: 12,
                   color: unlocked
                       ? tierColor
-                      : SphereColors.onSurfaceMuted,
+                      : context.sc.onSurfaceMuted,
                 ),
                 const SizedBox(width: 4),
                 Text(
@@ -369,7 +369,7 @@ class _BadgeCard extends StatelessWidget {
                   style: TextStyle(
                     color: unlocked
                         ? tierColor
-                        : SphereColors.onSurfaceMuted,
+                        : context.sc.onSurfaceMuted,
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                   ),
@@ -381,7 +381,7 @@ class _BadgeCard extends StatelessWidget {
                     style: TextStyle(
                       color: unlocked
                           ? tierColor
-                          : SphereColors.onSurfaceMuted,
+                          : context.sc.onSurfaceMuted,
                       fontSize: 9,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1,

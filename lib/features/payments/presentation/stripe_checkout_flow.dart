@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:go_router/go_router.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../programs/domain/registration_status.dart';
 import '../../programs/presentation/registration_providers.dart';
 import '../domain/payment_intent.dart';
@@ -50,19 +50,19 @@ Future<bool> runStripeCheckout({
         paymentIntentClientSecret: intent.clientSecret,
         merchantDisplayName: 'SportSphere',
         style: ThemeMode.dark,
-        appearance: const stripe.PaymentSheetAppearance(
+        appearance: stripe.PaymentSheetAppearance(
           colors: stripe.PaymentSheetAppearanceColors(
-            primary: SphereColors.primary,
-            background: SphereColors.surface,
-            componentBackground: SphereColors.surfaceElev1,
-            componentBorder: SphereColors.borderSubtle,
-            componentDivider: SphereColors.borderSubtle,
-            primaryText: SphereColors.onSurface,
-            secondaryText: SphereColors.onSurfaceMuted,
-            componentText: SphereColors.onSurface,
-            placeholderText: SphereColors.onSurfaceMuted,
-            icon: SphereColors.primary,
-            error: SphereColors.danger,
+            primary: context.sc.primary,
+            background: context.sc.surface,
+            componentBackground: context.sc.surfaceElev1,
+            componentBorder: context.sc.borderSubtle,
+            componentDivider: context.sc.borderSubtle,
+            primaryText: context.sc.onSurface,
+            secondaryText: context.sc.onSurfaceMuted,
+            componentText: context.sc.onSurface,
+            placeholderText: context.sc.onSurfaceMuted,
+            icon: context.sc.primary,
+            error: context.sc.danger,
           ),
           shapes: stripe.PaymentSheetShape(
             borderRadius: 12,
@@ -71,14 +71,14 @@ Future<bool> runStripeCheckout({
           primaryButton: stripe.PaymentSheetPrimaryButtonAppearance(
             colors: stripe.PaymentSheetPrimaryButtonTheme(
               light: stripe.PaymentSheetPrimaryButtonThemeColors(
-                background: SphereColors.primary,
-                text: SphereColors.onPrimary,
-                border: SphereColors.primary,
+                background: context.sc.primary,
+                text: context.sc.onPrimary,
+                border: context.sc.primary,
               ),
               dark: stripe.PaymentSheetPrimaryButtonThemeColors(
-                background: SphereColors.primary,
-                text: SphereColors.onPrimary,
-                border: SphereColors.primary,
+                background: context.sc.primary,
+                text: context.sc.onPrimary,
+                border: context.sc.primary,
               ),
             ),
           ),

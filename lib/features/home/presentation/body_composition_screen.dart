@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/body_composition_entry.dart';
@@ -45,7 +45,7 @@ class BodyCompositionScreen extends ConsumerWidget {
                 Row(
                   children: [
                     Material(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       shape: const CircleBorder(),
                       child: InkWell(
                         onTap: () {
@@ -56,12 +56,12 @@ class BodyCompositionScreen extends ConsumerWidget {
                           }
                         },
                         customBorder: const CircleBorder(),
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(10),
                           child: Icon(
                             LucideIcons.chevronLeft,
                             size: 20,
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                           ),
                         ),
                       ),
@@ -79,7 +79,7 @@ class BodyCompositionScreen extends ConsumerWidget {
                 Text(
                   'Track weight, height, and composition over time.',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                         height: 1.4,
                       ),
                 ),
@@ -99,10 +99,10 @@ class BodyCompositionScreen extends ConsumerWidget {
                           Container(
                             padding: const EdgeInsets.all(SphereSpacing.x20),
                             decoration: BoxDecoration(
-                              color: SphereColors.surfaceElev1,
+                              color: context.sc.surfaceElev1,
                               borderRadius: SphereRadius.cardRect,
                               border: Border.all(
-                                color: SphereColors.borderSubtle,
+                                color: context.sc.borderSubtle,
                               ),
                             ),
                             child: Text(
@@ -111,7 +111,7 @@ class BodyCompositionScreen extends ConsumerWidget {
                                   .textTheme
                                   .bodyMedium
                                   ?.copyWith(
-                                    color: SphereColors.onSurfaceMuted,
+                                    color: context.sc.onSurfaceMuted,
                                   ),
                             ),
                           )
@@ -130,7 +130,7 @@ class BodyCompositionScreen extends ConsumerWidget {
                       ],
                     );
                   },
-                  loading: () => const Padding(
+                  loading: () => Padding(
                     padding: EdgeInsets.symmetric(vertical: 32),
                     child: Center(
                       child: SizedBox(
@@ -139,7 +139,7 @@ class BodyCompositionScreen extends ConsumerWidget {
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor:
-                              AlwaysStoppedAnimation(SphereColors.primary),
+                              AlwaysStoppedAnimation(context.sc.primary),
                         ),
                       ),
                     ),
@@ -150,7 +150,7 @@ class BodyCompositionScreen extends ConsumerWidget {
                       Text(
                         'Could not load entries.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: SphereColors.onSurfaceMuted,
+                              color: context.sc.onSurfaceMuted,
                             ),
                       ),
                       const SizedBox(height: 8),
@@ -159,15 +159,15 @@ class BodyCompositionScreen extends ConsumerWidget {
                           padding: const EdgeInsets.all(SphereSpacing.x16),
                           margin: const EdgeInsets.only(top: 4),
                           decoration: BoxDecoration(
-                            color: SphereColors.warning.withValues(alpha: 0.1),
+                            color: context.sc.warning.withValues(alpha: 0.1),
                             borderRadius: SphereRadius.cardRect,
                             border: Border.all(
-                                color: SphereColors.warning.withValues(alpha: 0.4)),
+                                color: context.sc.warning.withValues(alpha: 0.4)),
                           ),
                           child: Text(
                             'Firestore permission denied. Ask your club admin to update the security rules so players can access their own body composition data.',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: SphereColors.warning,
+                                  color: context.sc.warning,
                                   height: 1.5,
                                 ),
                           ),
@@ -175,9 +175,9 @@ class BodyCompositionScreen extends ConsumerWidget {
                       const SizedBox(height: SphereSpacing.x16),
                       TextButton(
                         onPressed: () => ref.invalidate(myBodyCompositionProvider),
-                        child: const Text(
+                        child: Text(
                           'Retry',
-                          style: TextStyle(color: SphereColors.primary),
+                          style: TextStyle(color: context.sc.primary),
                         ),
                       ),
                     ],
@@ -198,8 +198,8 @@ class BodyCompositionScreen extends ConsumerWidget {
               icon: const Icon(LucideIcons.plus, size: 18),
               label: const Text('Add entry'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: SphereColors.primary,
-                foregroundColor: SphereColors.onPrimary,
+                backgroundColor: context.sc.primary,
+                foregroundColor: context.sc.onPrimary,
                 shape: const RoundedRectangleBorder(
                   borderRadius: SphereRadius.pillRect,
                 ),
@@ -227,15 +227,15 @@ class _LatestCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(SphereSpacing.x20),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            SphereColors.surfaceElev1,
-            SphereColors.primary.withValues(alpha: 0.04),
+            context.sc.surfaceElev1,
+            context.sc.primary.withValues(alpha: 0.04),
           ],
         ),
       ),
@@ -245,7 +245,7 @@ class _LatestCard extends StatelessWidget {
           Text(
             'Latest · ${formatDate(entry.recordedAt)}',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: SphereColors.primary,
+                  color: context.sc.primary,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.6,
                 ),
@@ -292,21 +292,21 @@ class _LatestCard extends StatelessWidget {
           ),
           if (entry.bmi != null) ...[
             const SizedBox(height: SphereSpacing.x16),
-            const Divider(color: SphereColors.borderSubtle, height: 1),
+            Divider(color: context.sc.borderSubtle, height: 1),
             const SizedBox(height: SphereSpacing.x12),
             Row(
               children: [
                 Text(
                   'BMI',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                       ),
                 ),
                 const Spacer(),
                 Text(
                   entry.bmi!.toStringAsFixed(1),
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: SphereColors.onSurface,
+                        color: context.sc.onSurface,
                         fontWeight: FontWeight.w700,
                       ),
                 ),
@@ -337,7 +337,7 @@ class _Metric extends StatelessWidget {
         Text(
           label.toUpperCase(),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0.8,
                 fontSize: 10,
@@ -352,8 +352,8 @@ class _Metric extends StatelessWidget {
               value ?? '-',
               style: Theme.of(context).textTheme.displayLarge?.copyWith(
                     color: value == null
-                        ? SphereColors.onSurfaceMuted
-                        : SphereColors.onSurface,
+                        ? context.sc.onSurfaceMuted
+                        : context.sc.onSurface,
                     fontSize: 28,
                     fontWeight: FontWeight.w800,
                     height: 1,
@@ -363,7 +363,7 @@ class _Metric extends StatelessWidget {
             Text(
               unit,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                   ),
             ),
           ],
@@ -394,9 +394,9 @@ class _HistoryRow extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(SphereSpacing.x16),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Row(
         children: [
@@ -406,11 +406,11 @@ class _HistoryRow extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: SphereColors.primary.withValues(alpha: 0.12),
+              color: context.sc.primary.withValues(alpha: 0.12),
             ),
-            child: const Icon(
+            child: Icon(
               LucideIcons.activity,
-              color: SphereColors.primary,
+              color: context.sc.primary,
               size: 16,
             ),
           ),
@@ -422,7 +422,7 @@ class _HistoryRow extends StatelessWidget {
                 Text(
                   parts.isEmpty ? 'Entry' : parts.join(' · '),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: SphereColors.onSurface,
+                        color: context.sc.onSurface,
                         fontWeight: FontWeight.w600,
                       ),
                   maxLines: 1,
@@ -432,7 +432,7 @@ class _HistoryRow extends StatelessWidget {
                 Text(
                   formatDate(entry.recordedAt),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                       ),
                 ),
               ],
@@ -452,9 +452,9 @@ class _EmptyState extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(SphereSpacing.x20),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -462,7 +462,7 @@ class _EmptyState extends StatelessWidget {
           Text(
             'No entries yet',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: SphereColors.onSurface,
+                  color: context.sc.onSurface,
                   fontWeight: FontWeight.w700,
                 ),
           ),
@@ -470,7 +470,7 @@ class _EmptyState extends StatelessWidget {
           Text(
             'Tap Add entry to log your first measurement.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: SphereColors.onSurfaceMuted,
+                  color: context.sc.onSurfaceMuted,
                 ),
           ),
         ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../../app/theme/sphere_spacing.dart';
 
 class ProfileRow extends StatelessWidget {
@@ -22,8 +22,8 @@ class ProfileRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = danger ? SphereColors.danger : SphereColors.primary;
-    final labelColor = danger ? SphereColors.danger : SphereColors.onSurface;
+    final iconColor = danger ? context.sc.danger : context.sc.primary;
+    final labelColor = danger ? context.sc.danger : context.sc.onSurface;
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -57,16 +57,16 @@ class ProfileRow extends StatelessWidget {
               Text(
                 trailingText!,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                     ),
               ),
               const SizedBox(width: 8),
             ],
             if (onTap != null && !danger)
-              const Icon(
+              Icon(
                 LucideIcons.chevronRight,
                 size: 18,
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
               ),
           ],
         ),

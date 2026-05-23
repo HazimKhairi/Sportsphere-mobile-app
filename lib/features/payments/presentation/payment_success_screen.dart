@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 
@@ -44,7 +44,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(SphereSpacing.x24),
@@ -68,7 +68,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
                           height: 220 + pulse * 20,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: SphereColors.primary
+                            color: context.sc.primary
                                 .withValues(alpha: 0.06 + pulse * 0.04),
                           ),
                         ),
@@ -78,9 +78,9 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
                           height: 170,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: SphereColors.primary.withValues(alpha: 0.14),
+                            color: context.sc.primary.withValues(alpha: 0.14),
                             border: Border.all(
-                              color: SphereColors.primary.withValues(alpha: 0.3),
+                              color: context.sc.primary.withValues(alpha: 0.3),
                             ),
                           ),
                         ),
@@ -90,14 +90,14 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
                           child: Container(
                             width: 120,
                             height: 120,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: SphereColors.primary,
+                              color: context.sc.primary,
                             ),
-                            child: const Icon(
+                            child: Icon(
                               LucideIcons.check,
                               size: 56,
-                              color: SphereColors.onPrimary,
+                              color: context.sc.onPrimary,
                             ),
                           ),
                         ),
@@ -118,7 +118,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
                       "You're in",
                       style:
                           Theme.of(context).textTheme.displayLarge?.copyWith(
-                                color: SphereColors.onSurface,
+                                color: context.sc.onSurface,
                               ),
                     ),
                     const SizedBox(height: SphereSpacing.x8),
@@ -127,7 +127,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
                       textAlign: TextAlign.center,
                       style:
                           Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: SphereColors.onSurfaceMuted,
+                                color: context.sc.onSurfaceMuted,
                                 height: 1.4,
                               ),
                     ),
@@ -152,8 +152,8 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
                         icon: const Icon(LucideIcons.fileText, size: 18),
                         label: const Text('View receipt'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: SphereColors.primary,
-                          foregroundColor: SphereColors.onPrimary,
+                          backgroundColor: context.sc.primary,
+                          foregroundColor: context.sc.onPrimary,
                           shape: const RoundedRectangleBorder(
                             borderRadius: SphereRadius.pillRect,
                           ),
@@ -172,8 +172,8 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
                       child: OutlinedButton(
                         onPressed: () => context.go('/home'),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: SphereColors.onSurface,
-                          side: const BorderSide(color: SphereColors.borderSubtle),
+                          foregroundColor: context.sc.onSurface,
+                          side: BorderSide(color: context.sc.borderSubtle),
                           shape: const RoundedRectangleBorder(
                             borderRadius: SphereRadius.pillRect,
                           ),

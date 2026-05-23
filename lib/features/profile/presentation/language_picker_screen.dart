@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
@@ -74,17 +74,17 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
                   Row(
                     children: [
                       Material(
-                        color: SphereColors.surfaceElev1,
+                        color: context.sc.surfaceElev1,
                         shape: const CircleBorder(),
                         child: InkWell(
                           onTap: () => context.canPop()
                               ? context.pop()
                               : context.go('/profile'),
                           customBorder: const CircleBorder(),
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.all(10),
                             child: Icon(LucideIcons.chevronLeft,
-                                size: 20, color: SphereColors.onSurface),
+                                size: 20, color: context.sc.onSurface),
                           ),
                         ),
                       ),
@@ -99,7 +99,7 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
                   Text(
                     'Select your preferred display language.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                   const SizedBox(height: SphereSpacing.x32),
@@ -107,9 +107,9 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
                   const SizedBox(height: SphereSpacing.x12),
                   Container(
                     decoration: BoxDecoration(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       borderRadius: SphereRadius.cardRect,
-                      border: Border.all(color: SphereColors.borderSubtle),
+                      border: Border.all(color: context.sc.borderSubtle),
                     ),
                     child: Column(
                       children: [
@@ -125,8 +125,8 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
                                 : () => _select(_languages[i].$1),
                           ),
                           if (i < _languages.length - 1)
-                            const Divider(
-                                color: SphereColors.borderSubtle, height: 1),
+                            Divider(
+                                color: context.sc.borderSubtle, height: 1),
                         ],
                       ],
                     ),
@@ -135,15 +135,15 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
                   Container(
                     padding: const EdgeInsets.all(SphereSpacing.x16),
                     decoration: BoxDecoration(
-                      color: SphereColors.primary.withValues(alpha: 0.08),
+                      color: context.sc.primary.withValues(alpha: 0.08),
                       borderRadius: SphereRadius.cardRect,
                       border: Border.all(
-                          color: SphereColors.primary.withValues(alpha: 0.3)),
+                          color: context.sc.primary.withValues(alpha: 0.3)),
                     ),
                     child: Row(
                       children: [
-                        const Icon(LucideIcons.info,
-                            size: 16, color: SphereColors.primary),
+                        Icon(LucideIcons.info,
+                            size: 16, color: context.sc.primary),
                         const SizedBox(width: SphereSpacing.x12),
                         Expanded(
                           child: Text(
@@ -151,7 +151,7 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall
-                                ?.copyWith(color: SphereColors.primary),
+                                ?.copyWith(color: context.sc.primary),
                           ),
                         ),
                       ],
@@ -187,8 +187,8 @@ class _LangOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textColor = comingSoon
-        ? SphereColors.onSurfaceSubtle
-        : SphereColors.onSurface;
+        ? context.sc.onSurfaceSubtle
+        : context.sc.onSurface;
 
     return InkWell(
       onTap: comingSoon ? null : onTap,
@@ -206,16 +206,16 @@ class _LangOption extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: comingSoon
-                    ? SphereColors.surfaceElev1
+                    ? context.sc.surfaceElev1
                     : selected
-                        ? SphereColors.primary.withValues(alpha: 0.18)
-                        : SphereColors.surfaceElev2,
+                        ? context.sc.primary.withValues(alpha: 0.18)
+                        : context.sc.surfaceElev2,
                 border: Border.all(
                   color: comingSoon
-                      ? SphereColors.borderSubtle
+                      ? context.sc.borderSubtle
                       : selected
-                          ? SphereColors.primary.withValues(alpha: 0.5)
-                          : SphereColors.borderSubtle,
+                          ? context.sc.primary.withValues(alpha: 0.5)
+                          : context.sc.borderSubtle,
                 ),
               ),
               child: Opacity(
@@ -244,24 +244,24 @@ class _LangOption extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: SphereColors.accentAmberPastel,
+                  color: context.sc.accentAmberPastel,
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(
-                    color: SphereColors.accentAmber.withValues(alpha: 0.4),
+                    color: context.sc.accentAmber.withValues(alpha: 0.4),
                   ),
                 ),
                 child: Text(
                   'Coming Soon',
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: SphereColors.accentAmber,
+                        color: context.sc.accentAmber,
                         fontWeight: FontWeight.w600,
                         fontSize: 10,
                       ),
                 ),
               )
             else if (selected)
-              const Icon(LucideIcons.check,
-                  size: 16, color: SphereColors.primary),
+              Icon(LucideIcons.check,
+                  size: 16, color: context.sc.primary),
           ],
         ),
       ),

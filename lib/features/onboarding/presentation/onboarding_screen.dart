@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import 'sphere_onboarding_illustration.dart';
 
@@ -75,7 +75,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         Text(
                           s.body,
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: SphereColors.onSurfaceMuted,
+                                color: context.sc.onSurfaceMuted,
                               ),
                           textAlign: TextAlign.center,
                         ),
@@ -99,8 +99,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       height: 8,
                       decoration: BoxDecoration(
                         color: i == _index
-                            ? SphereColors.primary
-                            : SphereColors.borderSubtle,
+                            ? context.sc.primary
+                            : context.sc.borderSubtle,
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
@@ -109,7 +109,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     onPressed: () => context.go('/role-pick'),
                     child: Text(
                       isLast ? '' : 'Skip',
-                      style: const TextStyle(color: SphereColors.onSurfaceMuted),
+                      style: TextStyle(color: context.sc.onSurfaceMuted),
                     ),
                   ),
                   const SizedBox(width: SphereSpacing.x8),

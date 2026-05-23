@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_avatar_stack.dart';
@@ -89,7 +89,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     );
 
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: SafeArea(
         bottom: false,
         child: detailAsync.when(
@@ -106,13 +106,13 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
               onCheckIn: () => context.push('/qr-scan/${session.id}'),
             );
           },
-          loading: () => const Center(
+          loading: () => Center(
             child: SizedBox(
               width: 28,
               height: 28,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+                valueColor: AlwaysStoppedAnimation(context.sc.primary),
               ),
             ),
           ),
@@ -165,7 +165,7 @@ class _Content extends StatelessWidget {
                     Text(
                       'Session',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                             fontWeight: FontWeight.w600,
                           ),
                     ),
@@ -176,21 +176,21 @@ class _Content extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(SphereSpacing.x20),
                   decoration: BoxDecoration(
-                    color: SphereColors.surfaceElev1,
+                    color: context.sc.surfaceElev1,
                     borderRadius: SphereRadius.cardRect,
-                    border: Border.all(color: SphereColors.borderSubtle),
+                    border: Border.all(color: context.sc.borderSubtle),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          const Icon(LucideIcons.clock, size: 14, color: SphereColors.primary),
+                          Icon(LucideIcons.clock, size: 14, color: context.sc.primary),
                           const SizedBox(width: 6),
                           Text(
                             countdown,
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: SphereColors.primary,
+                                  color: context.sc.primary,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.3,
                                 ),
@@ -201,7 +201,7 @@ class _Content extends StatelessWidget {
                       Text(
                         session.name,
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                              color: SphereColors.onSurface,
+                              color: context.sc.onSurface,
                               fontWeight: FontWeight.w700,
                             ),
                       ),
@@ -209,19 +209,19 @@ class _Content extends StatelessWidget {
                       Text(
                         formattedDate,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: SphereColors.onSurfaceMuted,
+                              color: context.sc.onSurfaceMuted,
                             ),
                       ),
                       if (session.location.isNotEmpty) ...[
                         const SizedBox(height: SphereSpacing.x12),
                         Row(
                           children: [
-                            const Icon(LucideIcons.mapPin, size: 14, color: SphereColors.onSurfaceMuted),
+                            Icon(LucideIcons.mapPin, size: 14, color: context.sc.onSurfaceMuted),
                             const SizedBox(width: 6),
                             Text(
                               session.location,
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: SphereColors.onSurface,
+                                    color: context.sc.onSurface,
                                   ),
                             ),
                           ],
@@ -248,9 +248,9 @@ class _Content extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(SphereSpacing.x16),
                     decoration: BoxDecoration(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       borderRadius: SphereRadius.cardRect,
-                      border: Border.all(color: SphereColors.borderSubtle),
+                      border: Border.all(color: context.sc.borderSubtle),
                     ),
                     child: Row(
                       children: [
@@ -262,7 +262,7 @@ class _Content extends StatelessWidget {
                                 ? '1 player expected'
                                 : '${attendees.length} players expected',
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: SphereColors.onSurface,
+                                  color: context.sc.onSurface,
                                 ),
                           ),
                         ),
@@ -286,8 +286,8 @@ class _Content extends StatelessWidget {
               icon: const Icon(LucideIcons.qrCode, size: 18),
               label: const Text('QR Check-in'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: SphereColors.primary,
-                foregroundColor: SphereColors.onPrimary,
+                backgroundColor: context.sc.primary,
+                foregroundColor: context.sc.onPrimary,
                 shape: const RoundedRectangleBorder(borderRadius: SphereRadius.pillRect),
                 elevation: 0,
                 textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
@@ -309,9 +309,9 @@ class _DetailRows extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x16, vertical: 8),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         children: [
@@ -324,14 +324,14 @@ class _DetailRows extends StatelessWidget {
                     child: Text(
                       rows[i].$1,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                           ),
                     ),
                   ),
                   Text(
                     rows[i].$2,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurface,
+                          color: context.sc.onSurface,
                           fontWeight: FontWeight.w600,
                         ),
                   ),
@@ -339,7 +339,7 @@ class _DetailRows extends StatelessWidget {
               ),
             ),
             if (i < rows.length - 1)
-              const Divider(color: SphereColors.borderSubtle, height: 1),
+              Divider(color: context.sc.borderSubtle, height: 1),
           ],
         ],
       ),
@@ -355,14 +355,14 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1,
+      color: context.sc.surfaceElev1,
       shape: const CircleBorder(),
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 20, color: SphereColors.onSurface),
+          child: Icon(icon, size: 20, color: context.sc.onSurface),
         ),
       ),
     );
@@ -390,7 +390,7 @@ class _NotFound extends StatelessWidget {
           Text(
             'This session may have been removed or you no longer have access.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: SphereColors.onSurfaceMuted,
+                  color: context.sc.onSurfaceMuted,
                 ),
           ),
         ],

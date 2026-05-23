@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../data/check_in_repository.dart';
@@ -174,9 +174,9 @@ class _ScannerOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = switch (status) {
-      _ScanStatus.success => SphereColors.success,
-      _ScanStatus.mismatch || _ScanStatus.failure => SphereColors.danger,
-      _ => SphereColors.primary,
+      _ScanStatus.success => context.sc.success,
+      _ScanStatus.mismatch || _ScanStatus.failure => context.sc.danger,
+      _ => context.sc.primary,
     };
     return Center(
       child: Container(
@@ -219,17 +219,17 @@ class _StatusBanner extends StatelessWidget {
       ),
       _ScanStatus.success => (
         'Checked in. Welcome!',
-        SphereColors.success,
+        context.sc.success,
         LucideIcons.check,
       ),
       _ScanStatus.mismatch => (
         'Wrong QR for this session.',
-        SphereColors.danger,
+        context.sc.danger,
         LucideIcons.x,
       ),
       _ScanStatus.failure => (
         'Network hiccup. Try again.',
-        SphereColors.danger,
+        context.sc.danger,
         LucideIcons.wifiOff,
       ),
     };

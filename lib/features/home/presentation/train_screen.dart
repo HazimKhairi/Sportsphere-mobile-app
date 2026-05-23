@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/drill.dart';
@@ -85,7 +85,7 @@ class TrainScreen extends ConsumerWidget {
                   child: Text(
                     'Keep your touch sharp.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                 ),
@@ -127,9 +127,9 @@ class TrainScreen extends ConsumerWidget {
                       return Container(
                         padding: const EdgeInsets.all(SphereSpacing.x20),
                         decoration: BoxDecoration(
-                          color: SphereColors.surfaceElev1,
+                          color: context.sc.surfaceElev1,
                           borderRadius: SphereRadius.cardRect,
-                          border: Border.all(color: SphereColors.borderSubtle),
+                          border: Border.all(color: context.sc.borderSubtle),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +140,7 @@ class TrainScreen extends ConsumerWidget {
                                   .textTheme
                                   .titleMedium
                                   ?.copyWith(
-                                    color: SphereColors.onSurface,
+                                    color: context.sc.onSurface,
                                     fontWeight: FontWeight.w700,
                                   ),
                             ),
@@ -149,7 +149,7 @@ class TrainScreen extends ConsumerWidget {
                               'Your coach can publish drills from the dashboard.',
                               style:
                                   Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: SphereColors.onSurfaceMuted,
+                                        color: context.sc.onSurfaceMuted,
                                       ),
                             ),
                           ],
@@ -195,7 +195,7 @@ class TrainScreen extends ConsumerWidget {
                       ],
                     );
                   },
-                  loading: () => const Padding(
+                  loading: () => Padding(
                     padding: EdgeInsets.symmetric(vertical: 32),
                     child: Center(
                       child: SizedBox(
@@ -204,7 +204,7 @@ class TrainScreen extends ConsumerWidget {
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor:
-                              AlwaysStoppedAnimation(SphereColors.primary),
+                              AlwaysStoppedAnimation(context.sc.primary),
                         ),
                       ),
                     ),
@@ -214,7 +214,7 @@ class TrainScreen extends ConsumerWidget {
                     return Text(
                       'Couldn\'t load drills.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                           ),
                     );
                   },
@@ -250,7 +250,7 @@ class _DrillCard extends StatelessWidget {
     return SizedBox(
       width: 156,
       child: Material(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
         child: InkWell(
           onTap: () => context.push('/train/drill/${drill.id}'),
@@ -258,7 +258,7 @@ class _DrillCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: SphereRadius.cardRect,
-              border: Border.all(color: SphereColors.borderSubtle),
+              border: Border.all(color: context.sc.borderSubtle),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,7 +278,7 @@ class _DrillCard extends StatelessWidget {
                       ),
                       child: Stack(
                         children: [
-                          const Positioned(
+                          Positioned(
                             right: -8,
                             top: -4,
                             child: Opacity(
@@ -286,7 +286,7 @@ class _DrillCard extends StatelessWidget {
                               child: Icon(
                                 LucideIcons.dumbbell,
                                 size: 88,
-                                color: SphereColors.primary,
+                                color: context.sc.primary,
                               ),
                             ),
                           ),
@@ -300,10 +300,10 @@ class _DrillCard extends StatelessWidget {
                               ),
                               decoration: BoxDecoration(
                                 color:
-                                    SphereColors.primary.withValues(alpha: 0.18),
+                                    context.sc.primary.withValues(alpha: 0.18),
                                 borderRadius: SphereRadius.pillRect,
                                 border: Border.all(
-                                  color: SphereColors.primary
+                                  color: context.sc.primary
                                       .withValues(alpha: 0.4),
                                 ),
                               ),
@@ -312,12 +312,12 @@ class _DrillCard extends StatelessWidget {
                                 children: [
                                   Icon(_difficultyIcon,
                                       size: 10,
-                                      color: SphereColors.primary),
+                                      color: context.sc.primary),
                                   const SizedBox(width: 4),
                                   Text(
                                     'L${drill.difficulty}',
-                                    style: const TextStyle(
-                                      color: SphereColors.primary,
+                                    style: TextStyle(
+                                      color: context.sc.primary,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 0.6,
@@ -340,7 +340,7 @@ class _DrillCard extends StatelessWidget {
                       Text(
                         drill.name,
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: SphereColors.onSurface,
+                              color: context.sc.onSurface,
                               fontWeight: FontWeight.w700,
                               fontSize: 14,
                             ),
@@ -354,7 +354,7 @@ class _DrillCard extends StatelessWidget {
                             : drill.targetAttributes.first
                                 .replaceAll('_', ' '),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: SphereColors.onSurfaceMuted,
+                              color: context.sc.onSurfaceMuted,
                               fontSize: 11,
                             ),
                         maxLines: 1,

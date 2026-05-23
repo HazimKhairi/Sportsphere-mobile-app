@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/pending_payment.dart';
@@ -14,7 +14,7 @@ class ApprovalsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: Column(
         children: [
           SafeArea(
@@ -27,14 +27,14 @@ class ApprovalsScreen extends StatelessWidget {
                   Text(
                     'Approvals',
                     style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                          color: SphereColors.onSurface,
+                          color: context.sc.onSurface,
                         ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Pending cash payments to review.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                 ],
@@ -57,9 +57,9 @@ class _ApprovalsList extends ConsumerWidget {
     final approvalsAsync = ref.watch(approvalsNotifierProvider);
 
     return approvalsAsync.when(
-      loading: () => const Center(
+      loading: () => Center(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+          valueColor: AlwaysStoppedAnimation(context.sc.primary),
         ),
       ),
       error: (error, _) => Center(
@@ -69,15 +69,15 @@ class _ApprovalsList extends ConsumerWidget {
             Text(
               'Failed to load approvals.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                   ),
             ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: () => ref.invalidate(approvalsNotifierProvider),
-              child: const Text(
+              child: Text(
                 'Retry',
-                style: TextStyle(color: SphereColors.primary),
+                style: TextStyle(color: context.sc.primary),
               ),
             ),
           ],
@@ -89,16 +89,16 @@ class _ApprovalsList extends ConsumerWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
+                Icon(
                   LucideIcons.checkCircle2,
                   size: 48,
-                  color: SphereColors.primary,
+                  color: context.sc.primary,
                 ),
                 const SizedBox(height: 16),
                 Text(
                   'All caught up!',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: SphereColors.onSurface,
+                        color: context.sc.onSurface,
                         fontWeight: FontWeight.w700,
                       ),
                 ),
@@ -106,7 +106,7 @@ class _ApprovalsList extends ConsumerWidget {
                 Text(
                   'No pending approvals.',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                       ),
                 ),
               ],
@@ -171,7 +171,7 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: SphereColors.surfaceElev1,
+      backgroundColor: context.sc.surfaceElev1,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -194,7 +194,7 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                     width: 36,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: SphereColors.borderSubtle,
+                      color: context.sc.borderSubtle,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -203,30 +203,30 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                 Text(
                   'Reject payment',
                   style: Theme.of(ctx).textTheme.headlineMedium?.copyWith(
-                        color: SphereColors.onSurface,
+                        color: context.sc.onSurface,
                       ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   'This will notify the player.',
                   style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                       ),
                 ),
                 const SizedBox(height: 20),
                 Text(
                   'Reason',
                   style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                         fontWeight: FontWeight.w600,
                       ),
                 ),
                 const SizedBox(height: 6),
                 Container(
                   decoration: BoxDecoration(
-                    color: SphereColors.surfaceElev2,
+                    color: context.sc.surfaceElev2,
                     borderRadius: SphereRadius.cardRect,
-                    border: Border.all(color: SphereColors.borderSubtle),
+                    border: Border.all(color: context.sc.borderSubtle),
                   ),
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16, vertical: 4),
@@ -234,13 +234,13 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                     controller: controller,
                     maxLines: 3,
                     style:
-                        const TextStyle(color: SphereColors.onSurface),
+                        TextStyle(color: context.sc.onSurface),
                     onChanged: (_) => setSheetState(() {}),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText:
                           'e.g. Amount does not match program fee.',
                       hintStyle: TextStyle(
-                          color: SphereColors.onSurfaceMuted),
+                          color: context.sc.onSurfaceMuted),
                       border: InputBorder.none,
                       isCollapsed: true,
                       contentPadding:
@@ -288,7 +288,7 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                             }
                           },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: SphereColors.danger,
+                      backgroundColor: context.sc.danger,
                       foregroundColor: Colors.white,
                       shape: const RoundedRectangleBorder(
                           borderRadius: SphereRadius.pillRect),
@@ -325,9 +325,9 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
     return Container(
       padding: const EdgeInsets.all(SphereSpacing.x16),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -340,7 +340,7 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                   payment.payerName,
                   style:
                       Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                             fontWeight: FontWeight.w700,
                           ),
                 ),
@@ -354,7 +354,7 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: SphereColors.onSurfaceMuted,
+                  color: context.sc.onSurfaceMuted,
                 ),
           ),
           const SizedBox(height: 12),
@@ -365,18 +365,18 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                 payment.formattedAmount,
                 style:
                     Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: SphereColors.primary,
+                          color: context.sc.primary,
                           fontWeight: FontWeight.w700,
                         ),
               ),
               const Spacer(),
-              const Icon(LucideIcons.clock,
-                  size: 12, color: SphereColors.onSurfaceMuted),
+              Icon(LucideIcons.clock,
+                  size: 12, color: context.sc.onSurfaceMuted),
               const SizedBox(width: 4),
               Text(
                 _formatDate(payment.createdAt),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                     ),
               ),
             ],
@@ -390,8 +390,8 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                   onPressed:
                       _busy ? null : () => _showRejectSheet(context),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: SphereColors.danger,
-                    side: const BorderSide(color: SphereColors.danger),
+                    foregroundColor: context.sc.danger,
+                    side: BorderSide(color: context.sc.danger),
                     shape: const RoundedRectangleBorder(
                         borderRadius: SphereRadius.pillRect),
                   ),
@@ -404,7 +404,7 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                   onPressed:
                       _busy ? null : () => _handleApprove(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: SphereColors.primary,
+                    backgroundColor: context.sc.primary,
                     foregroundColor: Colors.black,
                     shape: const RoundedRectangleBorder(
                         borderRadius: SphereRadius.pillRect),
@@ -434,16 +434,16 @@ class _MethodBadge extends StatelessWidget {
     switch (method) {
       case 'cash':
         label = 'Cash';
-        bg = SphereColors.primary.withValues(alpha: 0.15);
-        fg = SphereColors.primary;
+        bg = context.sc.primary.withValues(alpha: 0.15);
+        fg = context.sc.primary;
       case 'fpx_manual':
         label = 'FPX';
         bg = const Color(0xFF1D4ED8).withValues(alpha: 0.15);
         fg = const Color(0xFF3B82F6);
       default:
         label = method.toUpperCase();
-        bg = SphereColors.onSurfaceMuted.withValues(alpha: 0.15);
-        fg = SphereColors.onSurfaceMuted;
+        bg = context.sc.onSurfaceMuted.withValues(alpha: 0.15);
+        fg = context.sc.onSurfaceMuted;
     }
 
     return Container(

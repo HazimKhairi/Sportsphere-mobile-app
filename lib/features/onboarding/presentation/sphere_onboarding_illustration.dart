@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 
 class SphereOnboardingIllustration extends StatefulWidget {
   const SphereOnboardingIllustration({super.key, required this.icon});
@@ -49,7 +49,7 @@ class _SphereOnboardingIllustrationState extends State<SphereOnboardingIllustrat
                 height: 220 + t * 16,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: SphereColors.primary.withValues(alpha: 0.05 + t * 0.05),
+                  color: context.sc.primary.withValues(alpha: 0.05 + t * 0.05),
                 ),
               ),
               // Middle ring
@@ -58,9 +58,9 @@ class _SphereOnboardingIllustrationState extends State<SphereOnboardingIllustrat
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: SphereColors.primary.withValues(alpha: 0.12),
+                  color: context.sc.primary.withValues(alpha: 0.12),
                   border: Border.all(
-                    color: SphereColors.primary.withValues(alpha: 0.25),
+                    color: context.sc.primary.withValues(alpha: 0.25),
                     width: 1,
                   ),
                 ),
@@ -69,14 +69,14 @@ class _SphereOnboardingIllustrationState extends State<SphereOnboardingIllustrat
               Container(
                 width: 140,
                 height: 140,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: SphereColors.primary,
+                  color: context.sc.primary,
                 ),
                 child: Icon(
                   widget.icon,
                   size: 64,
-                  color: SphereColors.onPrimary,
+                  color: context.sc.onPrimary,
                 ),
               ),
             ],

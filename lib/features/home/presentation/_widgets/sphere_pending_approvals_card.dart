@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../../app/theme/sphere_radius.dart';
 import '../../../../app/theme/sphere_spacing.dart';
 import 'sphere_count_up.dart';
@@ -26,7 +26,7 @@ class SpherePendingApprovalsCard extends StatelessWidget {
             ? 'You are all caught up.'
             : '$count payment${count == 1 ? '' : 's'} need a look.');
     return Material(
-      color: SphereColors.surfaceElev1,
+      color: context.sc.surfaceElev1,
       borderRadius: SphereRadius.cardRect,
       child: InkWell(
         onTap: loading ? null : onTap,
@@ -35,7 +35,7 @@ class SpherePendingApprovalsCard extends StatelessWidget {
           padding: const EdgeInsets.all(SphereSpacing.x20),
           decoration: BoxDecoration(
             borderRadius: SphereRadius.cardRect,
-            border: Border.all(color: SphereColors.borderSubtle),
+            border: Border.all(color: context.sc.borderSubtle),
           ),
           child: Row(
             children: [
@@ -47,7 +47,7 @@ class SpherePendingApprovalsCard extends StatelessWidget {
                     ? Text(
                         '--',
                         style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                              color: SphereColors.onSurfaceMuted,
+                              color: context.sc.onSurfaceMuted,
                               fontSize: 32,
                               fontWeight: FontWeight.w700,
                             ),
@@ -55,7 +55,7 @@ class SpherePendingApprovalsCard extends StatelessWidget {
                     : SphereCountUp(
                         value: count,
                         style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                              color: SphereColors.primary,
+                              color: context.sc.primary,
                               fontSize: 32,
                               fontWeight: FontWeight.w700,
                             ),
@@ -69,7 +69,7 @@ class SpherePendingApprovalsCard extends StatelessWidget {
                     Text(
                       'Pending approvals',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                             fontWeight: FontWeight.w700,
                           ),
                     ),
@@ -77,13 +77,13 @@ class SpherePendingApprovalsCard extends StatelessWidget {
                     Text(
                       subtitle,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                           ),
                     ),
                   ],
                 ),
               ),
-              const Icon(LucideIcons.arrowRight, color: SphereColors.primary, size: 22),
+              Icon(LucideIcons.arrowRight, color: context.sc.primary, size: 22),
             ],
           ),
         ),

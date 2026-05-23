@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
@@ -24,7 +24,7 @@ class CoachProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: Stack(
         children: [
           _Header(coach: coach),
@@ -127,8 +127,8 @@ class _Header extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  SphereColors.surface.withValues(alpha: 0.0),
-                  SphereColors.surface,
+                  context.sc.surface.withValues(alpha: 0.0),
+                  context.sc.surface,
                 ],
                 stops: const [0.55, 1.0],
               ),
@@ -161,7 +161,7 @@ class _CoachAvatar extends StatelessWidget {
     final hasPhoto = coach.photoUrl != null && coach.photoUrl!.isNotEmpty;
     return CircleAvatar(
       radius: radius,
-      backgroundColor: SphereColors.primary,
+      backgroundColor: context.sc.primary,
       backgroundImage: hasPhoto ? NetworkImage(coach.photoUrl!) : null,
       onBackgroundImageError: hasPhoto
           ? (err, stack) {}
@@ -173,7 +173,7 @@ class _CoachAvatar extends StatelessWidget {
               style: TextStyle(
                 fontSize: radius * 0.6,
                 fontWeight: FontWeight.w700,
-                color: SphereColors.onPrimary,
+                color: context.sc.onPrimary,
               ),
             ),
     );
@@ -197,7 +197,7 @@ class _NameBadge extends StatelessWidget {
             coach.name,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: SphereColors.onSurface,
+                  color: context.sc.onSurface,
                   fontWeight: FontWeight.w700,
                 ),
           ),
@@ -206,14 +206,14 @@ class _NameBadge extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           decoration: BoxDecoration(
-            color: SphereColors.primary.withValues(alpha: 0.15),
+            color: context.sc.primary.withValues(alpha: 0.15),
             borderRadius: SphereRadius.pillRect,
-            border: Border.all(color: SphereColors.primary.withValues(alpha: 0.4)),
+            border: Border.all(color: context.sc.primary.withValues(alpha: 0.4)),
           ),
           child: Text(
             coach.role,
-            style: const TextStyle(
-              color: SphereColors.primary,
+            style: TextStyle(
+              color: context.sc.primary,
               fontWeight: FontWeight.w600,
               fontSize: 13,
             ),
@@ -235,14 +235,14 @@ class _BioCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(SphereSpacing.x16),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Text(
         bio,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: SphereColors.onSurfaceMuted,
+              color: context.sc.onSurfaceMuted,
               height: 1.5,
             ),
       ),
@@ -267,9 +267,9 @@ class _ExperienceRows extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         children: [
@@ -285,14 +285,14 @@ class _ExperienceRows extends StatelessWidget {
                     child: Text(
                       rows[i].$1,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                           ),
                     ),
                   ),
                   Text(
                     rows[i].$2,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurface,
+                          color: context.sc.onSurface,
                           fontWeight: FontWeight.w600,
                         ),
                   ),
@@ -300,8 +300,8 @@ class _ExperienceRows extends StatelessWidget {
               ),
             ),
             if (i < rows.length - 1)
-              const Divider(
-                color: SphereColors.borderSubtle,
+              Divider(
+                color: context.sc.borderSubtle,
                 height: 1,
                 indent: SphereSpacing.x16,
                 endIndent: SphereSpacing.x16,
@@ -327,11 +327,11 @@ class _ChipWrap extends StatelessWidget {
           .map(
             (item) => Chip(
               label: Text(item),
-              backgroundColor: SphereColors.surfaceElev1,
-              side: const BorderSide(color: SphereColors.borderSubtle),
-              labelStyle: const TextStyle(
+              backgroundColor: context.sc.surfaceElev1,
+              side: BorderSide(color: context.sc.borderSubtle),
+              labelStyle: TextStyle(
                 fontSize: 12,
-                color: SphereColors.onSurface,
+                color: context.sc.onSurface,
               ),
               padding: const EdgeInsets.symmetric(horizontal: 4),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -351,9 +351,9 @@ class _PreviousClubsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         children: [
@@ -365,17 +365,17 @@ class _PreviousClubsList extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     LucideIcons.shield,
                     size: 16,
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                   ),
                   const SizedBox(width: SphereSpacing.x12),
                   Expanded(
                     child: Text(
                       clubs[i],
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                           ),
                     ),
                   ),
@@ -383,8 +383,8 @@ class _PreviousClubsList extends StatelessWidget {
               ),
             ),
             if (i < clubs.length - 1)
-              const Divider(
-                color: SphereColors.borderSubtle,
+              Divider(
+                color: context.sc.borderSubtle,
                 height: 1,
                 indent: SphereSpacing.x16,
                 endIndent: SphereSpacing.x16,
@@ -407,24 +407,24 @@ class _PhilosophyCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(SphereSpacing.x16),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
+          Icon(
             LucideIcons.quote,
             size: 18,
-            color: SphereColors.onSurfaceSubtle,
+            color: context.sc.onSurfaceSubtle,
           ),
           const SizedBox(width: SphereSpacing.x12),
           Expanded(
             child: Text(
               philosophy,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                     fontStyle: FontStyle.italic,
                     height: 1.5,
                   ),
@@ -445,9 +445,9 @@ class _AchievementsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         children: [
@@ -460,17 +460,17 @@ class _AchievementsList extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
+                  Icon(
                     LucideIcons.medal,
                     size: 16,
-                    color: SphereColors.accentAmber,
+                    color: context.sc.accentAmber,
                   ),
                   const SizedBox(width: SphereSpacing.x12),
                   Expanded(
                     child: Text(
                       achievements[i],
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                           ),
                     ),
                   ),
@@ -478,8 +478,8 @@ class _AchievementsList extends StatelessWidget {
               ),
             ),
             if (i < achievements.length - 1)
-              const Divider(
-                color: SphereColors.borderSubtle,
+              Divider(
+                color: context.sc.borderSubtle,
                 height: 1,
                 indent: SphereSpacing.x16,
                 endIndent: SphereSpacing.x16,
@@ -500,14 +500,14 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1.withValues(alpha: 0.85),
+      color: context.sc.surfaceElev1.withValues(alpha: 0.85),
       shape: const CircleBorder(),
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 20, color: SphereColors.onSurface),
+          child: Icon(icon, size: 20, color: context.sc.onSurface),
         ),
       ),
     );

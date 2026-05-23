@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../../app/theme/sphere_radius.dart';
 
 class ProfileSectionCard extends StatelessWidget {
@@ -13,17 +13,17 @@ class ProfileSectionCard extends StatelessWidget {
     for (var i = 0; i < children.length; i++) {
       rows.add(children[i]);
       if (i < children.length - 1) {
-        rows.add(const Padding(
+        rows.add(Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Divider(color: SphereColors.borderSubtle, height: 1),
+          child: Divider(color: context.sc.borderSubtle, height: 1),
         ));
       }
     }
     return Container(
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(children: rows),
     );

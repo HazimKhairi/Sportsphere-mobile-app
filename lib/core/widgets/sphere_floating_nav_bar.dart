@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../app/theme/sphere_spacing.dart';
 
 class SphereFloatingNavBar extends StatelessWidget {
@@ -35,7 +35,7 @@ class SphereFloatingNavBar extends StatelessWidget {
             filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
             child: Container(
               decoration: BoxDecoration(
-                color: SphereColors.surfaceElev1.withValues(alpha: 0.70),
+                color: context.sc.surfaceElev1.withValues(alpha: 0.70),
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
                   color: Colors.white.withValues(alpha: 0.08),
@@ -89,7 +89,7 @@ class _NavTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = active ? SphereColors.primary : SphereColors.onSurfaceMuted;
+    final color = active ? context.sc.primary : context.sc.onSurfaceMuted;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),

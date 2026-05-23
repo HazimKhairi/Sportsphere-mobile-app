@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../auth/presentation/auth_providers.dart';
 import '_widgets/sphere_activity_timeline_item.dart';
@@ -73,14 +73,14 @@ class PlayerHomeScreen extends ConsumerWidget {
                             Text(
                               _greeting(),
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: SphereColors.onSurfaceMuted,
+                                    color: context.sc.onSurfaceMuted,
                                   ),
                             ),
                             const SizedBox(height: 2),
                             Text(
                               firstName,
                               style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                                    color: SphereColors.onSurface,
+                                    color: context.sc.onSurface,
                                     height: 1.1,
                                   ),
                             ),
@@ -159,7 +159,7 @@ class PlayerHomeScreen extends ConsumerWidget {
                           child: Text(
                             'No activity yet. Train today to start your streak.',
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: SphereColors.onSurfaceMuted,
+                                  color: context.sc.onSurfaceMuted,
                                 ),
                           ),
                         );
@@ -176,7 +176,7 @@ class PlayerHomeScreen extends ConsumerWidget {
                         ],
                       );
                     },
-                    loading: () => const Padding(
+                    loading: () => Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
                       child: Center(
                         child: SizedBox(
@@ -184,7 +184,7 @@ class PlayerHomeScreen extends ConsumerWidget {
                           height: 24,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+                            valueColor: AlwaysStoppedAnimation(context.sc.primary),
                           ),
                         ),
                       ),
@@ -196,7 +196,7 @@ class PlayerHomeScreen extends ConsumerWidget {
                         child: Text(
                           'Couldn\'t load activity.',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: SphereColors.onSurfaceMuted,
+                                color: context.sc.onSurfaceMuted,
                               ),
                         ),
                       );
@@ -221,14 +221,14 @@ class _BellIconButton extends StatelessWidget {
     return Stack(
       children: [
         Material(
-          color: SphereColors.surfaceElev1,
+          color: context.sc.surfaceElev1,
           shape: const CircleBorder(),
           child: InkWell(
             onTap: onTap,
             customBorder: const CircleBorder(),
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.all(11),
-              child: Icon(LucideIcons.bell, size: 20, color: SphereColors.onSurface),
+              child: Icon(LucideIcons.bell, size: 20, color: context.sc.onSurface),
             ),
           ),
         ),
@@ -240,8 +240,8 @@ class _BellIconButton extends StatelessWidget {
             height: 8,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: SphereColors.primary,
-              border: Border.all(color: SphereColors.surface, width: 1.5),
+              color: context.sc.primary,
+              border: Border.all(color: context.sc.surface, width: 1.5),
             ),
           ),
         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../../app/theme/sphere_radius.dart';
 import '../../../../app/theme/sphere_spacing.dart';
 import 'sphere_count_up.dart';
@@ -28,7 +28,7 @@ class SphereStreakCard extends StatelessWidget {
             ? 'Start your streak today.'
             : 'One more session and you hit your personal best.');
     return Material(
-      color: SphereColors.surfaceElev1,
+      color: context.sc.surfaceElev1,
       borderRadius: SphereRadius.cardRect,
       child: InkWell(
         onTap: loading ? null : onTap,
@@ -37,13 +37,13 @@ class SphereStreakCard extends StatelessWidget {
           padding: const EdgeInsets.all(SphereSpacing.x20),
           decoration: BoxDecoration(
             borderRadius: SphereRadius.cardRect,
-            border: Border.all(color: SphereColors.borderSubtle),
+            border: Border.all(color: context.sc.borderSubtle),
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                SphereColors.surfaceElev1,
-                SphereColors.primary.withValues(alpha: 0.04),
+                context.sc.surfaceElev1,
+                context.sc.primary.withValues(alpha: 0.04),
               ],
             ),
           ),
@@ -53,9 +53,9 @@ class SphereStreakCard extends StatelessWidget {
                 size: 80,
                 value: progress,
                 strokeWidth: 5,
-                child: const Icon(
+                child: Icon(
                   LucideIcons.flame,
-                  color: SphereColors.primary,
+                  color: context.sc.primary,
                   size: 28,
                 ),
               ),
@@ -72,7 +72,7 @@ class SphereStreakCard extends StatelessWidget {
                           Text(
                             '--',
                             style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                                  color: SphereColors.onSurfaceMuted,
+                                  color: context.sc.onSurfaceMuted,
                                   fontSize: 36,
                                   height: 1,
                                 ),
@@ -81,7 +81,7 @@ class SphereStreakCard extends StatelessWidget {
                           SphereCountUp(
                             value: streakDays,
                             style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                                  color: SphereColors.onSurface,
+                                  color: context.sc.onSurface,
                                   fontSize: 36,
                                   height: 1,
                                 ),
@@ -90,7 +90,7 @@ class SphereStreakCard extends StatelessWidget {
                         Text(
                           'days',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: SphereColors.onSurfaceMuted,
+                                color: context.sc.onSurfaceMuted,
                               ),
                         ),
                       ],
@@ -99,7 +99,7 @@ class SphereStreakCard extends StatelessWidget {
                     Text(
                       subtitle,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                             height: 1.4,
                           ),
                     ),

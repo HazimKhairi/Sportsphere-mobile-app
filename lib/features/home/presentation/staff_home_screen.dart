@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../auth/presentation/auth_providers.dart';
 import '_widgets/sphere_avatar_stack.dart';
@@ -76,14 +76,14 @@ class StaffHomeScreen extends ConsumerWidget {
                             Text(
                               '${_greeting()},',
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: SphereColors.onSurfaceMuted,
+                                    color: context.sc.onSurfaceMuted,
                                   ),
                             ),
                             const SizedBox(height: 2),
                             Text(
                               'Coach $firstName',
                               style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                                    color: SphereColors.onSurface,
+                                    color: context.sc.onSurface,
                                     height: 1.1,
                                   ),
                             ),
@@ -91,7 +91,7 @@ class StaffHomeScreen extends ConsumerWidget {
                             Text(
                               _formattedDate(),
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: SphereColors.onSurfaceMuted,
+                                    color: context.sc.onSurfaceMuted,
                                   ),
                             ),
                           ],
@@ -170,9 +170,9 @@ class StaffHomeScreen extends ConsumerWidget {
                     child: Container(
                     padding: const EdgeInsets.all(SphereSpacing.x20),
                     decoration: BoxDecoration(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
-                      border: Border.all(color: SphereColors.borderSubtle),
+                      border: Border.all(color: context.sc.borderSubtle),
                     ),
                     child: Row(
                       children: [
@@ -185,7 +185,7 @@ class StaffHomeScreen extends ConsumerWidget {
                               Text(
                                 '$rosterCount active player${rosterCount == 1 ? '' : 's'}',
                                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      color: SphereColors.onSurface,
+                                      color: context.sc.onSurface,
                                       fontWeight: FontWeight.w700,
                                     ),
                               ),
@@ -193,14 +193,14 @@ class StaffHomeScreen extends ConsumerWidget {
                               Text(
                                 'Tap to manage roster',
                                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: SphereColors.onSurfaceMuted,
+                                      color: context.sc.onSurfaceMuted,
                                     ),
                               ),
                             ],
                           ),
                         ),
-                        const Icon(LucideIcons.arrowRight,
-                            color: SphereColors.primary, size: 20),
+                        Icon(LucideIcons.arrowRight,
+                            color: context.sc.primary, size: 20),
                       ],
                     ),
                   ),
@@ -224,14 +224,14 @@ class _BellIconButton extends StatelessWidget {
     return Stack(
       children: [
         Material(
-          color: SphereColors.surfaceElev1,
+          color: context.sc.surfaceElev1,
           shape: const CircleBorder(),
           child: InkWell(
             onTap: onTap,
             customBorder: const CircleBorder(),
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.all(11),
-              child: Icon(LucideIcons.bell, size: 20, color: SphereColors.onSurface),
+              child: Icon(LucideIcons.bell, size: 20, color: context.sc.onSurface),
             ),
           ),
         ),
@@ -243,8 +243,8 @@ class _BellIconButton extends StatelessWidget {
             height: 8,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: SphereColors.primary,
-              border: Border.all(color: SphereColors.surface, width: 1.5),
+              color: context.sc.primary,
+              border: Border.all(color: context.sc.surface, width: 1.5),
             ),
           ),
         ),

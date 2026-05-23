@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../domain/player_card_data.dart';
 import 'player_card_providers.dart';
 
@@ -14,7 +14,7 @@ class PlayerCardScreen extends ConsumerWidget {
     final state = ref.watch(playerCardProvider);
 
     return Scaffold(
-      backgroundColor: SphereColors.background,
+      backgroundColor: context.sc.background,
       appBar: AppBar(
         title: const Text('My Card'),
         actions: [
@@ -305,25 +305,25 @@ class _AttrTile extends StatelessWidget {
   const _AttrTile({required this.stat});
   final StatEntry stat;
 
-  Color _barColor(int v) {
-    if (v >= 80) return SphereColors.primary;
-    if (v >= 65) return SphereColors.accentBlue;
-    if (v >= 50) return SphereColors.accentAmber;
-    return SphereColors.danger;
+  Color _barColor(BuildContext context, int v) {
+    if (v >= 80) return context.sc.primary;
+    if (v >= 65) return context.sc.accentBlue;
+    if (v >= 50) return context.sc.accentAmber;
+    return context.sc.danger;
   }
 
   @override
   Widget build(BuildContext context) {
     final tt = Theme.of(context).textTheme;
     final pct = (stat.value / 100).clamp(0.0, 1.0);
-    final barColor = _barColor(stat.value);
+    final barColor = _barColor(context, stat.value);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: SphereColors.surface,
+        color: context.sc.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,7 +333,7 @@ class _AttrTile extends StatelessWidget {
             children: [
               Text(stat.key,
                   style: tt.labelSmall
-                      ?.copyWith(color: SphereColors.onSurfaceMuted, letterSpacing: 0.8)),
+                      ?.copyWith(color: context.sc.onSurfaceMuted, letterSpacing: 0.8)),
               const Spacer(),
               Text('${stat.value}',
                   style: tt.titleMedium?.copyWith(
@@ -346,7 +346,7 @@ class _AttrTile extends StatelessWidget {
             child: LinearProgressIndicator(
               value: pct,
               minHeight: 4,
-              backgroundColor: SphereColors.surfaceElev1,
+              backgroundColor: context.sc.surfaceElev1,
               color: barColor,
             ),
           ),
@@ -372,16 +372,16 @@ class _TrainingSummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: SphereColors.surface,
+        color: context.sc.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(LucideIcons.barChart2, size: 16, color: SphereColors.primary),
+              Icon(LucideIcons.barChart2, size: 16, color: context.sc.primary),
               const SizedBox(width: 8),
               Text('Training Summary',
                   style: tt.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
@@ -399,7 +399,7 @@ class _TrainingSummaryCard extends StatelessWidget {
             const SizedBox(height: 16),
             Text('Last 6 Ratings per Attribute',
                 style: tt.labelSmall
-                    ?.copyWith(color: SphereColors.onSurfaceMuted, letterSpacing: 0.8)),
+                    ?.copyWith(color: context.sc.onSurfaceMuted, letterSpacing: 0.8)),
             const SizedBox(height: 10),
             ...summary.perAttribute.map((a) => _SparklineRow(attr: a)),
           ],
@@ -434,7 +434,7 @@ class _SummaryTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -458,9 +458,9 @@ class _SparklineRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final tt = Theme.of(context).textTheme;
     final trendColor = switch (attr.trend) {
-      'up' => SphereColors.primary,
-      'down' => SphereColors.danger,
-      _ => SphereColors.onSurfaceMuted,
+      'up' => context.sc.primary,
+      'down' => context.sc.danger,
+      _ => context.sc.onSurfaceMuted,
     };
     final trendIcon = switch (attr.trend) {
       'up' => LucideIcons.trendingUp,
@@ -476,7 +476,7 @@ class _SparklineRow extends StatelessWidget {
             width: 40,
             child: Text(attr.key,
                 style: tt.labelSmall
-                    ?.copyWith(fontWeight: FontWeight.w700, color: SphereColors.onSurface)),
+                    ?.copyWith(fontWeight: FontWeight.w700, color: context.sc.onSurface)),
           ),
           Expanded(
             child: _Sparkline(values: attr.history),
@@ -509,7 +509,7 @@ class _Sparkline extends StatelessWidget {
           style: Theme.of(context)
               .textTheme
               .bodySmall
-              ?.copyWith(color: SphereColors.onSurfaceSubtle));
+              ?.copyWith(color: context.sc.onSurfaceSubtle));
     }
     return SizedBox(
       height: 28,
@@ -525,7 +525,7 @@ class _Sparkline extends StatelessWidget {
                 heightFactor: pct.clamp(0.08, 1.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: SphereColors.primary.withAlpha(160),
+                    color: context.sc.primary.withAlpha(160),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -557,16 +557,16 @@ class _TipsCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: SphereColors.surface,
+        color: context.sc.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(LucideIcons.lightbulb, size: 16, color: SphereColors.accentAmber),
+              Icon(LucideIcons.lightbulb, size: 16, color: context.sc.accentAmber),
               const SizedBox(width: 8),
               Text('Development Tips',
                   style: tt.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
@@ -578,13 +578,13 @@ class _TipsCard extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(LucideIcons.circleCheck,
-                        size: 14, color: SphereColors.primary),
+                    Icon(LucideIcons.circleCheck,
+                        size: 14, color: context.sc.primary),
                     const SizedBox(width: 8),
                     Expanded(
                         child: Text(tip,
                             style: tt.bodySmall
-                                ?.copyWith(color: SphereColors.onSurfaceMuted))),
+                                ?.copyWith(color: context.sc.onSurfaceMuted))),
                   ],
                 ),
               )),
@@ -608,7 +608,7 @@ class _ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(LucideIcons.idCard, size: 56, color: SphereColors.onSurfaceMuted),
+            Icon(LucideIcons.idCard, size: 56, color: context.sc.onSurfaceMuted),
             const SizedBox(height: 16),
             Text('Card not available',
                 style: Theme.of(context).textTheme.titleMedium),
@@ -619,7 +619,7 @@ class _ErrorView extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
-                  ?.copyWith(color: SphereColors.onSurfaceMuted),
+                  ?.copyWith(color: context.sc.onSurfaceMuted),
             ),
             const SizedBox(height: 24),
             OutlinedButton(onPressed: onRetry, child: const Text('Retry')),

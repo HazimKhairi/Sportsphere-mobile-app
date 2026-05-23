@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/player_card.dart';
@@ -26,7 +26,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
     final rosterAsync = ref.watch(rosterNotifierProvider);
 
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: Column(
         children: [
           SafeArea(
@@ -49,7 +49,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                           style: Theme.of(context)
                               .textTheme
                               .displayLarge
-                              ?.copyWith(color: SphereColors.onSurface),
+                              ?.copyWith(color: context.sc.onSurface),
                         ),
                       ),
                       rosterAsync.whenOrNull(
@@ -61,7 +61,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: SphereColors.primary
+                              color: context.sc.primary
                                   .withValues(alpha: 0.15),
                               borderRadius: SphereRadius.pillRect,
                             ),
@@ -71,7 +71,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                                   .textTheme
                                   .labelMedium
                                   ?.copyWith(
-                                    color: SphereColors.primary,
+                                    color: context.sc.primary,
                                     fontWeight: FontWeight.w700,
                                   ),
                             ),
@@ -85,7 +85,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                   Text(
                     'Your club members',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                   const SizedBox(height: SphereSpacing.x16),
@@ -99,9 +99,9 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
           const SizedBox(height: SphereSpacing.x12),
           Expanded(
             child: rosterAsync.when(
-              loading: () => const Center(
+              loading: () => Center(
                 child: CircularProgressIndicator(
-                  color: SphereColors.primary,
+                  color: context.sc.primary,
                 ),
               ),
               error: (e, _) => Center(
@@ -114,7 +114,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                       Text(
                         'Could not load roster.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: SphereColors.onSurfaceMuted,
+                              color: context.sc.onSurfaceMuted,
                             ),
                         textAlign: TextAlign.center,
                       ),
@@ -122,7 +122,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                       Text(
                         e.toString(),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: SphereColors.danger,
+                              color: context.sc.danger,
                             ),
                         textAlign: TextAlign.center,
                       ),
@@ -150,7 +150,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                     child: Text(
                       "No results for '$_searchQuery'.",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                           ),
                       textAlign: TextAlign.center,
                     ),
@@ -162,7 +162,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                     child: Text(
                       'No players in your club yet.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                           ),
                       textAlign: TextAlign.center,
                     ),
@@ -208,7 +208,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                       },
                     );
                   },
-            backgroundColor: SphereColors.primary,
+            backgroundColor: context.sc.primary,
             foregroundColor: Colors.black,
             child: const Icon(LucideIcons.userPlus),
           );
@@ -227,31 +227,31 @@ class _SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.pillRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x16, vertical: 4),
       child: Row(
         children: [
-          const Icon(
+          Icon(
             LucideIcons.search,
             size: 16,
-            color: SphereColors.onSurfaceMuted,
+            color: context.sc.onSurfaceMuted,
           ),
           const SizedBox(width: SphereSpacing.x8),
           Expanded(
             child: TextField(
               onChanged: onChanged,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Search players...',
                 border: InputBorder.none,
                 isCollapsed: true,
                 contentPadding:
                     EdgeInsets.symmetric(vertical: SphereSpacing.x12),
-                hintStyle: TextStyle(color: SphereColors.onSurfaceMuted),
+                hintStyle: TextStyle(color: context.sc.onSurfaceMuted),
               ),
-              style: const TextStyle(color: SphereColors.onSurface),
+              style: TextStyle(color: context.sc.onSurface),
             ),
           ),
         ],
@@ -313,14 +313,14 @@ class _PlayerRow extends StatelessWidget {
       ),
       leading: CircleAvatar(
         radius: 22,
-        backgroundColor: SphereColors.primary.withValues(alpha: 0.18),
+        backgroundColor: context.sc.primary.withValues(alpha: 0.18),
         foregroundImage:
             photoUrl != null ? NetworkImage(photoUrl) : null,
         child: photoUrl == null
             ? Text(
                 initials,
-                style: const TextStyle(
-                  color: SphereColors.primary,
+                style: TextStyle(
+                  color: context.sc.primary,
                   fontWeight: FontWeight.w700,
                 ),
               )
@@ -329,7 +329,7 @@ class _PlayerRow extends StatelessWidget {
       title: Text(
         player.fullName,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: SphereColors.onSurface,
+              color: context.sc.onSurface,
               fontWeight: FontWeight.w700,
             ),
       ),
@@ -337,14 +337,14 @@ class _PlayerRow extends StatelessWidget {
           ? Text(
               subtitle,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                   ),
             )
           : null,
-      trailing: const Icon(
+      trailing: Icon(
         LucideIcons.chevronRight,
         size: 16,
-        color: SphereColors.onSurfaceMuted,
+        color: context.sc.onSurfaceMuted,
       ),
       onTap: () => context.push('/staff/roster/${player.id}'),
     );

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../domain/scouting_profile.dart';
 import 'scout_providers.dart';
 
@@ -15,7 +15,7 @@ class ScoutScreen extends ConsumerWidget {
     final state = ref.watch(scoutProfileNotifierProvider);
 
     return Scaffold(
-      backgroundColor: SphereColors.background,
+      backgroundColor: context.sc.background,
       appBar: AppBar(
         title: const Text('Scout Profile'),
         actions: [
@@ -58,10 +58,10 @@ class _EmptyState extends StatelessWidget {
               width: 96,
               height: 96,
               decoration: BoxDecoration(
-                color: SphereColors.primaryLight,
+                color: context.sc.primaryLight,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(LucideIcons.searchCheck, size: 44, color: SphereColors.primary),
+              child: Icon(LucideIcons.searchCheck, size: 44, color: context.sc.primary),
             ),
             const SizedBox(height: 24),
             Text('Get Discovered', style: tt.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
@@ -69,7 +69,7 @@ class _EmptyState extends StatelessWidget {
             Text(
               'Create your scouting profile so clubs and coaches can find you. You control when you\'re visible.',
               textAlign: TextAlign.center,
-              style: tt.bodyMedium?.copyWith(color: SphereColors.onSurfaceMuted),
+              style: tt.bodyMedium?.copyWith(color: context.sc.onSurfaceMuted),
             ),
             const SizedBox(height: 32),
             FilledButton.icon(
@@ -85,7 +85,7 @@ class _EmptyState extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(LucideIcons.lock, size: 14, color: SphereColors.onSurfaceMuted),
+                Icon(LucideIcons.lock, size: 14, color: context.sc.onSurfaceMuted),
                 const SizedBox(width: 6),
                 Text(
                   'Hidden by default — you decide when to go live',
@@ -183,9 +183,9 @@ class _HeroCard extends StatelessWidget {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: SphereColors.surface,
+        color: context.sc.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         children: [
@@ -202,23 +202,23 @@ class _HeroCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       '${profile.primaryPosition} · Age $_ageStr · ${profile.state}',
-                      style: tt.bodyMedium?.copyWith(color: SphereColors.onSurfaceMuted),
+                      style: tt.bodyMedium?.copyWith(color: context.sc.onSurfaceMuted),
                     ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        _Chip(label: levelLabel, color: SphereColors.accentBluePastel, textColor: SphereColors.accentBlue),
+                        _Chip(label: levelLabel, color: context.sc.accentBluePastel, textColor: context.sc.accentBlue),
                         const SizedBox(width: 8),
                         _Chip(
                           label: profile.isFreeAgent
                               ? 'Free Agent'
                               : profile.affiliation.clubName ?? 'Club',
                           color: profile.isFreeAgent
-                              ? SphereColors.successLight
-                              : SphereColors.accentAmberPastel,
+                              ? context.sc.successLight
+                              : context.sc.accentAmberPastel,
                           textColor: profile.isFreeAgent
-                              ? SphereColors.primary
-                              : SphereColors.accentAmber,
+                              ? context.sc.primary
+                              : context.sc.accentAmber,
                         ),
                       ],
                     ),
@@ -238,7 +238,7 @@ class _HeroCard extends StatelessWidget {
                 ...profile.secondaryPositions.map(
                   (p) => Padding(
                     padding: const EdgeInsets.only(right: 6),
-                    child: _Chip(label: p, color: SphereColors.surfaceElev1, textColor: SphereColors.onSurfaceMuted),
+                    child: _Chip(label: p, color: context.sc.surfaceElev1, textColor: context.sc.onSurfaceMuted),
                   ),
                 ),
               ],
@@ -262,8 +262,8 @@ class _Avatar extends StatelessWidget {
       height: 72,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: SphereColors.primaryLight,
-        border: Border.all(color: SphereColors.borderSubtle, width: 2),
+        color: context.sc.primaryLight,
+        border: Border.all(color: context.sc.borderSubtle, width: 2),
         image: photoUrl != null
             ? DecorationImage(image: NetworkImage(photoUrl!), fit: BoxFit.cover)
             : null,
@@ -272,10 +272,10 @@ class _Avatar extends StatelessWidget {
           ? Center(
               child: Text(
                 name.isNotEmpty ? name[0].toUpperCase() : '?',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
-                  color: SphereColors.primary,
+                  color: context.sc.primary,
                 ),
               ),
             )
@@ -317,17 +317,17 @@ class _VisibilityToggle extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isOpen ? SphereColors.primaryLight : SphereColors.surfaceElev1,
+        color: isOpen ? context.sc.primaryLight : context.sc.surfaceElev1,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isOpen ? SphereColors.primary.withAlpha(80) : SphereColors.borderSubtle,
+          color: isOpen ? context.sc.primary.withAlpha(80) : context.sc.borderSubtle,
         ),
       ),
       child: Row(
         children: [
           Icon(
             isOpen ? LucideIcons.eye : LucideIcons.eyeOff,
-            color: isOpen ? SphereColors.primary : SphereColors.onSurfaceMuted,
+            color: isOpen ? context.sc.primary : context.sc.onSurfaceMuted,
             size: 20,
           ),
           const SizedBox(width: 12),
@@ -338,7 +338,7 @@ class _VisibilityToggle extends ConsumerWidget {
                 Text(
                   isOpen ? 'Visible to clubs' : 'Hidden from clubs',
                   style: tt.titleMedium?.copyWith(
-                    color: isOpen ? SphereColors.primary : SphereColors.onSurface,
+                    color: isOpen ? context.sc.primary : context.sc.onSurface,
                   ),
                 ),
                 Text(
@@ -358,7 +358,7 @@ class _VisibilityToggle extends ConsumerWidget {
                 )
               : Switch(
                   value: isOpen,
-                  activeThumbColor: SphereColors.primary,
+                  activeThumbColor: context.sc.primary,
                   onChanged: (_) =>
                       ref.read(scoutProfileNotifierProvider.notifier).toggleVisibility(),
                 ),
@@ -381,19 +381,19 @@ class _SectionCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: SphereColors.surface,
+        color: context.sc.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(icon, size: 16, color: SphereColors.onSurfaceMuted),
+              Icon(icon, size: 16, color: context.sc.onSurfaceMuted),
               const SizedBox(width: 8),
               Text(title,
-                  style: tt.labelLarge?.copyWith(color: SphereColors.onSurfaceMuted)),
+                  style: tt.labelLarge?.copyWith(color: context.sc.onSurfaceMuted)),
             ],
           ),
           const SizedBox(height: 12),
@@ -421,10 +421,10 @@ class _SkillsGrid extends StatelessWidget {
                 width: 80,
                 child: Text(
                   _capitalize(e.key),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: SphereColors.onSurface,
+                    color: context.sc.onSurface,
                   ),
                 ),
               ),
@@ -434,15 +434,15 @@ class _SkillsGrid extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: pct,
                     minHeight: 8,
-                    backgroundColor: SphereColors.surfaceElev1,
-                    color: SphereColors.primary,
+                    backgroundColor: context.sc.surfaceElev1,
+                    color: context.sc.primary,
                   ),
                 ),
               ),
               const SizedBox(width: 8),
               Text(
                 '${e.value.round()}/5',
-                style: const TextStyle(fontSize: 12, color: SphereColors.onSurfaceMuted),
+                style: TextStyle(fontSize: 12, color: context.sc.onSurfaceMuted),
               ),
             ],
           ),
@@ -495,17 +495,17 @@ class _InfoChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: SphereColors.onSurfaceMuted),
+          Icon(icon, size: 14, color: context.sc.onSurfaceMuted),
           const SizedBox(width: 6),
           Text(label,
-              style: const TextStyle(fontSize: 12, color: SphereColors.onSurface)),
+              style: TextStyle(fontSize: 12, color: context.sc.onSurface)),
         ],
       ),
     );
@@ -528,7 +528,7 @@ class _PastClubsList extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 10),
           child: Row(
             children: [
-              const Icon(LucideIcons.building2, size: 16, color: SphereColors.onSurfaceMuted),
+              Icon(LucideIcons.building2, size: 16, color: context.sc.onSurfaceMuted),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
@@ -560,7 +560,7 @@ class _ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(LucideIcons.cloudOff, size: 48, color: SphereColors.onSurfaceMuted),
+            Icon(LucideIcons.cloudOff, size: 48, color: context.sc.onSurfaceMuted),
             const SizedBox(height: 16),
             Text('Could not load scout profile', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
@@ -569,7 +569,7 @@ class _ErrorView extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
-                    ?.copyWith(color: SphereColors.onSurfaceMuted)),
+                    ?.copyWith(color: context.sc.onSurfaceMuted)),
             const SizedBox(height: 24),
             OutlinedButton(onPressed: onRetry, child: const Text('Retry')),
           ],

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 
@@ -42,7 +42,7 @@ class _PaymentFailureScreenState extends State<PaymentFailureScreen>
         : widget.reason!;
 
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(SphereSpacing.x24),
@@ -67,16 +67,16 @@ class _PaymentFailureScreenState extends State<PaymentFailureScreen>
                   height: 120,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: SphereColors.danger.withValues(alpha: 0.16),
+                    color: context.sc.danger.withValues(alpha: 0.16),
                     border: Border.all(
-                      color: SphereColors.danger.withValues(alpha: 0.4),
+                      color: context.sc.danger.withValues(alpha: 0.4),
                       width: 2,
                     ),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     LucideIcons.x,
                     size: 56,
-                    color: SphereColors.danger,
+                    color: context.sc.danger,
                   ),
                 ),
               ),
@@ -84,7 +84,7 @@ class _PaymentFailureScreenState extends State<PaymentFailureScreen>
               Text(
                 'Payment failed',
                 style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                      color: SphereColors.onSurface,
+                      color: context.sc.onSurface,
                     ),
               ),
               const SizedBox(height: SphereSpacing.x8),
@@ -92,7 +92,7 @@ class _PaymentFailureScreenState extends State<PaymentFailureScreen>
                 reasonText,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                       height: 1.4,
                     ),
               ),
@@ -109,8 +109,8 @@ class _PaymentFailureScreenState extends State<PaymentFailureScreen>
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: SphereColors.primary,
-                    foregroundColor: SphereColors.onPrimary,
+                    backgroundColor: context.sc.primary,
+                    foregroundColor: context.sc.onPrimary,
                     shape: const RoundedRectangleBorder(
                       borderRadius: SphereRadius.pillRect,
                     ),
@@ -130,8 +130,8 @@ class _PaymentFailureScreenState extends State<PaymentFailureScreen>
                 child: OutlinedButton(
                   onPressed: () => context.go('/home'),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: SphereColors.onSurface,
-                    side: const BorderSide(color: SphereColors.borderSubtle),
+                    foregroundColor: context.sc.onSurface,
+                    side: BorderSide(color: context.sc.borderSubtle),
                     shape: const RoundedRectangleBorder(
                       borderRadius: SphereRadius.pillRect,
                     ),

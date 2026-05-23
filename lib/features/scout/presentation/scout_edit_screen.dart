@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../domain/scouting_profile.dart';
 import 'scout_providers.dart';
 
@@ -153,7 +153,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
     final tt = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: SphereColors.background,
+      backgroundColor: context.sc.background,
       appBar: AppBar(
         title: const Text('Edit Scout Profile'),
         actions: [
@@ -279,7 +279,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                     children: [
                       Text('Years playing:',
                           style: tt.bodyMedium
-                              ?.copyWith(color: SphereColors.onSurfaceMuted)),
+                              ?.copyWith(color: context.sc.onSurfaceMuted)),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Slider(
@@ -288,7 +288,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                           max: 20,
                           divisions: 20,
                           label: '$_yearsPlaying',
-                          activeColor: SphereColors.primary,
+                          activeColor: context.sc.primary,
                           onChanged: (v) =>
                               setState(() => _yearsPlaying = v.round()),
                         ),
@@ -324,7 +324,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                             max: 5,
                             divisions: 5,
                             label: val == 0 ? 'Not rated' : '${val.round()}',
-                            activeColor: SphereColors.primary,
+                            activeColor: context.sc.primary,
                             onChanged: (v) =>
                                 setState(() => _skills[key] = v),
                           ),
@@ -349,27 +349,27 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                     contentPadding: EdgeInsets.zero,
                     title: const Text('Available weekdays'),
                     value: _weekday,
-                    activeThumbColor: SphereColors.primary,
+                    activeThumbColor: context.sc.primary,
                     onChanged: (v) => setState(() => _weekday = v),
                   ),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     title: const Text('Available weekends'),
                     value: _weekend,
-                    activeThumbColor: SphereColors.primary,
+                    activeThumbColor: context.sc.primary,
                     onChanged: (v) => setState(() => _weekend = v),
                   ),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     title: const Text('Accept paid trials'),
                     value: _paidTrials,
-                    activeThumbColor: SphereColors.primary,
+                    activeThumbColor: context.sc.primary,
                     onChanged: (v) => setState(() => _paidTrials = v),
                   ),
                   const Divider(),
                   Row(
                     children: [
-                      Text('Hours/week:', style: tt.bodyMedium?.copyWith(color: SphereColors.onSurfaceMuted)),
+                      Text('Hours/week:', style: tt.bodyMedium?.copyWith(color: context.sc.onSurfaceMuted)),
                       Expanded(
                         child: Slider(
                           value: _hoursPerWeek.toDouble(),
@@ -377,7 +377,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                           max: 40,
                           divisions: 40,
                           label: '$_hoursPerWeek',
-                          activeColor: SphereColors.primary,
+                          activeColor: context.sc.primary,
                           onChanged: (v) => setState(() => _hoursPerWeek = v.round()),
                         ),
                       ),
@@ -386,7 +386,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                   ),
                   Row(
                     children: [
-                      Text('Travel radius:', style: tt.bodyMedium?.copyWith(color: SphereColors.onSurfaceMuted)),
+                      Text('Travel radius:', style: tt.bodyMedium?.copyWith(color: context.sc.onSurfaceMuted)),
                       Expanded(
                         child: Slider(
                           value: _travelRadius.toDouble(),
@@ -394,7 +394,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                           max: 200,
                           divisions: 20,
                           label: '${_travelRadius}km',
-                          activeColor: SphereColors.primary,
+                          activeColor: context.sc.primary,
                           onChanged: (v) => setState(() => _travelRadius = v.round()),
                         ),
                       ),
@@ -456,9 +456,9 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: SphereColors.surface,
+        color: context.sc.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: child,
     );
@@ -506,7 +506,7 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: SphereColors.primary),
+        Icon(icon, size: 16, color: context.sc.primary),
         const SizedBox(width: 8),
         Text(
           title,

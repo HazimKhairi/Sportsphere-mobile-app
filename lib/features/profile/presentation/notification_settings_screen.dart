@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
@@ -92,17 +92,17 @@ class _NotificationSettingsScreenState
                   Row(
                     children: [
                       Material(
-                        color: SphereColors.surfaceElev1,
+                        color: context.sc.surfaceElev1,
                         shape: const CircleBorder(),
                         child: InkWell(
                           onTap: () => context.canPop()
                               ? context.pop()
                               : context.go('/profile'),
                           customBorder: const CircleBorder(),
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.all(10),
                             child: Icon(LucideIcons.chevronLeft,
-                                size: 20, color: SphereColors.onSurface),
+                                size: 20, color: context.sc.onSurface),
                           ),
                         ),
                       ),
@@ -117,7 +117,7 @@ class _NotificationSettingsScreenState
                   Text(
                     'Choose what you want to be notified about.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                   const SizedBox(height: SphereSpacing.x32),
@@ -125,15 +125,15 @@ class _NotificationSettingsScreenState
                     Container(
                       padding: const EdgeInsets.all(SphereSpacing.x16),
                       decoration: BoxDecoration(
-                        color: SphereColors.warning.withValues(alpha: 0.12),
+                        color: context.sc.warning.withValues(alpha: 0.12),
                         borderRadius: SphereRadius.cardRect,
                         border: Border.all(
-                            color: SphereColors.warning.withValues(alpha: 0.4)),
+                            color: context.sc.warning.withValues(alpha: 0.4)),
                       ),
                       child: Row(
                         children: [
-                          const Icon(LucideIcons.alertTriangle,
-                              size: 16, color: SphereColors.warning),
+                          Icon(LucideIcons.alertTriangle,
+                              size: 16, color: context.sc.warning),
                           const SizedBox(width: SphereSpacing.x12),
                           Expanded(
                             child: Text(
@@ -141,7 +141,7 @@ class _NotificationSettingsScreenState
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
-                                  ?.copyWith(color: SphereColors.warning),
+                                  ?.copyWith(color: context.sc.warning),
                             ),
                           ),
                         ],
@@ -150,14 +150,14 @@ class _NotificationSettingsScreenState
                     const SizedBox(height: SphereSpacing.x24),
                   ],
                   if (!_loaded) ...[
-                    const Center(
+                    Center(
                       child: SizedBox(
                         width: 24,
                         height: 24,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor:
-                              AlwaysStoppedAnimation(SphereColors.primary),
+                              AlwaysStoppedAnimation(context.sc.primary),
                         ),
                       ),
                     ),
@@ -194,7 +194,7 @@ class _NotificationSettingsScreenState
                             _toggle('notif_schedule', v);
                           },
                         ),
-                        const Divider(color: SphereColors.borderSubtle, height: 1),
+                        Divider(color: context.sc.borderSubtle, height: 1),
                         _NotifRow(
                           icon: LucideIcons.receipt,
                           label: 'Payment updates',
@@ -206,7 +206,7 @@ class _NotificationSettingsScreenState
                             _toggle('notif_payments', v);
                           },
                         ),
-                        const Divider(color: SphereColors.borderSubtle, height: 1),
+                        Divider(color: context.sc.borderSubtle, height: 1),
                         _NotifRow(
                           icon: LucideIcons.award,
                           label: 'Achievements',
@@ -239,9 +239,9 @@ class _NotifCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(children: children),
     );
@@ -280,9 +280,9 @@ class _NotifRow extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: SphereColors.primary.withValues(alpha: 0.12),
+              color: context.sc.primary.withValues(alpha: 0.12),
             ),
-            child: Icon(icon, size: 16, color: SphereColors.primary),
+            child: Icon(icon, size: 16, color: context.sc.primary),
           ),
           const SizedBox(width: SphereSpacing.x12),
           Expanded(
@@ -293,15 +293,15 @@ class _NotifRow extends StatelessWidget {
                   label,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: enabled
-                            ? SphereColors.onSurface
-                            : SphereColors.onSurfaceMuted,
+                            ? context.sc.onSurface
+                            : context.sc.onSurfaceMuted,
                         fontWeight: FontWeight.w600,
                       ),
                 ),
                 Text(
                   subtitle,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                       ),
                 ),
               ],
@@ -310,8 +310,8 @@ class _NotifRow extends StatelessWidget {
           Switch(
             value: value,
             onChanged: enabled ? onChanged : null,
-            activeThumbColor: SphereColors.primary,
-            activeTrackColor: SphereColors.primary.withValues(alpha: 0.3),
+            activeThumbColor: context.sc.primary,
+            activeTrackColor: context.sc.primary.withValues(alpha: 0.3),
           ),
         ],
       ),

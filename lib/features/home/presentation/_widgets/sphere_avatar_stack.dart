@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 
 class SphereAvatarStack extends StatelessWidget {
   const SphereAvatarStack({
@@ -37,16 +37,16 @@ class SphereAvatarStack extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: SphereColors.primary.withValues(alpha: 0.12),
+                  color: context.sc.primary.withValues(alpha: 0.12),
                   border: Border.all(
-                    color: SphereColors.surface,
+                    color: context.sc.surface,
                     width: 2,
                   ),
                 ),
                 child: Text(
                   '+$remaining',
-                  style: const TextStyle(
-                    color: SphereColors.primary,
+                  style: TextStyle(
+                    color: context.sc.primary,
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                   ),
@@ -81,7 +81,7 @@ class _AvatarBubble extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color.withValues(alpha: 0.8),
-        border: Border.all(color: SphereColors.surface, width: 2),
+        border: Border.all(color: context.sc.surface, width: 2),
       ),
       child: Center(
         child: Text(

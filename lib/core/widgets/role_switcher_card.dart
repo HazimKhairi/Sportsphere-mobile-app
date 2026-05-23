@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../app/theme/sphere_radius.dart';
 import '../../app/theme/sphere_spacing.dart';
 
@@ -24,7 +24,7 @@ class RoleSwitcherCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: selected ? SphereColors.primary : SphereColors.surfaceElev1,
+      color: selected ? context.sc.primary : context.sc.surfaceElev1,
       borderRadius: SphereRadius.cardRect,
       child: InkWell(
         onTap: onTap,
@@ -35,7 +35,7 @@ class RoleSwitcherCard extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: selected ? SphereColors.onPrimary : SphereColors.primary,
+                color: selected ? context.sc.onPrimary : context.sc.primary,
                 size: 32,
               ),
               const SizedBox(width: SphereSpacing.x16),
@@ -47,8 +47,8 @@ class RoleSwitcherCard extends StatelessWidget {
                       title,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: selected
-                                ? SphereColors.onPrimary
-                                : SphereColors.onSurface,
+                                ? context.sc.onPrimary
+                                : context.sc.onSurface,
                           ),
                     ),
                     const SizedBox(height: 4),
@@ -56,8 +56,8 @@ class RoleSwitcherCard extends StatelessWidget {
                       subtitle,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: selected
-                                ? SphereColors.onPrimary.withValues(alpha: 0.75)
-                                : SphereColors.onSurfaceMuted,
+                                ? context.sc.onPrimary.withValues(alpha: 0.75)
+                                : context.sc.onSurfaceMuted,
                           ),
                     ),
                   ],
@@ -66,8 +66,8 @@ class RoleSwitcherCard extends StatelessWidget {
               Icon(
                 LucideIcons.chevronRight,
                 color: selected
-                    ? SphereColors.onPrimary
-                    : SphereColors.onSurfaceMuted,
+                    ? context.sc.onPrimary
+                    : context.sc.onSurfaceMuted,
               ),
             ],
           ),

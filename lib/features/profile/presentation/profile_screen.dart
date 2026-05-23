@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../auth/presentation/auth_providers.dart';
@@ -194,7 +194,7 @@ class ProfileScreen extends ConsumerWidget {
                   child: Text(
                     'v1.0.0+1 · 2026-05-22',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                 ),
@@ -264,7 +264,7 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
                 Expanded(child: Text(msg)),
               ],
             ),
-            backgroundColor: SphereColors.primary,
+            backgroundColor: context.sc.primary,
           ),
         );
       }
@@ -273,7 +273,7 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Photo rejected: ${e.reason}'),
-            backgroundColor: SphereColors.danger,
+            backgroundColor: context.sc.danger,
             duration: const Duration(seconds: 6),
           ),
         );
@@ -283,7 +283,7 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Upload failed: $e'),
-            backgroundColor: SphereColors.danger,
+            backgroundColor: context.sc.danger,
           ),
         );
       }
@@ -295,7 +295,7 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
   void _showPhotoOptions() {
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: SphereColors.surfaceElev1,
+      backgroundColor: context.sc.surfaceElev1,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -308,7 +308,7 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: SphereColors.borderSubtle,
+                color: context.sc.borderSubtle,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -320,22 +320,22 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
-                    ?.copyWith(color: SphereColors.onSurfaceMuted),
+                    ?.copyWith(color: context.sc.onSurfaceMuted),
                 textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 12),
             ListTile(
-              leading: const Icon(LucideIcons.camera, color: SphereColors.onSurface),
-              title: const Text('Take photo', style: TextStyle(color: SphereColors.onSurface)),
+              leading: Icon(LucideIcons.camera, color: context.sc.onSurface),
+              title: Text('Take photo', style: TextStyle(color: context.sc.onSurface)),
               onTap: () {
                 Navigator.pop(context);
                 _pickAndUpload(true);
               },
             ),
             ListTile(
-              leading: const Icon(LucideIcons.image, color: SphereColors.onSurface),
-              title: const Text('Choose from gallery', style: TextStyle(color: SphereColors.onSurface)),
+              leading: Icon(LucideIcons.image, color: context.sc.onSurface),
+              title: Text('Choose from gallery', style: TextStyle(color: context.sc.onSurface)),
               onTap: () {
                 Navigator.pop(context);
                 _pickAndUpload(false);
@@ -352,7 +352,7 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
     final adopted = await ProPhotoSheet.show(context);
     if (adopted && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Row(
             children: [
               Icon(Icons.check_circle, color: Colors.white, size: 18),
@@ -360,7 +360,7 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
               Text('Pro photo set as your profile picture!'),
             ],
           ),
-          backgroundColor: SphereColors.primary,
+          backgroundColor: context.sc.primary,
         ),
       );
     }
@@ -372,15 +372,15 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
     return Container(
       padding: const EdgeInsets.all(SphereSpacing.x20),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            SphereColors.surfaceElev1,
-            SphereColors.primary.withValues(alpha: 0.04),
+            context.sc.surfaceElev1,
+            context.sc.primary.withValues(alpha: 0.04),
           ],
         ),
       ),
@@ -402,9 +402,9 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: SphereColors.primary.withValues(alpha: 0.18),
+                      color: context.sc.primary.withValues(alpha: 0.18),
                       border: Border.all(
-                        color: SphereColors.primary.withValues(alpha: 0.4),
+                        color: context.sc.primary.withValues(alpha: 0.4),
                         width: 1,
                       ),
                     ),
@@ -417,8 +417,8 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
                               fit: BoxFit.cover,
                               errorBuilder: (_, e, s) => Text(
                                 widget.initials,
-                                style: const TextStyle(
-                                  color: SphereColors.primary,
+                                style: TextStyle(
+                                  color: context.sc.primary,
                                   fontSize: 24,
                                   fontWeight: FontWeight.w800,
                                 ),
@@ -426,18 +426,18 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
                             ),
                           )
                         : _uploading
-                            ? const SizedBox(
+                            ? SizedBox(
                                 width: 24,
                                 height: 24,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+                                  valueColor: AlwaysStoppedAnimation(context.sc.primary),
                                 ),
                               )
                             : Text(
                                 widget.initials,
-                                style: const TextStyle(
-                                  color: SphereColors.primary,
+                                style: TextStyle(
+                                  color: context.sc.primary,
                                   fontSize: 24,
                                   fontWeight: FontWeight.w800,
                                 ),
@@ -452,16 +452,16 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
                         height: 22,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: SphereColors.primary,
+                          color: context.sc.primary,
                           border: Border.all(
-                            color: SphereColors.surface,
+                            color: context.sc.surface,
                             width: 2,
                           ),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           LucideIcons.pencil,
                           size: 10,
-                          color: SphereColors.onPrimary,
+                          color: context.sc.onPrimary,
                         ),
                       ),
                     ),
@@ -477,7 +477,7 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
                 Text(
                   widget.displayName,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: SphereColors.onSurface,
+                        color: context.sc.onSurface,
                         fontWeight: FontWeight.w700,
                       ),
                   maxLines: 1,
@@ -487,16 +487,16 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: SphereColors.primary.withValues(alpha: 0.18),
+                    color: context.sc.primary.withValues(alpha: 0.18),
                     borderRadius: SphereRadius.pillRect,
                     border: Border.all(
-                      color: SphereColors.primary.withValues(alpha: 0.4),
+                      color: context.sc.primary.withValues(alpha: 0.4),
                     ),
                   ),
                   child: Text(
                     widget.roleLabel.toUpperCase(),
-                    style: const TextStyle(
-                      color: SphereColors.primary,
+                    style: TextStyle(
+                      color: context.sc.primary,
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 1.2,
@@ -508,7 +508,7 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
                   Text(
                     widget.email,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -526,21 +526,21 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: SphereColors.primary.withValues(alpha: 0.08),
+                  color: context.sc.primary.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: SphereColors.primary.withValues(alpha: 0.3),
+                    color: context.sc.primary.withValues(alpha: 0.3),
                   ),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(LucideIcons.sparkles, size: 14, color: SphereColors.primary),
+                    Icon(LucideIcons.sparkles, size: 14, color: context.sc.primary),
                     SizedBox(width: 6),
                     Text(
                       'Generate AI Pro Photo',
                       style: TextStyle(
-                        color: SphereColors.primary,
+                        color: context.sc.primary,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
@@ -563,14 +563,14 @@ class _BellIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1,
+      color: context.sc.surfaceElev1,
       shape: const CircleBorder(),
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
-        child: const Padding(
+        child: Padding(
           padding: EdgeInsets.all(11),
-          child: Icon(LucideIcons.bell, size: 20, color: SphereColors.onSurface),
+          child: Icon(LucideIcons.bell, size: 20, color: context.sc.onSurface),
         ),
       ),
     );

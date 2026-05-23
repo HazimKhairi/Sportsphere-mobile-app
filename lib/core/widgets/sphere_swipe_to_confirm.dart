@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../app/theme/sphere_radius.dart';
 
 class SphereSwipeToConfirm extends StatefulWidget {
@@ -97,9 +97,9 @@ class _SphereSwipeToConfirmState extends State<SphereSwipeToConfirm>
               Container(
                 height: _height,
                 decoration: BoxDecoration(
-                  color: SphereColors.surfaceElev1,
+                  color: context.sc.surfaceElev1,
                   borderRadius: SphereRadius.pillRect,
-                  border: Border.all(color: SphereColors.borderSubtle),
+                  border: Border.all(color: context.sc.borderSubtle),
                 ),
               ),
               // Filled progress
@@ -110,7 +110,7 @@ class _SphereSwipeToConfirmState extends State<SphereSwipeToConfirm>
                   child: Container(
                     width: _position + _thumbSize / 2,
                     height: _height,
-                    color: SphereColors.primary.withValues(alpha: 0.18),
+                    color: context.sc.primary.withValues(alpha: 0.18),
                   ),
                 ),
               ),
@@ -120,8 +120,8 @@ class _SphereSwipeToConfirmState extends State<SphereSwipeToConfirm>
                   opacity: 1 - progress,
                   child: Text(
                     widget.label,
-                    style: const TextStyle(
-                      color: SphereColors.onSurface,
+                    style: TextStyle(
+                      color: context.sc.onSurface,
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                     ),
@@ -135,23 +135,23 @@ class _SphereSwipeToConfirmState extends State<SphereSwipeToConfirm>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (widget.busy)
-                        const SizedBox(
+                        SizedBox(
                           width: 18,
                           height: 18,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor:
-                                AlwaysStoppedAnimation(SphereColors.primary),
+                                AlwaysStoppedAnimation(context.sc.primary),
                           ),
                         )
                       else
-                        const Icon(LucideIcons.check,
-                            size: 18, color: SphereColors.primary),
+                        Icon(LucideIcons.check,
+                            size: 18, color: context.sc.primary),
                       const SizedBox(width: 8),
                       Text(
                         widget.confirmedLabel,
-                        style: const TextStyle(
-                          color: SphereColors.primary,
+                        style: TextStyle(
+                          color: context.sc.primary,
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                         ),
@@ -180,13 +180,13 @@ class _SphereSwipeToConfirmState extends State<SphereSwipeToConfirm>
                     width: _thumbSize,
                     height: _thumbSize,
                     margin: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: SphereColors.primary,
+                      color: context.sc.primary,
                     ),
                     child: Icon(
                       widget.thumbIcon,
-                      color: SphereColors.onPrimary,
+                      color: context.sc.onPrimary,
                       size: 22,
                     ),
                   ),

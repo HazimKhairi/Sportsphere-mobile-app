@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 
@@ -51,7 +51,7 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(SphereSpacing.x24),
@@ -75,7 +75,7 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
                           height: 220 + pulse * 20,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: SphereColors.primary
+                            color: context.sc.primary
                                 .withValues(alpha: 0.06 + pulse * 0.04),
                           ),
                         ),
@@ -84,9 +84,9 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
                           height: 170,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: SphereColors.primary.withValues(alpha: 0.14),
+                            color: context.sc.primary.withValues(alpha: 0.14),
                             border: Border.all(
-                              color: SphereColors.primary.withValues(alpha: 0.3),
+                              color: context.sc.primary.withValues(alpha: 0.3),
                             ),
                           ),
                         ),
@@ -95,14 +95,14 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
                           child: Container(
                             width: 120,
                             height: 120,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: SphereColors.primary,
+                              color: context.sc.primary,
                             ),
-                            child: const Icon(
+                            child: Icon(
                               LucideIcons.flame,
                               size: 56,
-                              color: SphereColors.onPrimary,
+                              color: context.sc.onPrimary,
                             ),
                           ),
                         ),
@@ -122,14 +122,14 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
                     Text(
                       'Drill complete',
                       style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                           ),
                     ),
                     const SizedBox(height: SphereSpacing.x8),
                     Text(
                       '${widget.reps} reps in the bag.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                           ),
                     ),
                     if (widget.streakDays > 0) ...[
@@ -140,25 +140,25 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
                           vertical: SphereSpacing.x12,
                         ),
                         decoration: BoxDecoration(
-                          color: SphereColors.primary.withValues(alpha: 0.18),
+                          color: context.sc.primary.withValues(alpha: 0.18),
                           borderRadius: SphereRadius.pillRect,
                           border: Border.all(
-                            color: SphereColors.primary.withValues(alpha: 0.4),
+                            color: context.sc.primary.withValues(alpha: 0.4),
                           ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(
+                            Icon(
                               LucideIcons.flame,
                               size: 16,
-                              color: SphereColors.primary,
+                              color: context.sc.primary,
                             ),
                             const SizedBox(width: 6),
                             Text(
                               '${widget.streakDays}-day streak',
-                              style: const TextStyle(
-                                color: SphereColors.primary,
+                              style: TextStyle(
+                                color: context.sc.primary,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13,
                                 letterSpacing: 0.4,
@@ -187,8 +187,8 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
                         icon: const Icon(LucideIcons.dumbbell, size: 18),
                         label: const Text('Back to drills'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: SphereColors.primary,
-                          foregroundColor: SphereColors.onPrimary,
+                          backgroundColor: context.sc.primary,
+                          foregroundColor: context.sc.onPrimary,
                           shape: const RoundedRectangleBorder(
                             borderRadius: SphereRadius.pillRect,
                           ),
@@ -207,9 +207,9 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
                       child: OutlinedButton(
                         onPressed: () => context.go('/home'),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: SphereColors.onSurface,
-                          side: const BorderSide(
-                            color: SphereColors.borderSubtle,
+                          foregroundColor: context.sc.onSurface,
+                          side: BorderSide(
+                            color: context.sc.borderSubtle,
                           ),
                           shape: const RoundedRectangleBorder(
                             borderRadius: SphereRadius.pillRect,

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../core/widgets/sphere_swipe_to_confirm.dart';
@@ -53,7 +53,7 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
     );
 
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(SphereSpacing.x24),
@@ -85,7 +85,7 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
                     ? 'You will get a notification once staff confirms your payment.'
                     : 'Hand cash to staff at the counter. Swipe below to record your payment.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                       height: 1.4,
                     ),
               ),
@@ -97,16 +97,16 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
                       'Program not found.',
                       style:
                           Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: SphereColors.onSurfaceMuted,
+                                color: context.sc.onSurfaceMuted,
                               ),
                     );
                   }
                   return Container(
                     padding: const EdgeInsets.all(SphereSpacing.x20),
                     decoration: BoxDecoration(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       borderRadius: SphereRadius.cardRect,
-                      border: Border.all(color: SphereColors.borderSubtle),
+                      border: Border.all(color: context.sc.borderSubtle),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +117,7 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
                               .textTheme
                               .titleLarge
                               ?.copyWith(
-                                color: SphereColors.onSurface,
+                                color: context.sc.onSurface,
                                 fontWeight: FontWeight.w700,
                               ),
                         ),
@@ -128,7 +128,7 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
                               .textTheme
                               .bodySmall
                               ?.copyWith(
-                                color: SphereColors.onSurfaceMuted,
+                                color: context.sc.onSurfaceMuted,
                                 letterSpacing: 0.6,
                               ),
                         ),
@@ -139,7 +139,7 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
                               .textTheme
                               .displayLarge
                               ?.copyWith(
-                                color: SphereColors.primary,
+                                color: context.sc.primary,
                                 fontWeight: FontWeight.w800,
                               ),
                         ),
@@ -154,7 +154,7 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
               if (_error != null) ...[
                 Text(
                   _error!,
-                  style: const TextStyle(color: SphereColors.danger),
+                  style: TextStyle(color: context.sc.danger),
                 ),
                 const SizedBox(height: SphereSpacing.x12),
               ],
@@ -164,8 +164,8 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
                   child: ElevatedButton(
                     onPressed: () => context.go('/home'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: SphereColors.primary,
-                      foregroundColor: SphereColors.onPrimary,
+                      backgroundColor: context.sc.primary,
+                      foregroundColor: context.sc.onPrimary,
                       shape: const RoundedRectangleBorder(
                         borderRadius: SphereRadius.pillRect,
                       ),
@@ -202,14 +202,14 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1,
+      color: context.sc.surfaceElev1,
       shape: const CircleBorder(),
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 20, color: SphereColors.onSurface),
+          child: Icon(icon, size: 20, color: context.sc.onSurface),
         ),
       ),
     );

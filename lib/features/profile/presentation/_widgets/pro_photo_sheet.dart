@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../../app/theme/sphere_spacing.dart';
 import '../../data/photo_upload_repository.dart';
 import '../../../auth/presentation/auth_providers.dart';
@@ -16,7 +16,7 @@ class ProPhotoSheet extends ConsumerStatefulWidget {
     final adopted = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: SphereColors.surfaceElev1,
+      backgroundColor: context.sc.surfaceElev1,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -89,7 +89,7 @@ class _ProPhotoSheetState extends ConsumerState<ProPhotoSheet> {
         width: 36,
         height: 4,
         decoration: BoxDecoration(
-          color: SphereColors.borderSubtle,
+          color: context.sc.borderSubtle,
           borderRadius: BorderRadius.circular(2),
         ),
       );
@@ -126,9 +126,9 @@ class _IdleView extends StatelessWidget {
           height: 56,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: SphereColors.primary.withValues(alpha: 0.12),
+            color: context.sc.primary.withValues(alpha: 0.12),
           ),
-          child: const Icon(LucideIcons.sparkles, color: SphereColors.primary, size: 26),
+          child: Icon(LucideIcons.sparkles, color: context.sc.primary, size: 26),
         ),
         const SizedBox(height: 16),
         Text(
@@ -139,7 +139,7 @@ class _IdleView extends StatelessWidget {
         Text(
           'Our AI will generate a professional sports portrait using your current profile photo — same face, jersey, arms crossed, studio lighting.',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
               ),
           textAlign: TextAlign.center,
         ),
@@ -147,7 +147,7 @@ class _IdleView extends StatelessWidget {
         Text(
           'This takes about 30–60 seconds.',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
                 fontStyle: FontStyle.italic,
               ),
           textAlign: TextAlign.center,
@@ -175,12 +175,12 @@ class _GeneratingView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 32),
       child: Column(
         children: [
-          const SizedBox(
+          SizedBox(
             width: 48,
             height: 48,
             child: CircularProgressIndicator(
               strokeWidth: 3,
-              valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+              valueColor: AlwaysStoppedAnimation(context.sc.primary),
             ),
           ),
           const SizedBox(height: 20),
@@ -192,7 +192,7 @@ class _GeneratingView extends StatelessWidget {
           Text(
             'AI is creating your professional portrait. This may take up to a minute.',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: SphereColors.onSurfaceMuted,
+                  color: context.sc.onSurfaceMuted,
                 ),
             textAlign: TextAlign.center,
           ),
@@ -230,13 +230,13 @@ class _PreviewView extends StatelessWidget {
             fit: BoxFit.cover,
             loadingBuilder: (_, child, progress) => progress == null
                 ? child
-                : const SizedBox(
+                : SizedBox(
                     width: 240,
                     height: 240,
                     child: Center(
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+                        valueColor: AlwaysStoppedAnimation(context.sc.primary),
                       ),
                     ),
                   ),
@@ -270,7 +270,7 @@ class _AdoptingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.symmetric(vertical: 32),
       child: Column(
         children: [
@@ -279,7 +279,7 @@ class _AdoptingView extends StatelessWidget {
             height: 40,
             child: CircularProgressIndicator(
               strokeWidth: 3,
-              valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+              valueColor: AlwaysStoppedAnimation(context.sc.primary),
             ),
           ),
           SizedBox(height: 16),
@@ -304,9 +304,9 @@ class _DoneView extends StatelessWidget {
             height: 56,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: SphereColors.primary.withValues(alpha: 0.12),
+              color: context.sc.primary.withValues(alpha: 0.12),
             ),
-            child: const Icon(LucideIcons.checkCircle, color: SphereColors.primary, size: 28),
+            child: Icon(LucideIcons.checkCircle, color: context.sc.primary, size: 28),
           ),
           const SizedBox(height: 16),
           Text(
@@ -333,9 +333,9 @@ class _ErrorView extends StatelessWidget {
           height: 56,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: SphereColors.danger.withValues(alpha: 0.12),
+            color: context.sc.danger.withValues(alpha: 0.12),
           ),
-          child: const Icon(LucideIcons.alertCircle, color: SphereColors.danger, size: 28),
+          child: Icon(LucideIcons.alertCircle, color: context.sc.danger, size: 28),
         ),
         const SizedBox(height: 16),
         Text(
@@ -345,7 +345,7 @@ class _ErrorView extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           message,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: SphereColors.onSurfaceMuted),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: context.sc.onSurfaceMuted),
           textAlign: TextAlign.center,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,

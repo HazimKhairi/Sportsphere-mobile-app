@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../data/roster_repository.dart';
@@ -29,30 +29,30 @@ class PlayerDetailScreen extends ConsumerWidget {
     );
 
     return detailAsync.when(
-      loading: () => const Scaffold(
-        backgroundColor: SphereColors.surface,
+      loading: () => Scaffold(
+        backgroundColor: context.sc.surface,
         body: Center(
           child: CircularProgressIndicator(
-            color: SphereColors.primary,
+            color: context.sc.primary,
           ),
         ),
       ),
       error: (_, e) => Scaffold(
-        backgroundColor: SphereColors.surface,
+        backgroundColor: context.sc.surface,
         body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 LucideIcons.userX,
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
                 size: 48,
               ),
               const SizedBox(height: SphereSpacing.x16),
-              const Text(
+              Text(
                 'Player not found',
                 style: TextStyle(
-                  color: SphereColors.onSurface,
+                  color: context.sc.onSurface,
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
@@ -86,7 +86,7 @@ class _PlayerDetailContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: Stack(
         children: [
           // Hero gradient top
@@ -111,8 +111,8 @@ class _PlayerDetailContent extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: Container(
-              decoration: const BoxDecoration(
-                color: SphereColors.surface,
+              decoration: BoxDecoration(
+                color: context.sc.surface,
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(24),
                 ),
@@ -128,7 +128,7 @@ class _PlayerDetailContent extends StatelessWidget {
                     Text(
                       player.fullName,
                       style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                             fontWeight: FontWeight.w700,
                           ),
                       textAlign: TextAlign.center,
@@ -139,7 +139,7 @@ class _PlayerDetailContent extends StatelessWidget {
                       Text(
                         '#${player.jerseyNumber}',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: SphereColors.onSurfaceMuted,
+                              color: context.sc.onSurfaceMuted,
                             ),
                         textAlign: TextAlign.center,
                       ),
@@ -153,10 +153,10 @@ class _PlayerDetailContent extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           LucideIcons.crosshair,
                           size: 14,
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -164,20 +164,20 @@ class _PlayerDetailContent extends StatelessWidget {
                               ? 'No position'
                               : player.position,
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: SphereColors.onSurfaceMuted,
+                                color: context.sc.onSurfaceMuted,
                               ),
                         ),
                         const SizedBox(width: 16),
-                        const Icon(
+                        Icon(
                           LucideIcons.shield,
                           size: 14,
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                         const SizedBox(width: 4),
                         Text(
                           player.teamName.isEmpty ? 'No team' : player.teamName,
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: SphereColors.onSurfaceMuted,
+                                color: context.sc.onSurfaceMuted,
                               ),
                         ),
                       ],
@@ -264,8 +264,8 @@ class _GradientHeader extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            SphereColors.primary.withValues(alpha: 0.1),
-            SphereColors.surface.withValues(alpha: 0.7),
+            context.sc.primary.withValues(alpha: 0.1),
+            context.sc.surface.withValues(alpha: 0.7),
           ],
         ),
       ),
@@ -286,14 +286,14 @@ class _BackButton extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: SphereColors.surfaceElev1,
+          color: context.sc.surfaceElev1,
           borderRadius: SphereRadius.pillRect,
-          border: Border.all(color: SphereColors.borderSubtle),
+          border: Border.all(color: context.sc.borderSubtle),
         ),
-        child: const Icon(
+        child: Icon(
           LucideIcons.arrowLeft,
           size: 18,
-          color: SphereColors.onSurface,
+          color: context.sc.onSurface,
         ),
       ),
     );
@@ -310,13 +310,13 @@ class _Avatar extends StatelessWidget {
     final photoUrl = player.photoUrl;
     return CircleAvatar(
       radius: 72,
-      backgroundColor: SphereColors.primary.withValues(alpha: 0.18),
+      backgroundColor: context.sc.primary.withValues(alpha: 0.18),
       foregroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
       child: photoUrl == null
           ? Text(
               player.initials,
-              style: const TextStyle(
-                color: SphereColors.primary,
+              style: TextStyle(
+                color: context.sc.primary,
                 fontWeight: FontWeight.w700,
                 fontSize: 28,
               ),
@@ -337,7 +337,7 @@ class _AvailabilityBadge extends StatelessWidget {
       'injured' => ('Injured', const Color(0xFFEF4444)),
       'sick' => ('Sick', const Color(0xFFF59E0B)),
       'away' => ('Away', const Color(0xFF3B82F6)),
-      _ => ('Unavailable', SphereColors.onSurfaceMuted),
+      _ => ('Unavailable', context.sc.onSurfaceMuted),
     };
 
     return Container(
@@ -372,9 +372,9 @@ class _InfoCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(SphereSpacing.x16),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -382,7 +382,7 @@ class _InfoCard extends StatelessWidget {
           Text(
             title,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: SphereColors.onSurfaceMuted,
+                  color: context.sc.onSurfaceMuted,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.8,
                 ),
@@ -412,20 +412,20 @@ class _InfoRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          Icon(icon, size: 14, color: SphereColors.onSurfaceMuted),
+          Icon(icon, size: 14, color: context.sc.onSurfaceMuted),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                   ),
             ),
           ),
           Text(
             value,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: SphereColors.onSurface,
+                  color: context.sc.onSurface,
                   fontWeight: FontWeight.w500,
                 ),
           ),

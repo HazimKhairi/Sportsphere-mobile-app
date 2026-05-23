@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/points_entry.dart';
@@ -20,7 +20,7 @@ class PointsScreen extends ConsumerWidget {
     final summaryAsync = ref.watch(pointsSummaryProvider);
 
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: Stack(
         children: [
           const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
@@ -32,14 +32,14 @@ class PointsScreen extends ConsumerWidget {
                 _Header(),
                 summaryAsync.when(
                   data: (summary) => _SummaryBody(summary: summary, ref: ref),
-                  loading: () => const Expanded(
+                  loading: () => Expanded(
                     child: Center(
                       child: SizedBox(
                         width: 24,
                         height: 24,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+                          valueColor: AlwaysStoppedAnimation(context.sc.primary),
                         ),
                       ),
                     ),
@@ -52,15 +52,15 @@ class PointsScreen extends ConsumerWidget {
                           Text(
                             'Could not load points.',
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: SphereColors.onSurfaceMuted,
+                                  color: context.sc.onSurfaceMuted,
                                 ),
                           ),
                           const SizedBox(height: SphereSpacing.x12),
                           TextButton(
                             onPressed: () => ref.invalidate(pointsSummaryProvider),
-                            child: const Text(
+                            child: Text(
                               'Retry',
-                              style: TextStyle(color: SphereColors.primary),
+                              style: TextStyle(color: context.sc.primary),
                             ),
                           ),
                         ],
@@ -90,7 +90,7 @@ class _Header extends StatelessWidget {
       child: Row(
         children: [
           Material(
-            color: SphereColors.surfaceElev1,
+            color: context.sc.surfaceElev1,
             shape: const CircleBorder(),
             child: InkWell(
               onTap: () {
@@ -101,12 +101,12 @@ class _Header extends StatelessWidget {
                 }
               },
               customBorder: const CircleBorder(),
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.all(10),
                 child: Icon(
                   LucideIcons.chevronLeft,
                   size: 20,
-                  color: SphereColors.onSurface,
+                  color: context.sc.onSurface,
                 ),
               ),
             ),
@@ -163,15 +163,15 @@ class _HeroCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(SphereSpacing.x20),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            SphereColors.surfaceElev1,
-            SphereColors.primary.withValues(alpha: 0.06),
+            context.sc.surfaceElev1,
+            context.sc.primary.withValues(alpha: 0.06),
           ],
         ),
       ),
@@ -186,7 +186,7 @@ class _HeroCard extends StatelessWidget {
           Container(
             width: 1,
             height: 48,
-            color: SphereColors.borderSubtle,
+            color: context.sc.borderSubtle,
           ),
           Expanded(
             child: _StatColumn(
@@ -213,7 +213,7 @@ class _StatColumn extends StatelessWidget {
         Text(
           '$value',
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                color: SphereColors.primary,
+                color: context.sc.primary,
                 fontWeight: FontWeight.w800,
                 height: 1,
               ),
@@ -222,7 +222,7 @@ class _StatColumn extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
                 letterSpacing: 0.5,
               ),
         ),
@@ -242,7 +242,7 @@ class _HistoryList extends StatelessWidget {
         child: Text(
           'No points activity yet.',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
               ),
         ),
       );
@@ -256,8 +256,8 @@ class _HistoryList extends StatelessWidget {
         90,
       ),
       itemCount: history.length,
-      separatorBuilder: (context, i) => const Divider(
-        color: SphereColors.borderSubtle,
+      separatorBuilder: (context, i) => Divider(
+        color: context.sc.borderSubtle,
         height: 1,
       ),
       itemBuilder: (context, i) => _HistoryRow(entry: history[i]),
@@ -282,7 +282,7 @@ class _HistoryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isPositive = entry.points >= 0;
-    final circleColor = isPositive ? SphereColors.primary : const Color(0xFFEF4444);
+    final circleColor = isPositive ? context.sc.primary : Color(0xFFEF4444);
     final textColor = isPositive ? Colors.black : Colors.white;
     final pointsLabel =
         isPositive ? '+${entry.points}' : '${entry.points}';
@@ -313,7 +313,7 @@ class _HistoryRow extends StatelessWidget {
             child: Text(
               entry.description,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: SphereColors.onSurface,
+                    color: context.sc.onSurface,
                     height: 1.4,
                   ),
               maxLines: 2,
@@ -324,7 +324,7 @@ class _HistoryRow extends StatelessWidget {
           Text(
             _formatDate(entry.createdAt),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: SphereColors.onSurfaceMuted,
+                  color: context.sc.onSurfaceMuted,
                 ),
           ),
         ],

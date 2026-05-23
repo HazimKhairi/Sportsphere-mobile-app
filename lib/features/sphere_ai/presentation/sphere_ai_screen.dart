@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../data/chat_persistence_repository.dart';
@@ -186,7 +186,7 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -206,14 +206,14 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: SphereColors.primary.withValues(alpha: 0.18),
+                      color: context.sc.primary.withValues(alpha: 0.18),
                       border: Border.all(
-                        color: SphereColors.primary.withValues(alpha: 0.4),
+                        color: context.sc.primary.withValues(alpha: 0.4),
                       ),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       LucideIcons.sparkles,
-                      color: SphereColors.primary,
+                      color: context.sc.primary,
                       size: 18,
                     ),
                   ),
@@ -224,10 +224,10 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                   ),
                   const Spacer(),
                   IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       LucideIcons.rotateCcw,
                       size: 18,
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                     ),
                     tooltip: 'New chat',
                     onPressed: _clearChat,
@@ -297,7 +297,7 @@ class _EmptyState extends StatelessWidget {
           Text(
             'Ask anything about your game.',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: SphereColors.onSurface,
+                  color: context.sc.onSurface,
                   fontWeight: FontWeight.w700,
                 ),
           ),
@@ -305,7 +305,7 @@ class _EmptyState extends StatelessWidget {
           Text(
             'I can help with drills, schedules, and what to work on next.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: SphereColors.onSurfaceMuted,
+                  color: context.sc.onSurfaceMuted,
                   height: 1.4,
                 ),
           ),
@@ -332,7 +332,7 @@ class _SuggestionChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1,
+      color: context.sc.surfaceElev1,
       borderRadius: SphereRadius.pillRect,
       child: InkWell(
         onTap: onTap,
@@ -342,13 +342,13 @@ class _SuggestionChip extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: SphereRadius.pillRect,
             border: Border.all(
-              color: SphereColors.primary.withValues(alpha: 0.25),
+              color: context.sc.primary.withValues(alpha: 0.25),
             ),
           ),
           child: Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: SphereColors.onSurface,
+                  color: context.sc.onSurface,
                 ),
           ),
         ),
@@ -378,15 +378,15 @@ class _ChatBubble extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: SphereColors.primary.withValues(alpha: 0.18),
+                color: context.sc.primary.withValues(alpha: 0.18),
                 border: Border.all(
-                  color: SphereColors.primary.withValues(alpha: 0.4),
+                  color: context.sc.primary.withValues(alpha: 0.4),
                 ),
               ),
-              child: const Icon(
+              child: Icon(
                 LucideIcons.sparkles,
                 size: 14,
-                color: SphereColors.primary,
+                color: context.sc.primary,
               ),
             ),
             const SizedBox(width: 8),
@@ -399,8 +399,8 @@ class _ChatBubble extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: isUser
-                    ? SphereColors.primary
-                    : SphereColors.surfaceElev1,
+                    ? context.sc.primary
+                    : context.sc.surfaceElev1,
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(16),
                   topRight: const Radius.circular(16),
@@ -409,13 +409,13 @@ class _ChatBubble extends StatelessWidget {
                 ),
                 border: isUser
                     ? null
-                    : Border.all(color: SphereColors.borderSubtle),
+                    : Border.all(color: context.sc.borderSubtle),
               ),
               child: isUser
                   ? Text(
                       message.text,
-                      style: const TextStyle(
-                        color: SphereColors.onPrimary,
+                      style: TextStyle(
+                        color: context.sc.onPrimary,
                         fontSize: 14,
                         height: 1.45,
                       ),
@@ -436,46 +436,46 @@ class _ChatBubble extends StatelessWidget {
 
   MarkdownStyleSheet _markdownStyle(BuildContext context) {
     return MarkdownStyleSheet(
-      p: const TextStyle(
-        color: SphereColors.onSurface,
+      p: TextStyle(
+        color: context.sc.onSurface,
         fontSize: 14,
         height: 1.45,
       ),
-      strong: const TextStyle(
-        color: SphereColors.onSurface,
+      strong: TextStyle(
+        color: context.sc.onSurface,
         fontWeight: FontWeight.w700,
       ),
-      em: const TextStyle(
-        color: SphereColors.onSurface,
+      em: TextStyle(
+        color: context.sc.onSurface,
         fontStyle: FontStyle.italic,
       ),
-      a: const TextStyle(
-        color: SphereColors.primary,
+      a: TextStyle(
+        color: context.sc.primary,
         decoration: TextDecoration.underline,
       ),
-      h1: const TextStyle(
-        color: SphereColors.onSurface,
+      h1: TextStyle(
+        color: context.sc.onSurface,
         fontWeight: FontWeight.w700,
         fontSize: 20,
       ),
-      h2: const TextStyle(
-        color: SphereColors.onSurface,
+      h2: TextStyle(
+        color: context.sc.onSurface,
         fontWeight: FontWeight.w700,
         fontSize: 18,
       ),
-      h3: const TextStyle(
-        color: SphereColors.onSurface,
+      h3: TextStyle(
+        color: context.sc.onSurface,
         fontWeight: FontWeight.w700,
         fontSize: 16,
       ),
-      code: const TextStyle(
-        color: SphereColors.primary,
+      code: TextStyle(
+        color: context.sc.primary,
         fontFamily: 'Geist',
         backgroundColor: Color(0xFF0A0A0A),
         fontSize: 13,
       ),
       blockSpacing: 8,
-      listBullet: const TextStyle(color: SphereColors.primary),
+      listBullet: TextStyle(color: context.sc.primary),
     );
   }
 }
@@ -526,9 +526,9 @@ class _TypingDotsState extends State<_TypingDots>
                 child: Container(
                   width: 6,
                   height: 6,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: SphereColors.primary,
+                    color: context.sc.primary,
                   ),
                 ),
               ),
@@ -557,9 +557,9 @@ class _Composer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev2,
+        color: context.sc.surfaceElev2,
         borderRadius: SphereRadius.pillRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       padding: const EdgeInsets.fromLTRB(6, 4, 6, 4),
       child: Row(
@@ -577,8 +577,8 @@ class _Composer extends StatelessWidget {
                   LucideIcons.paperclip,
                   size: 18,
                   color: busy
-                      ? SphereColors.onSurfaceMuted.withValues(alpha: 0.4)
-                      : SphereColors.onSurfaceMuted,
+                      ? context.sc.onSurfaceMuted.withValues(alpha: 0.4)
+                      : context.sc.onSurfaceMuted,
                 ),
               ),
             ),
@@ -591,10 +591,10 @@ class _Composer extends StatelessWidget {
               maxLines: 4,
               textInputAction: TextInputAction.send,
               onSubmitted: onSubmit,
-              style: const TextStyle(color: SphereColors.onSurface),
-              decoration: const InputDecoration(
+              style: TextStyle(color: context.sc.onSurface),
+              decoration: InputDecoration(
                 hintText: 'Ask Sphere AI...',
-                hintStyle: TextStyle(color: SphereColors.onSurfaceMuted),
+                hintStyle: TextStyle(color: context.sc.onSurfaceMuted),
                 border: InputBorder.none,
                 isCollapsed: true,
                 contentPadding: EdgeInsets.symmetric(vertical: 14),
@@ -604,17 +604,17 @@ class _Composer extends StatelessWidget {
           const SizedBox(width: 4),
           Material(
             color: busy
-                ? SphereColors.primary.withValues(alpha: 0.5)
-                : SphereColors.primary,
+                ? context.sc.primary.withValues(alpha: 0.5)
+                : context.sc.primary,
             shape: const CircleBorder(),
             child: InkWell(
               onTap: busy ? null : () => onSubmit(controller.text),
               customBorder: const CircleBorder(),
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.all(10),
                 child: Icon(
                   LucideIcons.arrowUp,
-                  color: SphereColors.onPrimary,
+                  color: context.sc.onPrimary,
                   size: 18,
                 ),
               ),

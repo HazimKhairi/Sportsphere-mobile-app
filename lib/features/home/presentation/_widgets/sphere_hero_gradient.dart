@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 
 class SphereHeroGradient extends StatefulWidget {
   const SphereHeroGradient({super.key, this.height = 220});
@@ -44,9 +44,9 @@ class _SphereHeroGradientState extends State<SphereHeroGradient>
                 center: Alignment(dx, -0.8),
                 radius: 1.4,
                 colors: [
-                  SphereColors.primary.withValues(alpha: 0.18),
-                  SphereColors.primary.withValues(alpha: 0.05),
-                  SphereColors.surface,
+                  context.sc.primary.withValues(alpha: 0.18),
+                  context.sc.primary.withValues(alpha: 0.05),
+                  context.sc.surface,
                 ],
                 stops: const [0.0, 0.4, 1.0],
               ),

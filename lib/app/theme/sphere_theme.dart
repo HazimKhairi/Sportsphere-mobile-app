@@ -27,7 +27,7 @@ ThemeData buildSphereLightTheme() {
     surface: SphereColors.surface,
     onSurface: SphereColors.onSurface,
     surfaceContainerHighest: SphereColors.surfaceElev1,
-    surfaceContainerHigh: SphereColors.surfaceElev1,
+    surfaceContainerHigh: SphereColors.surfaceElev2,
     surfaceContainer: SphereColors.background,
     surfaceContainerLow: SphereColors.background,
     surfaceContainerLowest: SphereColors.surface,
@@ -230,7 +230,7 @@ ThemeData buildSphereDarkTheme() {
     surface: Color(0xFF1E293B),         // slate-800
     onSurface: Color(0xFFF1F5F9),       // slate-100
     surfaceContainerHighest: Color(0xFF334155), // slate-700
-    surfaceContainerHigh: Color(0xFF334155),
+    surfaceContainerHigh: Color(0xFF475569),    // slate-600 — surfaceElev2 dark
     surfaceContainer: Color(0xFF0F172A),  // slate-900
     surfaceContainerLow: Color(0xFF0F172A),
     surfaceContainerLowest: Color(0xFF020617), // slate-950

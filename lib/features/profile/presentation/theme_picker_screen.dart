@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/theme_provider.dart';
@@ -37,17 +37,17 @@ class ThemePickerScreen extends ConsumerWidget {
                   Row(
                     children: [
                       Material(
-                        color: SphereColors.surfaceElev1,
+                        color: context.sc.surfaceElev1,
                         shape: const CircleBorder(),
                         child: InkWell(
                           onTap: () => context.canPop()
                               ? context.pop()
                               : context.go('/profile'),
                           customBorder: const CircleBorder(),
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.all(10),
                             child: Icon(LucideIcons.chevronLeft,
-                                size: 20, color: SphereColors.onSurface),
+                                size: 20, color: context.sc.onSurface),
                           ),
                         ),
                       ),
@@ -62,7 +62,7 @@ class ThemePickerScreen extends ConsumerWidget {
                   Text(
                     'Choose your preferred appearance.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                   const SizedBox(height: SphereSpacing.x32),
@@ -70,9 +70,9 @@ class ThemePickerScreen extends ConsumerWidget {
                   const SizedBox(height: SphereSpacing.x12),
                   Container(
                     decoration: BoxDecoration(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       borderRadius: SphereRadius.cardRect,
-                      border: Border.all(color: SphereColors.borderSubtle),
+                      border: Border.all(color: context.sc.borderSubtle),
                     ),
                     child: Column(
                       children: [
@@ -85,7 +85,7 @@ class ThemePickerScreen extends ConsumerWidget {
                               .read(themeModeNotifierProvider.notifier)
                               .setMode(ThemeMode.dark),
                         ),
-                        const Divider(color: SphereColors.borderSubtle, height: 1),
+                        Divider(color: context.sc.borderSubtle, height: 1),
                         _ThemeOption(
                           icon: LucideIcons.sun,
                           label: 'Light',
@@ -95,7 +95,7 @@ class ThemePickerScreen extends ConsumerWidget {
                               .read(themeModeNotifierProvider.notifier)
                               .setMode(ThemeMode.light),
                         ),
-                        const Divider(color: SphereColors.borderSubtle, height: 1),
+                        Divider(color: context.sc.borderSubtle, height: 1),
                         _ThemeOption(
                           icon: LucideIcons.smartphone,
                           label: 'System',
@@ -151,20 +151,20 @@ class _ThemeOption extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: selected
-                    ? SphereColors.primary.withValues(alpha: 0.18)
-                    : SphereColors.surfaceElev2,
+                    ? context.sc.primary.withValues(alpha: 0.18)
+                    : context.sc.surfaceElev2,
                 border: Border.all(
                   color: selected
-                      ? SphereColors.primary.withValues(alpha: 0.5)
-                      : SphereColors.borderSubtle,
+                      ? context.sc.primary.withValues(alpha: 0.5)
+                      : context.sc.borderSubtle,
                 ),
               ),
               child: Icon(
                 icon,
                 size: 18,
                 color: selected
-                    ? SphereColors.primary
-                    : SphereColors.onSurfaceMuted,
+                    ? context.sc.primary
+                    : context.sc.onSurfaceMuted,
               ),
             ),
             const SizedBox(width: SphereSpacing.x12),
@@ -175,22 +175,22 @@ class _ThemeOption extends StatelessWidget {
                   Text(
                     label,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurface,
+                          color: context.sc.onSurface,
                           fontWeight: FontWeight.w600,
                         ),
                   ),
                   Text(
                     subtitle,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                 ],
               ),
             ),
             if (selected)
-              const Icon(LucideIcons.check,
-                  size: 16, color: SphereColors.primary),
+              Icon(LucideIcons.check,
+                  size: 16, color: context.sc.primary),
           ],
         ),
       ),

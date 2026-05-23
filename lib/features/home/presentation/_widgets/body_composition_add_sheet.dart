@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../../app/theme/sphere_radius.dart';
 import '../../../../app/theme/sphere_spacing.dart';
 import '../../../auth/presentation/auth_providers.dart';
@@ -91,8 +91,8 @@ class _BodyCompositionAddSheetState
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: SphereColors.surfaceElev2,
+      decoration: BoxDecoration(
+        color: context.sc.surfaceElev2,
         borderRadius: SphereRadius.sheetTop,
       ),
       child: SafeArea(
@@ -114,7 +114,7 @@ class _BodyCompositionAddSheetState
                   height: 4,
                   margin: const EdgeInsets.only(bottom: SphereSpacing.x16),
                   decoration: BoxDecoration(
-                    color: SphereColors.borderSubtle,
+                    color: context.sc.borderSubtle,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -127,7 +127,7 @@ class _BodyCompositionAddSheetState
               Text(
                 'Fill any field you have. Skip the rest.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                     ),
               ),
               const SizedBox(height: SphereSpacing.x24),
@@ -174,7 +174,7 @@ class _BodyCompositionAddSheetState
                 const SizedBox(height: SphereSpacing.x12),
                 Text(
                   _error!,
-                  style: const TextStyle(color: SphereColors.danger),
+                  style: TextStyle(color: context.sc.danger),
                 ),
               ],
               const SizedBox(height: SphereSpacing.x24),
@@ -183,20 +183,20 @@ class _BodyCompositionAddSheetState
                 child: ElevatedButton.icon(
                   onPressed: _busy ? null : _save,
                   icon: _busy
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 18,
                           height: 18,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor:
-                                AlwaysStoppedAnimation(SphereColors.onPrimary),
+                                AlwaysStoppedAnimation(context.sc.onPrimary),
                           ),
                         )
                       : const Icon(LucideIcons.check, size: 18),
                   label: const Text('Save entry'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: SphereColors.primary,
-                    foregroundColor: SphereColors.onPrimary,
+                    backgroundColor: context.sc.primary,
+                    foregroundColor: context.sc.onPrimary,
                     shape: const RoundedRectangleBorder(
                       borderRadius: SphereRadius.pillRect,
                     ),
@@ -234,21 +234,21 @@ class _NumField extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: SphereColors.onSurface,
+                color: context.sc.onSurface,
                 fontWeight: FontWeight.w600,
               ),
         ),
         const SizedBox(height: 6),
         Container(
           decoration: BoxDecoration(
-            color: SphereColors.surfaceElev1,
+            color: context.sc.surfaceElev1,
             borderRadius: SphereRadius.pillRect,
-            border: Border.all(color: SphereColors.borderSubtle),
+            border: Border.all(color: context.sc.borderSubtle),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
           child: Row(
             children: [
-              Icon(icon, size: 16, color: SphereColors.onSurfaceMuted),
+              Icon(icon, size: 16, color: context.sc.onSurfaceMuted),
               const SizedBox(width: 8),
               Expanded(
                 child: TextField(
@@ -256,10 +256,10 @@ class _NumField extends StatelessWidget {
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  style: const TextStyle(color: SphereColors.onSurface),
-                  decoration: const InputDecoration(
+                  style: TextStyle(color: context.sc.onSurface),
+                  decoration: InputDecoration(
                     hintText: '-',
-                    hintStyle: TextStyle(color: SphereColors.onSurfaceMuted),
+                    hintStyle: TextStyle(color: context.sc.onSurfaceMuted),
                     border: InputBorder.none,
                     isCollapsed: true,
                     contentPadding: EdgeInsets.symmetric(vertical: 14),

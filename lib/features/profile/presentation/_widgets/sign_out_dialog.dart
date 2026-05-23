@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../../app/theme/sphere_radius.dart';
 import '../../../../app/theme/sphere_spacing.dart';
 
@@ -19,7 +19,7 @@ class SignOutDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: SphereColors.surfaceElev2,
+      backgroundColor: context.sc.surfaceElev2,
       shape: const RoundedRectangleBorder(borderRadius: SphereRadius.modalRect),
       child: Padding(
         padding: const EdgeInsets.all(SphereSpacing.x20),
@@ -33,11 +33,11 @@ class SignOutDialog extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: SphereColors.danger.withValues(alpha: 0.12),
+                color: context.sc.danger.withValues(alpha: 0.12),
               ),
-              child: const Icon(
+              child: Icon(
                 LucideIcons.logOut,
-                color: SphereColors.danger,
+                color: context.sc.danger,
                 size: 26,
               ),
             ),
@@ -45,7 +45,7 @@ class SignOutDialog extends StatelessWidget {
             Text(
               'Sign out of SportSphere?',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: SphereColors.onSurface,
+                    color: context.sc.onSurface,
                     fontWeight: FontWeight.w700,
                   ),
             ),
@@ -53,7 +53,7 @@ class SignOutDialog extends StatelessWidget {
             Text(
               'You will need to log in again to access your account.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                     height: 1.4,
                   ),
             ),
@@ -65,11 +65,11 @@ class SignOutDialog extends StatelessWidget {
                     onPressed: () => Navigator.of(context).pop(false),
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size.fromHeight(48),
-                      side: const BorderSide(color: SphereColors.borderSubtle),
+                      side: BorderSide(color: context.sc.borderSubtle),
                       shape: const RoundedRectangleBorder(
                         borderRadius: SphereRadius.pillRect,
                       ),
-                      foregroundColor: SphereColors.onSurface,
+                      foregroundColor: context.sc.onSurface,
                     ),
                     child: const Text('Cancel'),
                   ),
@@ -80,7 +80,7 @@ class SignOutDialog extends StatelessWidget {
                     onPressed: () => Navigator.of(context).pop(true),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(48),
-                      backgroundColor: SphereColors.danger,
+                      backgroundColor: context.sc.danger,
                       foregroundColor: Colors.white,
                       shape: const RoundedRectangleBorder(
                         borderRadius: SphereRadius.pillRect,

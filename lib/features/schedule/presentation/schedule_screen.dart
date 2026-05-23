@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/training_session.dart';
@@ -41,7 +41,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
     final sessionsAsync = ref.watch(monthSessionsProvider(focusedMonth: _focusedDay));
 
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
@@ -65,9 +65,9 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x16),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: SphereColors.surfaceElev1,
+                    color: context.sc.surfaceElev1,
                     borderRadius: SphereRadius.cardRect,
-                    border: Border.all(color: SphereColors.borderSubtle),
+                    border: Border.all(color: context.sc.borderSubtle),
                   ),
                   padding: const EdgeInsets.all(SphereSpacing.x8),
                   child: sessionsAsync.when(
@@ -127,37 +127,37 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
       headerStyle: HeaderStyle(
         titleCentered: true,
         formatButtonVisible: false,
-        leftChevronIcon: const Icon(LucideIcons.chevronLeft, color: SphereColors.onSurface),
-        rightChevronIcon: const Icon(LucideIcons.chevronRight, color: SphereColors.onSurface),
+        leftChevronIcon: Icon(LucideIcons.chevronLeft, color: context.sc.onSurface),
+        rightChevronIcon: Icon(LucideIcons.chevronRight, color: context.sc.onSurface),
         titleTextStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
-              color: SphereColors.onSurface,
+              color: context.sc.onSurface,
               fontWeight: FontWeight.w700,
             ),
       ),
-      daysOfWeekStyle: const DaysOfWeekStyle(
-        weekdayStyle: TextStyle(color: SphereColors.onSurfaceMuted, fontSize: 11),
-        weekendStyle: TextStyle(color: SphereColors.onSurfaceMuted, fontSize: 11),
+      daysOfWeekStyle: DaysOfWeekStyle(
+        weekdayStyle: TextStyle(color: context.sc.onSurfaceMuted, fontSize: 11),
+        weekendStyle: TextStyle(color: context.sc.onSurfaceMuted, fontSize: 11),
       ),
       calendarStyle: CalendarStyle(
-        defaultTextStyle: const TextStyle(color: SphereColors.onSurface),
-        weekendTextStyle: const TextStyle(color: SphereColors.onSurface),
-        outsideTextStyle: const TextStyle(color: SphereColors.onSurfaceMuted),
+        defaultTextStyle: TextStyle(color: context.sc.onSurface),
+        weekendTextStyle: TextStyle(color: context.sc.onSurface),
+        outsideTextStyle: TextStyle(color: context.sc.onSurfaceMuted),
         todayDecoration: BoxDecoration(
-          color: SphereColors.primary.withValues(alpha: 0.18),
+          color: context.sc.primary.withValues(alpha: 0.18),
           shape: BoxShape.circle,
-          border: Border.all(color: SphereColors.primary),
+          border: Border.all(color: context.sc.primary),
         ),
-        todayTextStyle: const TextStyle(color: SphereColors.primary, fontWeight: FontWeight.w700),
-        selectedDecoration: const BoxDecoration(
-          color: SphereColors.primary,
+        todayTextStyle: TextStyle(color: context.sc.primary, fontWeight: FontWeight.w700),
+        selectedDecoration: BoxDecoration(
+          color: context.sc.primary,
           shape: BoxShape.circle,
         ),
-        selectedTextStyle: const TextStyle(
-          color: SphereColors.onPrimary,
+        selectedTextStyle: TextStyle(
+          color: context.sc.onPrimary,
           fontWeight: FontWeight.w700,
         ),
-        markerDecoration: const BoxDecoration(
-          color: SphereColors.primary,
+        markerDecoration: BoxDecoration(
+          color: context.sc.primary,
           shape: BoxShape.circle,
         ),
         markersMaxCount: 3,
@@ -189,14 +189,14 @@ class _DaySessionsList extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.all(SphereSpacing.x20),
             decoration: BoxDecoration(
-              color: SphereColors.surfaceElev1,
+              color: context.sc.surfaceElev1,
               borderRadius: SphereRadius.cardRect,
-              border: Border.all(color: SphereColors.borderSubtle),
+              border: Border.all(color: context.sc.borderSubtle),
             ),
             child: Text(
               'No sessions on this day.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                   ),
             ),
           );
@@ -210,7 +210,7 @@ class _DaySessionsList extends StatelessWidget {
           ],
         );
       },
-      loading: () => const Padding(
+      loading: () => Padding(
         padding: EdgeInsets.symmetric(vertical: 16),
         child: Center(
           child: SizedBox(
@@ -218,7 +218,7 @@ class _DaySessionsList extends StatelessWidget {
             height: 24,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+              valueColor: AlwaysStoppedAnimation(context.sc.primary),
             ),
           ),
         ),
@@ -226,7 +226,7 @@ class _DaySessionsList extends StatelessWidget {
       error: (_, _) => Text(
         'Couldn’t load sessions.',
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: SphereColors.onSurfaceMuted,
+              color: context.sc.onSurfaceMuted,
             ),
       ),
     );
@@ -241,7 +241,7 @@ class _SessionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1,
+      color: context.sc.surfaceElev1,
       borderRadius: SphereRadius.cardRect,
       child: InkWell(
         onTap: () => GoRouter.of(context).push('/schedule/session/${session.id}'),
@@ -249,7 +249,7 @@ class _SessionRow extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(SphereSpacing.x16),
           decoration: BoxDecoration(
-            border: Border.all(color: SphereColors.borderSubtle),
+            border: Border.all(color: context.sc.borderSubtle),
             borderRadius: SphereRadius.cardRect,
           ),
           child: Row(
@@ -260,11 +260,11 @@ class _SessionRow extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: SphereColors.primary.withValues(alpha: 0.12),
+                  color: context.sc.primary.withValues(alpha: 0.12),
                 ),
-                child: const Icon(
+                child: Icon(
                   LucideIcons.calendar,
-                  color: SphereColors.primary,
+                  color: context.sc.primary,
                   size: 22,
                 ),
               ),
@@ -276,7 +276,7 @@ class _SessionRow extends StatelessWidget {
                     Text(
                       session.name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                             fontWeight: FontWeight.w700,
                           ),
                     ),
@@ -284,13 +284,13 @@ class _SessionRow extends StatelessWidget {
                     Text(
                       '${formatTime(session.startTime)} · ${session.location}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                           ),
                     ),
                   ],
                 ),
               ),
-              const Icon(LucideIcons.arrowRight, color: SphereColors.primary, size: 18),
+              Icon(LucideIcons.arrowRight, color: context.sc.primary, size: 18),
             ],
           ),
         ),

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../../app/theme/sphere_radius.dart';
 import '../../../../app/theme/sphere_spacing.dart';
 import '../../domain/staff_next_session.dart';
@@ -63,9 +63,9 @@ class _SphereNextSessionCardState extends State<SphereNextSessionCard> {
     return Container(
       padding: const EdgeInsets.all(SphereSpacing.x20),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: widget.loading
           ? _buildLoading(context)
@@ -81,13 +81,13 @@ class _SphereNextSessionCardState extends State<SphereNextSessionCard> {
       children: [
         Row(
           children: [
-            const Icon(LucideIcons.clock,
-                size: 14, color: SphereColors.onSurfaceMuted),
+            Icon(LucideIcons.clock,
+                size: 14, color: context.sc.onSurfaceMuted),
             const SizedBox(width: 6),
             Text(
               'Loading…',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.3,
                   ),
@@ -98,7 +98,7 @@ class _SphereNextSessionCardState extends State<SphereNextSessionCard> {
         Text(
           '--',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
                 fontWeight: FontWeight.w700,
               ),
         ),
@@ -106,7 +106,7 @@ class _SphereNextSessionCardState extends State<SphereNextSessionCard> {
         Text(
           'Fetching your next session…',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
               ),
         ),
       ],
@@ -119,13 +119,13 @@ class _SphereNextSessionCardState extends State<SphereNextSessionCard> {
       children: [
         Row(
           children: [
-            const Icon(LucideIcons.calendar,
-                size: 14, color: SphereColors.onSurfaceMuted),
+            Icon(LucideIcons.calendar,
+                size: 14, color: context.sc.onSurfaceMuted),
             const SizedBox(width: 6),
             Text(
               'No schedule',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.3,
                   ),
@@ -136,7 +136,7 @@ class _SphereNextSessionCardState extends State<SphereNextSessionCard> {
         Text(
           'No upcoming sessions',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: SphereColors.onSurface,
+                color: context.sc.onSurface,
                 fontWeight: FontWeight.w700,
               ),
         ),
@@ -144,7 +144,7 @@ class _SphereNextSessionCardState extends State<SphereNextSessionCard> {
         Text(
           'Check back later.',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
               ),
         ),
       ],
@@ -161,13 +161,13 @@ class _SphereNextSessionCardState extends State<SphereNextSessionCard> {
       children: [
         Row(
           children: [
-            const Icon(LucideIcons.clock,
-                size: 14, color: SphereColors.primary),
+            Icon(LucideIcons.clock,
+                size: 14, color: context.sc.primary),
             const SizedBox(width: 6),
             Text(
               _countdown(session.startTime),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: SphereColors.primary,
+                    color: context.sc.primary,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.3,
                   ),
@@ -178,21 +178,21 @@ class _SphereNextSessionCardState extends State<SphereNextSessionCard> {
         Text(
           session.name,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: SphereColors.onSurface,
+                color: context.sc.onSurface,
                 fontWeight: FontWeight.w700,
               ),
         ),
         const SizedBox(height: 4),
         Row(
           children: [
-            const Icon(LucideIcons.mapPin,
-                size: 14, color: SphereColors.onSurfaceMuted),
+            Icon(LucideIcons.mapPin,
+                size: 14, color: context.sc.onSurfaceMuted),
             const SizedBox(width: 6),
             Expanded(
               child: Text(
                 locationLine,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                     ),
               ),
             ),
@@ -207,8 +207,8 @@ class _SphereNextSessionCardState extends State<SphereNextSessionCard> {
             icon: const Icon(LucideIcons.qrCode, size: 18),
             label: const Text('QR Check-in'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: SphereColors.primary,
-              foregroundColor: SphereColors.onPrimary,
+              backgroundColor: context.sc.primary,
+              foregroundColor: context.sc.onPrimary,
               shape: const RoundedRectangleBorder(
                   borderRadius: SphereRadius.pillRect),
             ),

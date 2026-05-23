@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../../app/theme/sphere_radius.dart';
 import '../../../../app/theme/sphere_spacing.dart';
 import '../../domain/redemption_result.dart';
@@ -85,8 +85,8 @@ class _RewardRedeemSheetState extends ConsumerState<RewardRedeemSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: SphereColors.surfaceElev2,
+      decoration: BoxDecoration(
+        color: context.sc.surfaceElev2,
         borderRadius: SphereRadius.sheetTop,
       ),
       child: SafeArea(
@@ -108,7 +108,7 @@ class _RewardRedeemSheetState extends ConsumerState<RewardRedeemSheet> {
                   height: 4,
                   margin: const EdgeInsets.only(bottom: SphereSpacing.x16),
                   decoration: BoxDecoration(
-                    color: SphereColors.borderSubtle,
+                    color: context.sc.borderSubtle,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -171,16 +171,16 @@ class _ConfirmState extends StatelessWidget {
         Text(
           reward.name,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
               ),
         ),
         const SizedBox(height: SphereSpacing.x24),
         Container(
           padding: const EdgeInsets.all(SphereSpacing.x20),
           decoration: BoxDecoration(
-            color: SphereColors.surfaceElev1,
+            color: context.sc.surfaceElev1,
             borderRadius: SphereRadius.cardRect,
-            border: Border.all(color: SphereColors.borderSubtle),
+            border: Border.all(color: context.sc.borderSubtle),
           ),
           child: Column(
             children: [
@@ -189,14 +189,14 @@ class _ConfirmState extends StatelessWidget {
                 value: '${reward.costPoints} pts',
               ),
               const SizedBox(height: SphereSpacing.x8),
-              const Divider(color: SphereColors.borderSubtle, height: 1),
+              Divider(color: context.sc.borderSubtle, height: 1),
               const SizedBox(height: SphereSpacing.x8),
               _Row(
                 label: 'Your balance',
                 value: '$balance pts',
               ),
               const SizedBox(height: SphereSpacing.x8),
-              const Divider(color: SphereColors.borderSubtle, height: 1),
+              Divider(color: context.sc.borderSubtle, height: 1),
               const SizedBox(height: SphereSpacing.x8),
               _Row(
                 label: 'After redeem',
@@ -211,12 +211,12 @@ class _ConfirmState extends StatelessWidget {
           const SizedBox(height: SphereSpacing.x12),
           Text(
             'Earn ${reward.costPoints - balance} more points to redeem.',
-            style: const TextStyle(color: SphereColors.warning),
+            style: TextStyle(color: context.sc.warning),
           ),
         ],
         if (error != null) ...[
           const SizedBox(height: SphereSpacing.x12),
-          Text(error!, style: const TextStyle(color: SphereColors.danger)),
+          Text(error!, style: TextStyle(color: context.sc.danger)),
         ],
         const SizedBox(height: SphereSpacing.x24),
         Row(
@@ -226,11 +226,11 @@ class _ConfirmState extends StatelessWidget {
                 onPressed: onCancel,
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(48),
-                  side: const BorderSide(color: SphereColors.borderSubtle),
+                  side: BorderSide(color: context.sc.borderSubtle),
                   shape: const RoundedRectangleBorder(
                     borderRadius: SphereRadius.pillRect,
                   ),
-                  foregroundColor: SphereColors.onSurface,
+                  foregroundColor: context.sc.onSurface,
                 ),
                 child: const Text('Cancel'),
               ),
@@ -241,24 +241,24 @@ class _ConfirmState extends StatelessWidget {
                 onPressed: (busy || !canAfford) ? null : onConfirm,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(48),
-                  backgroundColor: SphereColors.primary,
-                  foregroundColor: SphereColors.onPrimary,
+                  backgroundColor: context.sc.primary,
+                  foregroundColor: context.sc.onPrimary,
                   shape: const RoundedRectangleBorder(
                     borderRadius: SphereRadius.pillRect,
                   ),
                   disabledBackgroundColor:
-                      SphereColors.primary.withValues(alpha: 0.4),
+                      context.sc.primary.withValues(alpha: 0.4),
                   elevation: 0,
                   textStyle: const TextStyle(fontWeight: FontWeight.w700),
                 ),
                 child: busy
-                    ? const SizedBox(
+                    ? SizedBox(
                         width: 18,
                         height: 18,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor:
-                              AlwaysStoppedAnimation(SphereColors.onPrimary),
+                              AlwaysStoppedAnimation(context.sc.onPrimary),
                         ),
                       )
                     : const Text('Redeem'),
@@ -286,17 +286,17 @@ class _Row extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = negative
-        ? SphereColors.danger
+        ? context.sc.danger
         : emphasised
-            ? SphereColors.primary
-            : SphereColors.onSurface;
+            ? context.sc.primary
+            : context.sc.onSurface;
     return Row(
       children: [
         Expanded(
           child: Text(
             label,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: SphereColors.onSurfaceMuted,
+                  color: context.sc.onSurfaceMuted,
                 ),
           ),
         ),
@@ -337,14 +337,14 @@ class _SuccessState extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: SphereColors.primary.withValues(alpha: 0.18),
+              color: context.sc.primary.withValues(alpha: 0.18),
               border: Border.all(
-                color: SphereColors.primary.withValues(alpha: 0.5),
+                color: context.sc.primary.withValues(alpha: 0.5),
               ),
             ),
-            child: const Icon(
+            child: Icon(
               LucideIcons.check,
-              color: SphereColors.primary,
+              color: context.sc.primary,
               size: 32,
             ),
           ),
@@ -361,7 +361,7 @@ class _SuccessState extends StatelessWidget {
           child: Text(
             reward.name,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: SphereColors.onSurfaceMuted,
+                  color: context.sc.onSurfaceMuted,
                 ),
           ),
         ),
@@ -369,10 +369,10 @@ class _SuccessState extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(SphereSpacing.x20),
           decoration: BoxDecoration(
-            color: SphereColors.surfaceElev1,
+            color: context.sc.surfaceElev1,
             borderRadius: SphereRadius.cardRect,
             border: Border.all(
-              color: SphereColors.primary.withValues(alpha: 0.4),
+              color: context.sc.primary.withValues(alpha: 0.4),
             ),
           ),
           child: Column(
@@ -380,7 +380,7 @@ class _SuccessState extends StatelessWidget {
               Text(
                 'YOUR CODE',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                       letterSpacing: 1.2,
                       fontWeight: FontWeight.w700,
                       fontSize: 10,
@@ -389,11 +389,11 @@ class _SuccessState extends StatelessWidget {
               const SizedBox(height: SphereSpacing.x12),
               SelectableText(
                 result.code,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Geist',
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
-                  color: SphereColors.primary,
+                  color: context.sc.primary,
                   letterSpacing: 2,
                 ),
                 textAlign: TextAlign.center,
@@ -408,9 +408,9 @@ class _SuccessState extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size.fromHeight(40),
                     side: BorderSide(
-                      color: SphereColors.primary.withValues(alpha: 0.4),
+                      color: context.sc.primary.withValues(alpha: 0.4),
                     ),
-                    foregroundColor: SphereColors.primary,
+                    foregroundColor: context.sc.primary,
                     shape: const RoundedRectangleBorder(
                       borderRadius: SphereRadius.pillRect,
                     ),
@@ -427,14 +427,14 @@ class _SuccessState extends StatelessWidget {
               child: Text(
                 'Balance',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                     ),
               ),
             ),
             Text(
               '${result.remainingPoints} pts',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: SphereColors.onSurface,
+                    color: context.sc.onSurface,
                     fontWeight: FontWeight.w700,
                   ),
             ),
@@ -445,8 +445,8 @@ class _SuccessState extends StatelessWidget {
           onPressed: onDone,
           style: ElevatedButton.styleFrom(
             minimumSize: const Size.fromHeight(52),
-            backgroundColor: SphereColors.primary,
-            foregroundColor: SphereColors.onPrimary,
+            backgroundColor: context.sc.primary,
+            foregroundColor: context.sc.onPrimary,
             shape: const RoundedRectangleBorder(
               borderRadius: SphereRadius.pillRect,
             ),

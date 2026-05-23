@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 
@@ -28,7 +28,7 @@ class AddPlayerSheet extends StatefulWidget {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: SphereColors.surfaceElev1,
+      backgroundColor: context.sc.surfaceElev1,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -105,7 +105,7 @@ class _AddPlayerSheetState extends State<AddPlayerSheet> {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: SphereColors.borderSubtle,
+                color: context.sc.borderSubtle,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -121,7 +121,7 @@ class _AddPlayerSheetState extends State<AddPlayerSheet> {
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium
-                ?.copyWith(color: SphereColors.onSurfaceMuted),
+                ?.copyWith(color: context.sc.onSurfaceMuted),
           ),
           const SizedBox(height: 20),
 
@@ -179,8 +179,8 @@ class _AddPlayerSheetState extends State<AddPlayerSheet> {
             const SizedBox(height: 12),
             Text(
               _error!,
-              style: const TextStyle(
-                color: SphereColors.danger,
+              style: TextStyle(
+                color: context.sc.danger,
                 fontSize: 13,
               ),
             ),
@@ -200,14 +200,14 @@ class _AddPlayerSheetState extends State<AddPlayerSheet> {
                 child: ElevatedButton(
                   onPressed: canSubmit ? _submit : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: SphereColors.primary,
+                    backgroundColor: context.sc.primary,
                     foregroundColor: Colors.black,
                     shape: const RoundedRectangleBorder(
                       borderRadius: SphereRadius.pillRect,
                     ),
                     elevation: 0,
                     disabledBackgroundColor:
-                        SphereColors.primary.withValues(alpha: 0.4),
+                        context.sc.primary.withValues(alpha: 0.4),
                   ),
                   child: _busy
                       ? const SizedBox(
@@ -246,7 +246,7 @@ class _FieldLabel extends StatelessWidget {
     return Text(
       text,
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: SphereColors.onSurface,
+            color: context.sc.onSurface,
             fontWeight: FontWeight.w600,
             fontSize: 13,
           ),
@@ -269,18 +269,18 @@ class _Input extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev2,
+        color: context.sc.surfaceElev2,
         borderRadius: SphereRadius.pillRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
       child: TextField(
         controller: controller,
         keyboardType: keyboardType,
-        style: const TextStyle(color: SphereColors.onSurface),
+        style: TextStyle(color: context.sc.onSurface),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: const TextStyle(color: SphereColors.onSurfaceMuted),
+          hintStyle: TextStyle(color: context.sc.onSurfaceMuted),
           border: InputBorder.none,
           isCollapsed: true,
           contentPadding: const EdgeInsets.symmetric(vertical: 14),

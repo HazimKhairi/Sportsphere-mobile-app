@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import 'auth_providers.dart';
@@ -57,7 +57,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: Stack(
         children: [
           // Hero image background.
@@ -80,8 +80,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        SphereColors.surface.withValues(alpha: 0.55),
-                        SphereColors.surface.withValues(alpha: 0.25),
+                        context.sc.surface.withValues(alpha: 0.55),
+                        context.sc.surface.withValues(alpha: 0.25),
                       ],
                     ),
                   ),
@@ -129,18 +129,18 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             bottom: 0,
             child: Container(
               decoration: BoxDecoration(
-                color: SphereColors.surfaceElev1,
+                color: context.sc.surfaceElev1,
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(28)),
                 border: Border(
                   top: BorderSide(
-                    color: SphereColors.primary.withValues(alpha: 0.18),
+                    color: context.sc.primary.withValues(alpha: 0.18),
                     width: 1,
                   ),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: SphereColors.primary.withValues(alpha: 0.08),
+                    color: context.sc.primary.withValues(alpha: 0.08),
                     blurRadius: 24,
                     offset: const Offset(0, -4),
                   ),
@@ -203,7 +203,7 @@ class _FormContent extends StatelessWidget {
         Text(
           "Enter your email and we'll send you a reset link.",
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
               ),
         ),
         const SizedBox(height: SphereSpacing.x24),
@@ -218,7 +218,7 @@ class _FormContent extends StatelessWidget {
           const SizedBox(height: SphereSpacing.x12),
           Text(
             error!,
-            style: const TextStyle(color: SphereColors.danger),
+            style: TextStyle(color: context.sc.danger),
           ),
         ],
         const SizedBox(height: SphereSpacing.x24),
@@ -243,11 +243,11 @@ class _SuccessContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Center(
+        Center(
           child: Icon(
             LucideIcons.checkCircle2,
             size: 40,
-            color: SphereColors.primary,
+            color: context.sc.primary,
           ),
         ),
         const SizedBox(height: SphereSpacing.x20),
@@ -260,7 +260,7 @@ class _SuccessContent extends StatelessWidget {
         Text(
           'A reset link has been sent to $email.',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
               ),
           textAlign: TextAlign.center,
         ),
@@ -281,14 +281,14 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1.withValues(alpha: 0.85),
+      color: context.sc.surfaceElev1.withValues(alpha: 0.85),
       shape: const CircleBorder(),
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 20, color: SphereColors.onSurface),
+          child: Icon(icon, size: 20, color: context.sc.onSurface),
         ),
       ),
     );
@@ -304,7 +304,7 @@ class _FieldLabel extends StatelessWidget {
     return Text(
       text,
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: SphereColors.onSurface,
+            color: context.sc.onSurface,
             fontWeight: FontWeight.w600,
             fontSize: 13,
           ),
@@ -327,9 +327,9 @@ class _SphereInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev2,
+        color: context.sc.surfaceElev2,
         borderRadius: SphereRadius.pillRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
       child: Row(
@@ -338,11 +338,11 @@ class _SphereInput extends StatelessWidget {
             child: TextField(
               controller: controller,
               keyboardType: keyboardType,
-              style: const TextStyle(color: SphereColors.onSurface),
+              style: TextStyle(color: context.sc.onSurface),
               decoration: InputDecoration(
                 hintText: hint,
                 hintStyle:
-                    const TextStyle(color: SphereColors.onSurfaceMuted),
+                    TextStyle(color: context.sc.onSurfaceMuted),
                 border: InputBorder.none,
                 isCollapsed: true,
                 contentPadding: const EdgeInsets.symmetric(vertical: 16),
@@ -372,30 +372,30 @@ class _PillButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-          backgroundColor: SphereColors.primary,
-          foregroundColor: SphereColors.onPrimary,
+          backgroundColor: context.sc.primary,
+          foregroundColor: context.sc.onPrimary,
           shape: const RoundedRectangleBorder(
               borderRadius: SphereRadius.pillRect),
           elevation: 0,
           disabledBackgroundColor:
-              SphereColors.primary.withValues(alpha: 0.5),
+              context.sc.primary.withValues(alpha: 0.5),
         ),
         child: busy
-            ? const SizedBox(
+            ? SizedBox(
                 width: 20,
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor:
-                      AlwaysStoppedAnimation(SphereColors.onPrimary),
+                      AlwaysStoppedAnimation(context.sc.onPrimary),
                 ),
               )
             : Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: SphereColors.onPrimary,
+                  color: context.sc.onPrimary,
                 ),
               ),
       ),

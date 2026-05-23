@@ -9,7 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../data/drill_analyzer/drill_mode.dart';
@@ -283,7 +283,7 @@ class _DrillPlayerScreenState extends ConsumerState<DrillPlayerScreen>
           },
         );
       },
-      loading: () => const Scaffold(
+      loading: () => Scaffold(
         backgroundColor: Colors.black,
         body: Center(
           child: SizedBox(
@@ -291,7 +291,7 @@ class _DrillPlayerScreenState extends ConsumerState<DrillPlayerScreen>
             height: 28,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+              valueColor: AlwaysStoppedAnimation(context.sc.primary),
             ),
           ),
         ),
@@ -400,22 +400,22 @@ class _Player extends StatelessWidget {
                       color: Colors.black.withValues(alpha: 0.5),
                       borderRadius: SphereRadius.pillRect,
                       border: Border.all(
-                        color: SphereColors.primary.withValues(alpha: 0.4),
+                        color: context.sc.primary.withValues(alpha: 0.4),
                       ),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
+                        Icon(
                           LucideIcons.dumbbell,
-                          color: SphereColors.primary,
+                          color: context.sc.primary,
                           size: 14,
                         ),
                         const SizedBox(width: 6),
                         Text(
                           modeLabel,
-                          style: const TextStyle(
-                            color: SphereColors.primary,
+                          style: TextStyle(
+                            color: context.sc.primary,
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
                             letterSpacing: 0.6,
@@ -457,7 +457,7 @@ class _Player extends StatelessWidget {
                 color: Colors.black.withValues(alpha: 0.45),
                 borderRadius: SphereRadius.modalRect,
                 border: Border.all(
-                  color: SphereColors.primary.withValues(alpha: 0.5),
+                  color: context.sc.primary.withValues(alpha: 0.5),
                 ),
               ),
               child: Column(
@@ -465,8 +465,8 @@ class _Player extends StatelessWidget {
                 children: [
                   Text(
                     '$reps',
-                    style: const TextStyle(
-                      color: SphereColors.primary,
+                    style: TextStyle(
+                      color: context.sc.primary,
                       fontSize: 84,
                       fontWeight: FontWeight.w800,
                       height: 1,
@@ -506,8 +506,8 @@ class _Player extends StatelessWidget {
                         value: progress,
                         minHeight: 6,
                         backgroundColor: Colors.white.withValues(alpha: 0.15),
-                        valueColor: const AlwaysStoppedAnimation(
-                          SphereColors.primary,
+                        valueColor: AlwaysStoppedAnimation(
+                          context.sc.primary,
                         ),
                       ),
                     ),
@@ -520,8 +520,8 @@ class _Player extends StatelessWidget {
                         icon: const Icon(LucideIcons.check, size: 18),
                         label: const Text('Done'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: SphereColors.primary,
-                          foregroundColor: SphereColors.onPrimary,
+                          backgroundColor: context.sc.primary,
+                          foregroundColor: context.sc.onPrimary,
                           shape: const RoundedRectangleBorder(
                             borderRadius: SphereRadius.pillRect,
                           ),

@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
@@ -45,17 +45,17 @@ class AboutScreen extends StatelessWidget {
                   Row(
                     children: [
                       Material(
-                        color: SphereColors.surfaceElev1,
+                        color: context.sc.surfaceElev1,
                         shape: const CircleBorder(),
                         child: InkWell(
                           onTap: () => context.canPop()
                               ? context.pop()
                               : context.go('/profile'),
                           customBorder: const CircleBorder(),
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.all(10),
                             child: Icon(LucideIcons.chevronLeft,
-                                size: 20, color: SphereColors.onSurface),
+                                size: 20, color: context.sc.onSurface),
                           ),
                         ),
                       ),
@@ -72,15 +72,15 @@ class AboutScreen extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(SphereSpacing.x24),
                     decoration: BoxDecoration(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       borderRadius: SphereRadius.cardRect,
-                      border: Border.all(color: SphereColors.borderSubtle),
+                      border: Border.all(color: context.sc.borderSubtle),
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          SphereColors.surfaceElev1,
-                          SphereColors.primary.withValues(alpha: 0.06),
+                          context.sc.surfaceElev1,
+                          context.sc.primary.withValues(alpha: 0.06),
                         ],
                       ),
                     ),
@@ -104,7 +104,7 @@ class AboutScreen extends StatelessWidget {
                           'Version 1.0.0 (build 1)',
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: SphereColors.onSurfaceMuted,
+                                    color: context.sc.onSurfaceMuted,
                                   ),
                         ),
                         const SizedBox(height: SphereSpacing.x12),
@@ -112,7 +112,7 @@ class AboutScreen extends StatelessWidget {
                           'The all-in-one sports club management platform. Built for coaches and players to train smarter, pay easier, and grow together.',
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: SphereColors.onSurfaceMuted,
+                                    color: context.sc.onSurfaceMuted,
                                     height: 1.5,
                                   ),
                         ),
@@ -124,18 +124,18 @@ class AboutScreen extends StatelessWidget {
                   const SizedBox(height: SphereSpacing.x12),
                   Container(
                     decoration: BoxDecoration(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       borderRadius: SphereRadius.cardRect,
-                      border: Border.all(color: SphereColors.borderSubtle),
+                      border: Border.all(color: context.sc.borderSubtle),
                     ),
-                    child: const Column(
+                    child: Column(
                       children: [
                         _InfoRow(label: 'Version', value: '1.0.0'),
-                        Divider(color: SphereColors.borderSubtle, height: 1),
+                        Divider(color: context.sc.borderSubtle, height: 1),
                         _InfoRow(label: 'Build', value: '1'),
-                        Divider(color: SphereColors.borderSubtle, height: 1),
+                        Divider(color: context.sc.borderSubtle, height: 1),
                         _InfoRow(label: 'Platform', value: 'Flutter'),
-                        Divider(color: SphereColors.borderSubtle, height: 1),
+                        Divider(color: context.sc.borderSubtle, height: 1),
                         _InfoRow(label: 'Released', value: '2026'),
                       ],
                     ),
@@ -145,9 +145,9 @@ class AboutScreen extends StatelessWidget {
                   const SizedBox(height: SphereSpacing.x12),
                   Container(
                     decoration: BoxDecoration(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       borderRadius: SphereRadius.cardRect,
-                      border: Border.all(color: SphereColors.borderSubtle),
+                      border: Border.all(color: context.sc.borderSubtle),
                     ),
                     child: Column(
                       children: [
@@ -157,7 +157,7 @@ class AboutScreen extends StatelessWidget {
                           onTap: () => _launch(
                               context, 'https://sprtsphr.app/terms'),
                         ),
-                        const Divider(color: SphereColors.borderSubtle, height: 1),
+                        Divider(color: context.sc.borderSubtle, height: 1),
                         _LinkRow(
                           icon: LucideIcons.shield,
                           label: 'Privacy Policy',
@@ -172,7 +172,7 @@ class AboutScreen extends StatelessWidget {
                     child: Text(
                       '© 2026 SportSphere. All rights reserved.',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                           ),
                       textAlign: TextAlign.center,
                     ),
@@ -205,14 +205,14 @@ class _InfoRow extends StatelessWidget {
             child: Text(
               label,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                   ),
             ),
           ),
           Text(
             value,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: SphereColors.onSurface,
+                  color: context.sc.onSurface,
                   fontWeight: FontWeight.w600,
                 ),
           ),
@@ -243,19 +243,19 @@ class _LinkRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, size: 16, color: SphereColors.onSurfaceMuted),
+            Icon(icon, size: 16, color: context.sc.onSurfaceMuted),
             const SizedBox(width: SphereSpacing.x12),
             Expanded(
               child: Text(
                 label,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: SphereColors.onSurface,
+                      color: context.sc.onSurface,
                       fontWeight: FontWeight.w600,
                     ),
               ),
             ),
-            const Icon(LucideIcons.chevronRight,
-                size: 14, color: SphereColors.onSurfaceMuted),
+            Icon(LucideIcons.chevronRight,
+                size: 14, color: context.sc.onSurfaceMuted),
           ],
         ),
       ),

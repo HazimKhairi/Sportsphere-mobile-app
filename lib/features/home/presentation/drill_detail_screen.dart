@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../data/drill_completion_repository.dart';
@@ -94,7 +94,7 @@ class DrillDetailScreen extends ConsumerWidget {
     final async = ref.watch(drillDetailProvider(drillId: drillId));
 
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: async.when(
         data: (drill) {
           if (drill == null) return _NotFound(onBack: () => _back(context));
@@ -114,13 +114,13 @@ class DrillDetailScreen extends ConsumerWidget {
                 .markComplete(drillId: drill.id),
           );
         },
-        loading: () => const Center(
+        loading: () => Center(
           child: SizedBox(
             width: 28,
             height: 28,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+              valueColor: AlwaysStoppedAnimation(context.sc.primary),
             ),
           ),
         ),
@@ -187,7 +187,7 @@ class _ContentState extends State<_Content> {
   void _showCelebration(DrillCompletionResult result) {
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: SphereColors.surfaceElev1,
+      backgroundColor: context.sc.surfaceElev1,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -202,39 +202,39 @@ class _ContentState extends State<_Content> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: SphereColors.primary.withValues(alpha: 0.15),
+                color: context.sc.primary.withValues(alpha: 0.15),
                 border: Border.all(
-                    color: SphereColors.primary.withValues(alpha: 0.4)),
+                    color: context.sc.primary.withValues(alpha: 0.4)),
               ),
-              child: const Icon(LucideIcons.checkCircle2,
-                  color: SphereColors.primary, size: 32),
+              child: Icon(LucideIcons.checkCircle2,
+                  color: context.sc.primary, size: 32),
             ),
             const SizedBox(height: 16),
             Text(
               '+${result.pointsEarned} pts',
-              style: const TextStyle(
-                color: SphereColors.primary,
+              style: TextStyle(
+                color: context.sc.primary,
                 fontSize: 28,
                 fontWeight: FontWeight.w800,
               ),
             ),
             const SizedBox(height: 4),
-            const Text(
+            Text(
               'Drill watched. Keep it up!',
               style: TextStyle(
-                  color: SphereColors.onSurfaceMuted, fontSize: 14),
+                  color: context.sc.onSurfaceMuted, fontSize: 14),
             ),
             const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(LucideIcons.flame,
-                    size: 16, color: SphereColors.warning),
+                Icon(LucideIcons.flame,
+                    size: 16, color: context.sc.warning),
                 const SizedBox(width: 4),
                 Text(
                   '${result.currentStreak} day streak',
-                  style: const TextStyle(
-                    color: SphereColors.onSurface,
+                  style: TextStyle(
+                    color: context.sc.onSurface,
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),
@@ -245,13 +245,13 @@ class _ContentState extends State<_Content> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: SphereColors.primary.withValues(alpha: 0.18),
+                      color: context.sc.primary.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Personal Best',
                       style: TextStyle(
-                        color: SphereColors.primary,
+                        color: context.sc.primary,
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                       ),
@@ -267,7 +267,7 @@ class _ContentState extends State<_Content> {
               child: ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: SphereColors.primary,
+                  backgroundColor: context.sc.primary,
                   foregroundColor: Colors.black,
                   shape: const RoundedRectangleBorder(
                       borderRadius: SphereRadius.pillRect),
@@ -311,9 +311,9 @@ class _ContentState extends State<_Content> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      SphereColors.surface.withValues(alpha: 0.55),
+                      context.sc.surface.withValues(alpha: 0.55),
                       Colors.transparent,
-                      SphereColors.surface,
+                      context.sc.surface,
                     ],
                     stops: const [0.0, 0.5, 1.0],
                   ),
@@ -323,18 +323,18 @@ class _ContentState extends State<_Content> {
               if (widget.videoId != null && widget.onOpenYoutube != null)
                 Center(
                   child: Material(
-                    color: SphereColors.primary,
+                    color: context.sc.primary,
                     shape: const CircleBorder(),
                     elevation: 6,
                     child: InkWell(
                       onTap: widget.onOpenYoutube,
                       customBorder: const CircleBorder(),
-                      child: const Padding(
+                      child: Padding(
                         padding: EdgeInsets.all(18),
                         child: Icon(
                           LucideIcons.play,
                           size: 28,
-                          color: SphereColors.onPrimary,
+                          color: context.sc.onPrimary,
                         ),
                       ),
                     ),
@@ -369,9 +369,9 @@ class _ContentState extends State<_Content> {
                   Container(
                     padding: const EdgeInsets.all(SphereSpacing.x20),
                     decoration: BoxDecoration(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       borderRadius: SphereRadius.cardRect,
-                      border: Border.all(color: SphereColors.borderSubtle),
+                      border: Border.all(color: context.sc.borderSubtle),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -391,7 +391,7 @@ class _ContentState extends State<_Content> {
                               .textTheme
                               .headlineMedium
                               ?.copyWith(
-                                color: SphereColors.onSurface,
+                                color: context.sc.onSurface,
                                 fontWeight: FontWeight.w700,
                               ),
                         ),
@@ -403,7 +403,7 @@ class _ContentState extends State<_Content> {
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                                  color: SphereColors.onSurfaceMuted,
+                                  color: context.sc.onSurfaceMuted,
                                   height: 1.5,
                                 ),
                           ),
@@ -450,16 +450,16 @@ class _ContentState extends State<_Content> {
               onPressed:
                   _completedToday || _marking ? null : _handleMarkComplete,
               icon: _completedToday
-                  ? const Icon(LucideIcons.checkCircle2,
-                      size: 16, color: SphereColors.primary)
+                  ? Icon(LucideIcons.checkCircle2,
+                      size: 16, color: context.sc.primary)
                   : _marking
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 16,
                           height: 16,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor: AlwaysStoppedAnimation(
-                                SphereColors.primary),
+                                context.sc.primary),
                           ),
                         )
                       : const Icon(LucideIcons.eye, size: 16),
@@ -470,12 +470,12 @@ class _ContentState extends State<_Content> {
               ),
               style: OutlinedButton.styleFrom(
                 foregroundColor: _completedToday
-                    ? SphereColors.primary
-                    : SphereColors.onSurface,
+                    ? context.sc.primary
+                    : context.sc.onSurface,
                 side: BorderSide(
                   color: _completedToday
-                      ? SphereColors.primary
-                      : SphereColors.borderSubtle,
+                      ? context.sc.primary
+                      : context.sc.borderSubtle,
                 ),
                 shape: const RoundedRectangleBorder(
                     borderRadius: SphereRadius.pillRect),
@@ -498,8 +498,8 @@ class _ContentState extends State<_Content> {
               icon: const Icon(LucideIcons.play, size: 18),
               label: const Text('Start Practice'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: SphereColors.primary,
-                foregroundColor: SphereColors.onPrimary,
+                backgroundColor: context.sc.primary,
+                foregroundColor: context.sc.onPrimary,
                 shape: const RoundedRectangleBorder(
                     borderRadius: SphereRadius.pillRect),
                 elevation: 0,
@@ -526,7 +526,7 @@ class _ContentState extends State<_Content> {
         child: Icon(
           LucideIcons.dumbbell,
           size: 88,
-          color: SphereColors.primary.withValues(alpha: 0.3),
+          color: context.sc.primary.withValues(alpha: 0.3),
         ),
       ),
     );
@@ -542,15 +542,15 @@ class _Pill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: SphereColors.primary.withValues(alpha: 0.18),
+        color: context.sc.primary.withValues(alpha: 0.18),
         borderRadius: SphereRadius.pillRect,
         border:
-            Border.all(color: SphereColors.primary.withValues(alpha: 0.4)),
+            Border.all(color: context.sc.primary.withValues(alpha: 0.4)),
       ),
       child: Text(
         text,
-        style: const TextStyle(
-          color: SphereColors.primary,
+        style: TextStyle(
+          color: context.sc.primary,
           fontSize: 11,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.6,
@@ -569,14 +569,14 @@ class _AttributeChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.pillRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Text(
         label,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: SphereColors.onSurface,
+              color: context.sc.onSurface,
               fontWeight: FontWeight.w600,
             ),
       ),
@@ -592,14 +592,14 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1.withValues(alpha: 0.85),
+      color: context.sc.surfaceElev1.withValues(alpha: 0.85),
       shape: const CircleBorder(),
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 20, color: SphereColors.onSurface),
+          child: Icon(icon, size: 20, color: context.sc.onSurface),
         ),
       ),
     );
@@ -628,7 +628,7 @@ class _NotFound extends StatelessWidget {
             Text(
               'This drill may have been removed.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                   ),
             ),
           ],

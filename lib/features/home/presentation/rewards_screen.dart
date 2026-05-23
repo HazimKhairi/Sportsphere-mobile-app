@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/reward.dart';
@@ -90,7 +90,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                 Row(
                   children: [
                     Material(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       shape: const CircleBorder(),
                       child: InkWell(
                         onTap: () {
@@ -101,12 +101,12 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                           }
                         },
                         customBorder: const CircleBorder(),
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(10),
                           child: Icon(
                             LucideIcons.chevronLeft,
                             size: 20,
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                           ),
                         ),
                       ),
@@ -124,7 +124,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                 Text(
                   'Spend points on stuff your club has stocked.',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                         height: 1.4,
                       ),
                 ),
@@ -143,8 +143,8 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           decoration: BoxDecoration(
                             color: _tabIndex == 0
-                                ? SphereColors.primary
-                                : SphereColors.surfaceElev2,
+                                ? context.sc.primary
+                                : context.sc.surfaceElev2,
                             borderRadius: SphereRadius.pillRect,
                           ),
                           alignment: Alignment.center,
@@ -153,7 +153,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                             style: TextStyle(
                               color: _tabIndex == 0
                                   ? Colors.black
-                                  : SphereColors.onSurfaceMuted,
+                                  : context.sc.onSurfaceMuted,
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
                             ),
@@ -169,8 +169,8 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           decoration: BoxDecoration(
                             color: _tabIndex == 1
-                                ? SphereColors.primary
-                                : SphereColors.surfaceElev2,
+                                ? context.sc.primary
+                                : context.sc.surfaceElev2,
                             borderRadius: SphereRadius.pillRect,
                           ),
                           alignment: Alignment.center,
@@ -179,7 +179,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                             style: TextStyle(
                               color: _tabIndex == 1
                                   ? Colors.black
-                                  : SphereColors.onSurfaceMuted,
+                                  : context.sc.onSurfaceMuted,
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
                             ),
@@ -200,10 +200,10 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                         return Container(
                           padding: const EdgeInsets.all(SphereSpacing.x20),
                           decoration: BoxDecoration(
-                            color: SphereColors.surfaceElev1,
+                            color: context.sc.surfaceElev1,
                             borderRadius: SphereRadius.cardRect,
                             border: Border.all(
-                                color: SphereColors.borderSubtle),
+                                color: context.sc.borderSubtle),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,7 +214,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                                     .textTheme
                                     .titleMedium
                                     ?.copyWith(
-                                      color: SphereColors.onSurface,
+                                      color: context.sc.onSurface,
                                       fontWeight: FontWeight.w700,
                                     ),
                               ),
@@ -225,7 +225,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                                     .textTheme
                                     .bodyMedium
                                     ?.copyWith(
-                                      color: SphereColors.onSurfaceMuted,
+                                      color: context.sc.onSurfaceMuted,
                                     ),
                               ),
                             ],
@@ -261,7 +261,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                         },
                       );
                     },
-                    loading: () => const Padding(
+                    loading: () => Padding(
                       padding: EdgeInsets.symmetric(vertical: 32),
                       child: Center(
                         child: SizedBox(
@@ -270,7 +270,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor: AlwaysStoppedAnimation(
-                                SphereColors.primary),
+                                context.sc.primary),
                           ),
                         ),
                       ),
@@ -280,7 +280,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium
-                          ?.copyWith(color: SphereColors.onSurfaceMuted),
+                          ?.copyWith(color: context.sc.onSurfaceMuted),
                     ),
                   ),
                 ] else ...[
@@ -321,7 +321,7 @@ class _VouchersTab extends ConsumerWidget {
                 'You haven\'t redeemed any rewards yet.',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                     ),
               ),
             ),
@@ -341,7 +341,7 @@ class _VouchersTab extends ConsumerWidget {
               .toList(),
         );
       },
-      loading: () => const Padding(
+      loading: () => Padding(
         padding: EdgeInsets.symmetric(vertical: 48),
         child: Center(
           child: SizedBox(
@@ -349,7 +349,7 @@ class _VouchersTab extends ConsumerWidget {
             height: 24,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+              valueColor: AlwaysStoppedAnimation(context.sc.primary),
             ),
           ),
         ),
@@ -361,15 +361,15 @@ class _VouchersTab extends ConsumerWidget {
             Text(
               'Could not load vouchers.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: SphereColors.onSurfaceMuted,
+                    color: context.sc.onSurfaceMuted,
                   ),
             ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: () => ref.invalidate(myVouchersProvider),
-              child: const Text(
+              child: Text(
                 'Retry',
-                style: TextStyle(color: SphereColors.primary),
+                style: TextStyle(color: context.sc.primary),
               ),
             ),
           ],
@@ -395,9 +395,9 @@ class _VoucherCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(SphereSpacing.x16),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -408,8 +408,8 @@ class _VoucherCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   voucher.rewardName,
-                  style: const TextStyle(
-                    color: SphereColors.onSurface,
+                  style: TextStyle(
+                    color: context.sc.onSurface,
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),
@@ -428,15 +428,15 @@ class _VoucherCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: SphereColors.surfaceElev2,
+                    color: context.sc.surfaceElev2,
                     borderRadius: SphereRadius.pillRect,
-                    border: Border.all(color: SphereColors.borderSubtle),
+                    border: Border.all(color: context.sc.borderSubtle),
                   ),
                   child: Text(
                     voucher.code,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'monospace',
-                      color: SphereColors.onSurface,
+                      color: context.sc.onSurface,
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                       letterSpacing: 1.2,
@@ -447,7 +447,7 @@ class _VoucherCard extends StatelessWidget {
               const SizedBox(width: SphereSpacing.x8),
               IconButton(
                 icon: const Icon(LucideIcons.copy, size: 18),
-                color: SphereColors.primary,
+                color: context.sc.primary,
                 onPressed: () => copyCode(context, voucher.code),
               ),
             ],
@@ -455,24 +455,24 @@ class _VoucherCard extends StatelessWidget {
           const SizedBox(height: 6),
           Row(
             children: [
-              const Icon(
+              Icon(
                 LucideIcons.calendar,
                 size: 12,
-                color: SphereColors.onSurfaceMuted,
+                color: context.sc.onSurfaceMuted,
               ),
               const SizedBox(width: 4),
               Text(
                 'Expires ${formatDate(voucher.expiresAt)}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
-                  color: SphereColors.onSurfaceMuted,
+                  color: context.sc.onSurfaceMuted,
                 ),
               ),
               const Spacer(),
               Text(
                 voucher.discountValue,
-                style: const TextStyle(
-                  color: SphereColors.primary,
+                style: TextStyle(
+                  color: context.sc.primary,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -497,16 +497,16 @@ class _StatusBadge extends StatelessWidget {
 
     switch (status) {
       case 'used':
-        bg = SphereColors.onSurfaceMuted.withValues(alpha: 0.15);
-        textColor = SphereColors.onSurfaceMuted;
+        bg = context.sc.onSurfaceMuted.withValues(alpha: 0.15);
+        textColor = context.sc.onSurfaceMuted;
         label = 'Used';
       case 'expired':
-        bg = SphereColors.danger.withValues(alpha: 0.15);
-        textColor = SphereColors.danger;
+        bg = context.sc.danger.withValues(alpha: 0.15);
+        textColor = context.sc.danger;
         label = 'Expired';
       default: // 'active'
-        bg = SphereColors.primary.withValues(alpha: 0.15);
-        textColor = SphereColors.primary;
+        bg = context.sc.primary.withValues(alpha: 0.15);
+        textColor = context.sc.primary;
         label = 'Active';
     }
 
@@ -537,15 +537,15 @@ class _BalanceCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(SphereSpacing.x20),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            SphereColors.surfaceElev1,
-            SphereColors.primary.withValues(alpha: 0.06),
+            context.sc.surfaceElev1,
+            context.sc.primary.withValues(alpha: 0.06),
           ],
         ),
       ),
@@ -557,14 +557,14 @@ class _BalanceCard extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: SphereColors.primary.withValues(alpha: 0.18),
+              color: context.sc.primary.withValues(alpha: 0.18),
               border: Border.all(
-                color: SphereColors.primary.withValues(alpha: 0.4),
+                color: context.sc.primary.withValues(alpha: 0.4),
               ),
             ),
-            child: const Icon(
+            child: Icon(
               LucideIcons.zap,
-              color: SphereColors.primary,
+              color: context.sc.primary,
               size: 24,
             ),
           ),
@@ -576,7 +576,7 @@ class _BalanceCard extends StatelessWidget {
                 Text(
                   'Your balance',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                         letterSpacing: 0.8,
                         fontWeight: FontWeight.w700,
                       ),
@@ -592,7 +592,7 @@ class _BalanceCard extends StatelessWidget {
                           .textTheme
                           .displayLarge
                           ?.copyWith(
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                             fontWeight: FontWeight.w800,
                             fontSize: 32,
                             height: 1,
@@ -603,7 +603,7 @@ class _BalanceCard extends StatelessWidget {
                       'pts',
                       style:
                           Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: SphereColors.onSurfaceMuted,
+                                color: context.sc.onSurfaceMuted,
                               ),
                     ),
                   ],
@@ -637,7 +637,7 @@ class _RewardCard extends StatelessWidget {
     final muted = !available;
 
     return Material(
-      color: SphereColors.surfaceElev1,
+      color: context.sc.surfaceElev1,
       borderRadius: SphereRadius.cardRect,
       child: InkWell(
         onTap: available ? onTap : null,
@@ -648,10 +648,10 @@ class _RewardCard extends StatelessWidget {
             borderRadius: SphereRadius.cardRect,
             border: Border.all(
               color: muted
-                  ? SphereColors.borderSubtle
+                  ? context.sc.borderSubtle
                   : canAfford
-                      ? SphereColors.primary.withValues(alpha: 0.4)
-                      : SphereColors.borderSubtle,
+                      ? context.sc.primary.withValues(alpha: 0.4)
+                      : context.sc.borderSubtle,
             ),
           ),
           child: Column(
@@ -664,19 +664,19 @@ class _RewardCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: muted
-                      ? SphereColors.surfaceElev2
-                      : SphereColors.primary.withValues(alpha: 0.18),
+                      ? context.sc.surfaceElev2
+                      : context.sc.primary.withValues(alpha: 0.18),
                   border: Border.all(
                     color: muted
-                        ? SphereColors.borderSubtle
-                        : SphereColors.primary.withValues(alpha: 0.4),
+                        ? context.sc.borderSubtle
+                        : context.sc.primary.withValues(alpha: 0.4),
                   ),
                 ),
                 child: Icon(
                   muted ? LucideIcons.lock : icon,
                   color: muted
-                      ? SphereColors.onSurfaceMuted
-                      : SphereColors.primary,
+                      ? context.sc.onSurfaceMuted
+                      : context.sc.primary,
                   size: 22,
                 ),
               ),
@@ -685,8 +685,8 @@ class _RewardCard extends StatelessWidget {
                 reward.name,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: muted
-                          ? SphereColors.onSurfaceMuted
-                          : SphereColors.onSurface,
+                          ? context.sc.onSurfaceMuted
+                          : context.sc.onSurface,
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                     ),
@@ -698,7 +698,7 @@ class _RewardCard extends StatelessWidget {
                 child: Text(
                   reward.description.isEmpty ? 'Reward' : reward.description,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                         fontSize: 11,
                         height: 1.35,
                       ),
@@ -713,20 +713,20 @@ class _RewardCard extends StatelessWidget {
                     LucideIcons.zap,
                     size: 12,
                     color: muted
-                        ? SphereColors.onSurfaceMuted
+                        ? context.sc.onSurfaceMuted
                         : canAfford
-                            ? SphereColors.primary
-                            : SphereColors.warning,
+                            ? context.sc.primary
+                            : context.sc.warning,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     '${reward.costPoints} pts',
                     style: TextStyle(
                       color: muted
-                          ? SphereColors.onSurfaceMuted
+                          ? context.sc.onSurfaceMuted
                           : canAfford
-                              ? SphereColors.primary
-                              : SphereColors.warning,
+                              ? context.sc.primary
+                              : context.sc.warning,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                     ),
@@ -737,8 +737,8 @@ class _RewardCard extends StatelessWidget {
                       reward.stock! > 0)
                     Text(
                       'x${reward.stock}',
-                      style: const TextStyle(
-                        color: SphereColors.warning,
+                      style: TextStyle(
+                        color: context.sc.warning,
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                       ),

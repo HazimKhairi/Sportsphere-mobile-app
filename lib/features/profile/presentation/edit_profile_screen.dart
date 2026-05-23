@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../auth/presentation/auth_providers.dart';
@@ -109,14 +109,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   child: Row(
                     children: [
                       Material(
-                        color: SphereColors.surfaceElev1,
+                        color: context.sc.surfaceElev1,
                         shape: const CircleBorder(),
                         child: InkWell(
                           onTap: () => context.canPop() ? context.pop() : context.go('/profile'),
                           customBorder: const CircleBorder(),
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.all(10),
-                            child: Icon(LucideIcons.chevronLeft, size: 20, color: SphereColors.onSurface),
+                            child: Icon(LucideIcons.chevronLeft, size: 20, color: context.sc.onSurface),
                           ),
                         ),
                       ),
@@ -173,8 +173,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                             child: ElevatedButton(
                               onPressed: _saving ? null : _save,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: SphereColors.primary,
-                                foregroundColor: SphereColors.onPrimary,
+                                backgroundColor: context.sc.primary,
+                                foregroundColor: context.sc.onPrimary,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: SphereRadius.pillRect,
                                 ),
@@ -219,7 +219,7 @@ class _FieldLabel extends StatelessWidget {
     return Text(
       text,
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: SphereColors.onSurfaceMuted,
+            color: context.sc.onSurfaceMuted,
             fontWeight: FontWeight.w600,
           ),
     );
@@ -245,24 +245,24 @@ class _SphereTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x16, vertical: 4),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: SphereColors.onSurfaceMuted),
+          Icon(icon, size: 16, color: context.sc.onSurfaceMuted),
           const SizedBox(width: SphereSpacing.x12),
           Expanded(
             child: TextFormField(
               controller: controller,
               keyboardType: keyboardType,
               validator: validator,
-              style: const TextStyle(color: SphereColors.onSurface),
+              style: TextStyle(color: context.sc.onSurface),
               decoration: InputDecoration(
                 hintText: hint,
-                hintStyle: const TextStyle(color: SphereColors.onSurfaceMuted),
+                hintStyle: TextStyle(color: context.sc.onSurfaceMuted),
                 border: InputBorder.none,
                 isCollapsed: true,
                 contentPadding: const EdgeInsets.symmetric(vertical: SphereSpacing.x12),

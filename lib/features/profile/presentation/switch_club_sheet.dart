@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/staff_home_providers.dart';
@@ -33,8 +33,8 @@ class _SwitchClubSheetState extends ConsumerState<SwitchClubSheet> {
     final activeClubId = ref.watch(activeClubIdProvider).valueOrNull;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: SphereColors.surfaceElev2,
+      decoration: BoxDecoration(
+        color: context.sc.surfaceElev2,
         borderRadius: SphereRadius.sheetTop,
       ),
       child: SafeArea(
@@ -56,7 +56,7 @@ class _SwitchClubSheetState extends ConsumerState<SwitchClubSheet> {
                   height: 4,
                   margin: const EdgeInsets.only(bottom: SphereSpacing.x16),
                   decoration: BoxDecoration(
-                    color: SphereColors.borderSubtle,
+                    color: context.sc.borderSubtle,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -69,7 +69,7 @@ class _SwitchClubSheetState extends ConsumerState<SwitchClubSheet> {
               Text(
                 'Pick the club you want active.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                     ),
               ),
               const SizedBox(height: SphereSpacing.x24),
@@ -82,7 +82,7 @@ class _SwitchClubSheetState extends ConsumerState<SwitchClubSheet> {
                       child: Text(
                         'You are not in any clubs yet.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: SphereColors.onSurfaceMuted,
+                              color: context.sc.onSurfaceMuted,
                             ),
                       ),
                     );
@@ -102,7 +102,7 @@ class _SwitchClubSheetState extends ConsumerState<SwitchClubSheet> {
                     ],
                   );
                 },
-                loading: () => const Padding(
+                loading: () => Padding(
                   padding: EdgeInsets.symmetric(vertical: 32),
                   child: Center(
                     child: SizedBox(
@@ -110,7 +110,7 @@ class _SwitchClubSheetState extends ConsumerState<SwitchClubSheet> {
                       height: 24,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+                        valueColor: AlwaysStoppedAnimation(context.sc.primary),
                       ),
                     ),
                   ),
@@ -120,7 +120,7 @@ class _SwitchClubSheetState extends ConsumerState<SwitchClubSheet> {
                   child: Text(
                     'Couldn’t load your clubs.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                 ),
@@ -171,8 +171,8 @@ class _ClubRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: selected
-          ? SphereColors.primary.withValues(alpha: 0.12)
-          : SphereColors.surfaceElev1,
+          ? context.sc.primary.withValues(alpha: 0.12)
+          : context.sc.surfaceElev1,
       borderRadius: SphereRadius.cardRect,
       child: InkWell(
         onTap: busy ? null : onTap,
@@ -183,8 +183,8 @@ class _ClubRow extends StatelessWidget {
             borderRadius: SphereRadius.cardRect,
             border: Border.all(
               color: selected
-                  ? SphereColors.primary.withValues(alpha: 0.5)
-                  : SphereColors.borderSubtle,
+                  ? context.sc.primary.withValues(alpha: 0.5)
+                  : context.sc.borderSubtle,
             ),
           ),
           child: Row(
@@ -195,12 +195,12 @@ class _ClubRow extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: SphereColors.primary.withValues(alpha: 0.18),
+                  color: context.sc.primary.withValues(alpha: 0.18),
                 ),
-                child: const Icon(
+                child: Icon(
                   LucideIcons.building2,
                   size: 18,
-                  color: SphereColors.primary,
+                  color: context.sc.primary,
                 ),
               ),
               const SizedBox(width: SphereSpacing.x12),
@@ -211,7 +211,7 @@ class _ClubRow extends StatelessWidget {
                     Text(
                       clubName,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                             fontWeight: FontWeight.w700,
                           ),
                       maxLines: 1,
@@ -221,7 +221,7 @@ class _ClubRow extends StatelessWidget {
                     Text(
                       role,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                             letterSpacing: 0.6,
                           ),
                     ),
@@ -229,25 +229,25 @@ class _ClubRow extends StatelessWidget {
                 ),
               ),
               if (busy)
-                const SizedBox(
+                SizedBox(
                   width: 18,
                   height: 18,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+                    valueColor: AlwaysStoppedAnimation(context.sc.primary),
                   ),
                 )
               else if (selected)
-                const Icon(
+                Icon(
                   LucideIcons.check,
                   size: 18,
-                  color: SphereColors.primary,
+                  color: context.sc.primary,
                 )
               else
-                const Icon(
+                Icon(
                   LucideIcons.chevronRight,
                   size: 18,
-                  color: SphereColors.onSurfaceMuted,
+                  color: context.sc.onSurfaceMuted,
                 ),
             ],
           ),

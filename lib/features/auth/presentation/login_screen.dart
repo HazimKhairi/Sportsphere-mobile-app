@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import 'auth_providers.dart';
@@ -52,7 +52,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: Stack(
         children: [
           // Hero image background.
@@ -75,8 +75,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        SphereColors.surface.withValues(alpha: 0.55),
-                        SphereColors.surface.withValues(alpha: 0.25),
+                        context.sc.surface.withValues(alpha: 0.55),
+                        context.sc.surface.withValues(alpha: 0.25),
                       ],
                     ),
                   ),
@@ -130,17 +130,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             bottom: 0,
             child: Container(
               decoration: BoxDecoration(
-                color: SphereColors.surfaceElev1,
+                color: context.sc.surfaceElev1,
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
                 border: Border(
                   top: BorderSide(
-                    color: SphereColors.primary.withValues(alpha: 0.18),
+                    color: context.sc.primary.withValues(alpha: 0.18),
                     width: 1,
                   ),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: SphereColors.primary.withValues(alpha: 0.08),
+                    color: context.sc.primary.withValues(alpha: 0.08),
                     blurRadius: 24,
                     offset: const Offset(0, -4),
                   ),
@@ -172,7 +172,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         'Log in to continue your training.',
                         style:
                             Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: SphereColors.onSurfaceMuted,
+                                  color: context.sc.onSurfaceMuted,
                                 ),
                       ),
                       const SizedBox(height: SphereSpacing.x24),
@@ -195,7 +195,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             _passwordVisible
                                 ? LucideIcons.eyeOff
                                 : LucideIcons.eye,
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                             size: 20,
                           ),
                           onPressed: () => setState(
@@ -208,9 +208,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () => context.push('/auth/forgot-password'),
-                          child: const Text(
+                          child: Text(
                             'Forgot password?',
-                            style: TextStyle(color: SphereColors.primary),
+                            style: TextStyle(color: context.sc.primary),
                           ),
                         ),
                       ),
@@ -218,7 +218,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         const SizedBox(height: SphereSpacing.x12),
                         Text(
                           _error!,
-                          style: const TextStyle(color: SphereColors.danger),
+                          style: TextStyle(color: context.sc.danger),
                         ),
                       ],
                       const SizedBox(height: SphereSpacing.x16),
@@ -272,13 +272,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   .textTheme
                                   .bodyMedium
                                   ?.copyWith(
-                                    color: SphereColors.onSurfaceMuted,
+                                    color: context.sc.onSurfaceMuted,
                                   ),
-                              children: const [
+                              children: [
                                 TextSpan(
                                   text: 'Sign up',
                                   style: TextStyle(
-                                    color: SphereColors.primary,
+                                    color: context.sc.primary,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -333,14 +333,14 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1.withValues(alpha: 0.85),
+      color: context.sc.surfaceElev1.withValues(alpha: 0.85),
       shape: const CircleBorder(),
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 20, color: SphereColors.onSurface),
+          child: Icon(icon, size: 20, color: context.sc.onSurface),
         ),
       ),
     );
@@ -356,7 +356,7 @@ class _FieldLabel extends StatelessWidget {
     return Text(
       text,
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: SphereColors.onSurface,
+            color: context.sc.onSurface,
             fontWeight: FontWeight.w600,
             fontSize: 13,
           ),
@@ -383,9 +383,9 @@ class _SphereInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev2,
+        color: context.sc.surfaceElev2,
         borderRadius: SphereRadius.pillRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
       child: Row(
@@ -395,11 +395,11 @@ class _SphereInput extends StatelessWidget {
               controller: controller,
               keyboardType: keyboardType,
               obscureText: obscureText,
-              style: const TextStyle(color: SphereColors.onSurface),
+              style: TextStyle(color: context.sc.onSurface),
               decoration: InputDecoration(
                 hintText: hint,
                 hintStyle:
-                    const TextStyle(color: SphereColors.onSurfaceMuted),
+                    TextStyle(color: context.sc.onSurfaceMuted),
                 border: InputBorder.none,
                 isCollapsed: true,
                 contentPadding: const EdgeInsets.symmetric(vertical: 16),
@@ -430,28 +430,28 @@ class _PillButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-          backgroundColor: SphereColors.primary,
-          foregroundColor: SphereColors.onPrimary,
+          backgroundColor: context.sc.primary,
+          foregroundColor: context.sc.onPrimary,
           shape:
               const RoundedRectangleBorder(borderRadius: SphereRadius.pillRect),
           elevation: 0,
-          disabledBackgroundColor: SphereColors.primary.withValues(alpha: 0.5),
+          disabledBackgroundColor: context.sc.primary.withValues(alpha: 0.5),
         ),
         child: busy
-            ? const SizedBox(
+            ? SizedBox(
                 width: 20,
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation(SphereColors.onPrimary),
+                  valueColor: AlwaysStoppedAnimation(context.sc.onPrimary),
                 ),
               )
             : Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: SphereColors.onPrimary,
+                  color: context.sc.onPrimary,
                 ),
               ),
       ),
@@ -467,18 +467,18 @@ class _DividerWithLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Expanded(child: Divider(color: SphereColors.borderSubtle)),
+        Expanded(child: Divider(color: context.sc.borderSubtle)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
             label,
-            style: const TextStyle(
-              color: SphereColors.onSurfaceMuted,
+            style: TextStyle(
+              color: context.sc.onSurfaceMuted,
               fontSize: 13,
             ),
           ),
         ),
-        const Expanded(child: Divider(color: SphereColors.borderSubtle)),
+        Expanded(child: Divider(color: context.sc.borderSubtle)),
       ],
     );
   }
@@ -503,16 +503,16 @@ class _SocialPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color =
-        disabled ? SphereColors.onSurfaceMuted : SphereColors.onSurface;
+        disabled ? context.sc.onSurfaceMuted : context.sc.onSurface;
     return InkWell(
       onTap: onTap,
       borderRadius: SphereRadius.pillRect,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
         decoration: BoxDecoration(
-          color: SphereColors.surfaceElev2,
+          color: context.sc.surfaceElev2,
           borderRadius: SphereRadius.pillRect,
-          border: Border.all(color: SphereColors.borderSubtle),
+          border: Border.all(color: context.sc.borderSubtle),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

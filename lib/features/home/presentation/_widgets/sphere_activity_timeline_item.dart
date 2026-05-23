@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 
 class SphereActivityTimelineItem extends StatelessWidget {
   const SphereActivityTimelineItem({
@@ -27,18 +27,18 @@ class SphereActivityTimelineItem extends StatelessWidget {
                 height: 32,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: SphereColors.primary.withValues(alpha: 0.12),
+                  color: context.sc.primary.withValues(alpha: 0.12),
                   border: Border.all(
-                    color: SphereColors.primary.withValues(alpha: 0.3),
+                    color: context.sc.primary.withValues(alpha: 0.3),
                   ),
                 ),
-                child: Icon(icon, size: 14, color: SphereColors.primary),
+                child: Icon(icon, size: 14, color: context.sc.primary),
               ),
               if (!isLast)
                 Expanded(
                   child: Container(
                     width: 1.5,
-                    color: SphereColors.borderSubtle,
+                    color: context.sc.borderSubtle,
                     margin: const EdgeInsets.symmetric(vertical: 4),
                   ),
                 ),
@@ -54,7 +54,7 @@ class SphereActivityTimelineItem extends StatelessWidget {
                   Text(
                     title,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurface,
+                          color: context.sc.onSurface,
                           fontWeight: FontWeight.w600,
                         ),
                   ),
@@ -62,7 +62,7 @@ class SphereActivityTimelineItem extends StatelessWidget {
                   Text(
                     timeAgo,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                          color: context.sc.onSurfaceMuted,
                         ),
                   ),
                 ],

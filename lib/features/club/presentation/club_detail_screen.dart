@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
@@ -18,7 +18,7 @@ class ClubDetailScreen extends ConsumerWidget {
     final clubAsync = ref.watch(myClubProvider);
 
     return Scaffold(
-      backgroundColor: SphereColors.surface,
+      backgroundColor: context.sc.surface,
       body: clubAsync.when(
         data: (ClubInfo? club) {
           if (club == null) {
@@ -26,13 +26,13 @@ class ClubDetailScreen extends ConsumerWidget {
           }
           return _ClubContent(club: club);
         },
-        loading: () => const Center(
+        loading: () => Center(
           child: SizedBox(
             width: 28,
             height: 28,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(SphereColors.primary),
+              valueColor: AlwaysStoppedAnimation(context.sc.primary),
             ),
           ),
         ),
@@ -134,7 +134,7 @@ class _ClubHeader extends StatelessWidget {
           club.name,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: SphereColors.onSurface,
+                color: context.sc.onSurface,
                 fontWeight: FontWeight.w700,
               ),
         ),
@@ -163,8 +163,8 @@ class _ClubLogo extends StatelessWidget {
       height: 80,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: SphereColors.surfaceElev1,
-        border: Border.all(color: SphereColors.borderSubtle, width: 2),
+        color: context.sc.surfaceElev1,
+        border: Border.all(color: context.sc.borderSubtle, width: 2),
       ),
       clipBehavior: Clip.antiAlias,
       child: logoUrl != null && logoUrl!.isNotEmpty
@@ -188,8 +188,8 @@ class _Initials extends StatelessWidget {
     return Center(
       child: Text(
         initial,
-        style: const TextStyle(
-          color: SphereColors.primary,
+        style: TextStyle(
+          color: context.sc.primary,
           fontWeight: FontWeight.w800,
           fontSize: 30,
         ),
@@ -208,15 +208,15 @@ class _SportPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: SphereColors.primary.withValues(alpha: 0.12),
+        color: context.sc.primary.withValues(alpha: 0.12),
         borderRadius: SphereRadius.pillRect,
         border:
-            Border.all(color: SphereColors.primary.withValues(alpha: 0.35)),
+            Border.all(color: context.sc.primary.withValues(alpha: 0.35)),
       ),
       child: Text(
         sport,
-        style: const TextStyle(
-          color: SphereColors.primary,
+        style: TextStyle(
+          color: context.sc.primary,
           fontWeight: FontWeight.w600,
           fontSize: 13,
         ),
@@ -238,14 +238,14 @@ class _DescriptionCard extends StatelessWidget {
         vertical: SphereSpacing.x16,
       ),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Text(
         description,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: SphereColors.onSurfaceMuted,
+              color: context.sc.onSurfaceMuted,
               height: 1.5,
             ),
       ),
@@ -301,9 +301,9 @@ class _InfoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x16, vertical: 8),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Column(
         children: [
@@ -313,13 +313,13 @@ class _InfoCard extends StatelessWidget {
               child: Row(
                 children: [
                   Icon(rows[i].icon,
-                      size: 20, color: SphereColors.onSurfaceMuted),
+                      size: 20, color: context.sc.onSurfaceMuted),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       rows[i].text,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                           ),
                     ),
                   ),
@@ -327,7 +327,7 @@ class _InfoCard extends StatelessWidget {
               ),
             ),
             if (i < rows.length - 1)
-              const Divider(color: SphereColors.borderSubtle, height: 1),
+              Divider(color: context.sc.borderSubtle, height: 1),
           ],
         ],
       ),
@@ -367,14 +367,14 @@ class _SportChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: SphereColors.surfaceElev1,
+        color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.pillRect,
-        border: Border.all(color: SphereColors.borderSubtle),
+        border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Text(
         label,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: SphereColors.onSurface,
+              color: context.sc.onSurface,
               fontWeight: FontWeight.w600,
             ),
       ),
@@ -398,9 +398,9 @@ class _CertificationsSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
               horizontal: SphereSpacing.x16, vertical: 8),
           decoration: BoxDecoration(
-            color: SphereColors.surfaceElev1,
+            color: context.sc.surfaceElev1,
             borderRadius: SphereRadius.cardRect,
-            border: Border.all(color: SphereColors.borderSubtle),
+            border: Border.all(color: context.sc.borderSubtle),
           ),
           child: Column(
             children: [
@@ -409,15 +409,15 @@ class _CertificationsSection extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Row(
                     children: [
-                      const Icon(LucideIcons.shieldCheck,
-                          size: 20, color: SphereColors.primary),
+                      Icon(LucideIcons.shieldCheck,
+                          size: 20, color: context.sc.primary),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           certifications[i],
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: SphereColors.onSurface,
+                                    color: context.sc.onSurface,
                                   ),
                         ),
                       ),
@@ -425,7 +425,7 @@ class _CertificationsSection extends StatelessWidget {
                   ),
                 ),
                 if (i < certifications.length - 1)
-                  const Divider(color: SphereColors.borderSubtle, height: 1),
+                  Divider(color: context.sc.borderSubtle, height: 1),
               ],
             ],
           ),
@@ -451,9 +451,9 @@ class _SocialSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
               horizontal: SphereSpacing.x16, vertical: 8),
           decoration: BoxDecoration(
-            color: SphereColors.surfaceElev1,
+            color: context.sc.surfaceElev1,
             borderRadius: SphereRadius.cardRect,
-            border: Border.all(color: SphereColors.borderSubtle),
+            border: Border.all(color: context.sc.borderSubtle),
           ),
           child: Column(
             children: [
@@ -467,7 +467,7 @@ class _SocialSection extends StatelessWidget {
               if (storefront.instagramUrl != null &&
                   (storefront.facebookUrl != null ||
                       storefront.tiktokUrl != null))
-                const Divider(color: SphereColors.borderSubtle, height: 1),
+                Divider(color: context.sc.borderSubtle, height: 1),
               if (storefront.facebookUrl != null) ...[
                 _SocialRow(
                   icon: LucideIcons.link,
@@ -477,7 +477,7 @@ class _SocialSection extends StatelessWidget {
               ],
               if (storefront.facebookUrl != null &&
                   storefront.tiktokUrl != null)
-                const Divider(color: SphereColors.borderSubtle, height: 1),
+                Divider(color: context.sc.borderSubtle, height: 1),
               if (storefront.tiktokUrl != null)
                 _SocialRow(
                   icon: LucideIcons.music,
@@ -509,7 +509,7 @@ class _SocialRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: SphereColors.onSurfaceMuted),
+          Icon(icon, size: 20, color: context.sc.onSurfaceMuted),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -518,14 +518,14 @@ class _SocialRow extends StatelessWidget {
                 Text(
                   platform,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                         fontWeight: FontWeight.w600,
                       ),
                 ),
                 Text(
                   url,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: SphereColors.onSurface,
+                        color: context.sc.onSurface,
                       ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -547,15 +547,15 @@ class _CircleIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1.withValues(alpha: 0.85),
+      color: context.sc.surfaceElev1.withValues(alpha: 0.85),
       shape: const CircleBorder(),
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
-        child: const Padding(
+        child: Padding(
           padding: EdgeInsets.all(10),
           child: Icon(LucideIcons.chevronLeft,
-              size: 20, color: SphereColors.onSurface),
+              size: 20, color: context.sc.onSurface),
         ),
       ),
     );
@@ -578,7 +578,7 @@ class _ErrorView extends StatelessWidget {
             Text(
               'Could not load club info',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: SphereColors.onSurface,
+                    color: context.sc.onSurface,
                   ),
             ),
             const SizedBox(height: SphereSpacing.x16),

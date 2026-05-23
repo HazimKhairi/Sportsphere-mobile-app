@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 
@@ -22,8 +22,8 @@ class PaymentMethodSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: SphereColors.surfaceElev2,
+      decoration: BoxDecoration(
+        color: context.sc.surfaceElev2,
         borderRadius: SphereRadius.sheetTop,
       ),
       child: SafeArea(
@@ -45,7 +45,7 @@ class PaymentMethodSheet extends StatelessWidget {
                   height: 4,
                   margin: const EdgeInsets.only(bottom: SphereSpacing.x16),
                   decoration: BoxDecoration(
-                    color: SphereColors.borderSubtle,
+                    color: context.sc.borderSubtle,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -58,7 +58,7 @@ class PaymentMethodSheet extends StatelessWidget {
               Text(
                 'Pick how you want to pay.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: SphereColors.onSurfaceMuted,
+                      color: context.sc.onSurfaceMuted,
                     ),
               ),
               const SizedBox(height: SphereSpacing.x20),
@@ -98,7 +98,7 @@ class _MethodTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1,
+      color: context.sc.surfaceElev1,
       borderRadius: SphereRadius.cardRect,
       child: InkWell(
         onTap: onTap,
@@ -107,7 +107,7 @@ class _MethodTile extends StatelessWidget {
           padding: const EdgeInsets.all(SphereSpacing.x16),
           decoration: BoxDecoration(
             borderRadius: SphereRadius.cardRect,
-            border: Border.all(color: SphereColors.borderSubtle),
+            border: Border.all(color: context.sc.borderSubtle),
           ),
           child: Row(
             children: [
@@ -117,9 +117,9 @@ class _MethodTile extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: SphereColors.primary.withValues(alpha: 0.18),
+                  color: context.sc.primary.withValues(alpha: 0.18),
                 ),
-                child: Icon(icon, color: SphereColors.primary, size: 20),
+                child: Icon(icon, color: context.sc.primary, size: 20),
               ),
               const SizedBox(width: SphereSpacing.x12),
               Expanded(
@@ -129,7 +129,7 @@ class _MethodTile extends StatelessWidget {
                     Text(
                       title,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                             fontWeight: FontWeight.w700,
                           ),
                     ),
@@ -137,16 +137,16 @@ class _MethodTile extends StatelessWidget {
                     Text(
                       subtitle,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                           ),
                     ),
                   ],
                 ),
               ),
-              const Icon(
+              Icon(
                 LucideIcons.chevronRight,
                 size: 18,
-                color: SphereColors.primary,
+                color: context.sc.primary,
               ),
             ],
           ),

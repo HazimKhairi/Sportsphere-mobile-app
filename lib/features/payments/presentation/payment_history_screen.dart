@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
@@ -54,7 +54,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
                 Row(
                   children: [
                     Material(
-                      color: SphereColors.surfaceElev1,
+                      color: context.sc.surfaceElev1,
                       shape: const CircleBorder(),
                       child: InkWell(
                         onTap: () {
@@ -65,12 +65,12 @@ class PaymentHistoryScreen extends ConsumerWidget {
                           }
                         },
                         customBorder: const CircleBorder(),
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(10),
                           child: Icon(
                             LucideIcons.chevronLeft,
                             size: 20,
-                            color: SphereColors.onSurface,
+                            color: context.sc.onSurface,
                           ),
                         ),
                       ),
@@ -91,7 +91,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
                 Text(
                   'Your last 10 transactions.',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: SphereColors.onSurfaceMuted,
+                        color: context.sc.onSurfaceMuted,
                       ),
                 ),
                 const SizedBox(height: SphereSpacing.x32),
@@ -103,9 +103,9 @@ class PaymentHistoryScreen extends ConsumerWidget {
                       return Container(
                         padding: const EdgeInsets.all(SphereSpacing.x20),
                         decoration: BoxDecoration(
-                          color: SphereColors.surfaceElev1,
+                          color: context.sc.surfaceElev1,
                           borderRadius: SphereRadius.cardRect,
-                          border: Border.all(color: SphereColors.borderSubtle),
+                          border: Border.all(color: context.sc.borderSubtle),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +116,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
                                   .textTheme
                                   .titleMedium
                                   ?.copyWith(
-                                    color: SphereColors.onSurface,
+                                    color: context.sc.onSurface,
                                     fontWeight: FontWeight.w700,
                                   ),
                             ),
@@ -127,7 +127,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
                                   .textTheme
                                   .bodyMedium
                                   ?.copyWith(
-                                    color: SphereColors.onSurfaceMuted,
+                                    color: context.sc.onSurfaceMuted,
                                   ),
                             ),
                           ],
@@ -146,7 +146,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
                       ],
                     );
                   },
-                  loading: () => const Padding(
+                  loading: () => Padding(
                     padding: EdgeInsets.symmetric(vertical: 32),
                     child: Center(
                       child: SizedBox(
@@ -155,7 +155,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor:
-                              AlwaysStoppedAnimation(SphereColors.primary),
+                              AlwaysStoppedAnimation(context.sc.primary),
                         ),
                       ),
                     ),
@@ -165,15 +165,15 @@ class PaymentHistoryScreen extends ConsumerWidget {
                       Text(
                         'Could not load your payments.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: SphereColors.onSurfaceMuted,
+                              color: context.sc.onSurfaceMuted,
                             ),
                       ),
                       const SizedBox(height: SphereSpacing.x12),
                       TextButton(
                         onPressed: () => ref.invalidate(myPaymentHistoryProvider),
-                        child: const Text(
+                        child: Text(
                           'Retry',
-                          style: TextStyle(color: SphereColors.primary),
+                          style: TextStyle(color: context.sc.primary),
                         ),
                       ),
                     ],
@@ -206,25 +206,25 @@ class _PaymentRow extends StatelessWidget {
     }
   }
 
-  Color get _statusColor {
+  Color _statusColor(BuildContext context) {
     switch (record.status) {
       case PaymentStatusKind.cleared:
-        return SphereColors.success;
+        return context.sc.success;
       case PaymentStatusKind.pendingApproval:
-        return SphereColors.warning;
+        return context.sc.warning;
       case PaymentStatusKind.refunded:
-        return SphereColors.onSurfaceMuted;
+        return context.sc.onSurfaceMuted;
       case PaymentStatusKind.failed:
-        return SphereColors.danger;
+        return context.sc.danger;
       case PaymentStatusKind.unknown:
-        return SphereColors.onSurfaceMuted;
+        return context.sc.onSurfaceMuted;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: SphereColors.surfaceElev1,
+      color: context.sc.surfaceElev1,
       borderRadius: SphereRadius.cardRect,
       child: InkWell(
         onTap: () => context.push('/profile/payments/${record.id}'),
@@ -233,7 +233,7 @@ class _PaymentRow extends StatelessWidget {
           padding: const EdgeInsets.all(SphereSpacing.x16),
           decoration: BoxDecoration(
             borderRadius: SphereRadius.cardRect,
-            border: Border.all(color: SphereColors.borderSubtle),
+            border: Border.all(color: context.sc.borderSubtle),
           ),
           child: Row(
             children: [
@@ -243,10 +243,10 @@ class _PaymentRow extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: SphereColors.primary.withValues(alpha: 0.12),
+                  color: context.sc.primary.withValues(alpha: 0.12),
                 ),
                 child: Icon(_methodIcon,
-                    color: SphereColors.primary, size: 20),
+                    color: context.sc.primary, size: 20),
               ),
               const SizedBox(width: SphereSpacing.x12),
               Expanded(
@@ -257,7 +257,7 @@ class _PaymentRow extends StatelessWidget {
                       record.programName ?? record.method.label,
                       style:
                           Theme.of(context).textTheme.titleMedium?.copyWith(
-                                color: SphereColors.onSurface,
+                                color: context.sc.onSurface,
                                 fontWeight: FontWeight.w700,
                               ),
                       maxLines: 1,
@@ -267,7 +267,7 @@ class _PaymentRow extends StatelessWidget {
                     Text(
                       '${formatDate(record.createdAt)} · ${record.method.label}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: SphereColors.onSurfaceMuted,
+                            color: context.sc.onSurfaceMuted,
                           ),
                     ),
                   ],
@@ -281,7 +281,7 @@ class _PaymentRow extends StatelessWidget {
                     record.displayAmount,
                     style:
                         Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: SphereColors.onSurface,
+                              color: context.sc.onSurface,
                               fontWeight: FontWeight.w700,
                             ),
                   ),
@@ -290,13 +290,13 @@ class _PaymentRow extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: _statusColor.withValues(alpha: 0.18),
+                      color: _statusColor(context).withValues(alpha: 0.18),
                       borderRadius: SphereRadius.pillRect,
                     ),
                     child: Text(
                       record.status.label,
                       style: TextStyle(
-                        color: _statusColor,
+                        color: _statusColor(context),
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.6,

@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '../../../../app/theme/sphere_colors.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 
 class SphereProgressRing extends StatefulWidget {
   const SphereProgressRing({
@@ -51,6 +51,8 @@ class _SphereProgressRingState extends State<SphereProgressRing>
             painter: _RingPainter(
               progress: widget.value * t,
               strokeWidth: widget.strokeWidth,
+              trackColor: context.sc.borderSubtle,
+              progressColor: context.sc.primary,
             ),
             child: Center(child: widget.child),
           );
@@ -61,9 +63,16 @@ class _SphereProgressRingState extends State<SphereProgressRing>
 }
 
 class _RingPainter extends CustomPainter {
-  _RingPainter({required this.progress, required this.strokeWidth});
+  _RingPainter({
+    required this.progress,
+    required this.strokeWidth,
+    required this.trackColor,
+    required this.progressColor,
+  });
   final double progress;
   final double strokeWidth;
+  final Color trackColor;
+  final Color progressColor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -73,13 +82,13 @@ class _RingPainter extends CustomPainter {
     final trackPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
-      ..color = SphereColors.borderSubtle;
+      ..color = trackColor;
 
     final progressPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round
-      ..color = SphereColors.primary;
+      ..color = progressColor;
 
     canvas.drawCircle(center, radius, trackPaint);
     if (progress > 0) {
@@ -95,5 +104,8 @@ class _RingPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_RingPainter old) =>
-      old.progress != progress || old.strokeWidth != strokeWidth;
+      old.progress != progress ||
+      old.strokeWidth != strokeWidth ||
+      old.trackColor != trackColor ||
+      old.progressColor != progressColor;
 }
