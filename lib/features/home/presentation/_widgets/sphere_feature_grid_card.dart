@@ -6,7 +6,8 @@ import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../../app/theme/sphere_radius.dart';
 import '../../../../app/theme/sphere_spacing.dart';
 
-/// A glassmorphism-styled feature card intended for use in a grid layout.
+const double _kCardBlur = 20.0;
+
 class SphereFeatureGridCard extends StatelessWidget {
   const SphereFeatureGridCard({
     super.key,
@@ -32,7 +33,7 @@ class SphereFeatureGridCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: SphereRadius.cardRect,
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+        filter: ImageFilter.blur(sigmaX: _kCardBlur, sigmaY: _kCardBlur),
         child: GestureDetector(
           onTap: loading ? null : onTap,
           child: Container(
@@ -48,16 +49,16 @@ class SphereFeatureGridCard extends StatelessWidget {
                   color: accentColor.withValues(alpha: 0.40),
                 ),
                 right: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.08),
+                  color: context.sc.onSurface.withValues(alpha: 0.08),
                 ),
                 bottom: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.08),
+                  color: context.sc.onSurface.withValues(alpha: 0.08),
                 ),
               ),
               boxShadow: [
                 BoxShadow(
                   color: accentColor.withValues(alpha: 0.15),
-                  blurRadius: 20,
+                  blurRadius: _kCardBlur,
                 ),
               ],
             ),
@@ -66,7 +67,7 @@ class SphereFeatureGridCard extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  size: 24,
+                  size: SphereSpacing.x24,
                   color: accentColor,
                 ),
                 const Spacer(),
@@ -102,7 +103,6 @@ class SphereFeatureGridCard extends StatelessWidget {
   }
 }
 
-/// A thin animated progress bar for use as a [metricWidget] inside [SphereFeatureGridCard].
 class SphereGridProgressBar extends StatelessWidget {
   const SphereGridProgressBar({
     super.key,
@@ -122,7 +122,7 @@ class SphereGridProgressBar extends StatelessWidget {
       curve: Curves.easeOut,
       builder: (context, animatedValue, _) {
         return ClipRRect(
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: SphereRadius.pillRect,
           child: LinearProgressIndicator(
             value: animatedValue,
             minHeight: 4,
