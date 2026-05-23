@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
-
-import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
-import '../../../app/theme/sphere_spacing.dart';
-import 'sphere_onboarding_illustration.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -14,125 +10,360 @@ class OnboardingScreen extends ConsumerStatefulWidget {
   ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
+    with TickerProviderStateMixin {
   final _controller = PageController();
   int _index = 0;
+  late AnimationController _fadeCtrl;
 
   static const _slides = [
-    (
-      title: 'Welcome to SportSphere',
-      body: 'One app for training, scheduling, and analytics across your academy.',
+    _Slide(
+      bgWord: 'TRAIN',
+      headline: 'Train Smart,\nGrow Faster',
+      subtitle: 'AI-powered drills and real-time feedback built for serious athletes.',
+      image: 'assets/onboarding/player1.jpg',
+      accent: Color(0xFFD6FF4B),
     ),
-    (
-      title: 'Train smart with Sphere AI',
-      body: 'Drill analyzer in your phone. An AI coach that gets your game.',
+    _Slide(
+      bgWord: 'PERFORM',
+      headline: 'Track Every\nSession Live',
+      subtitle: 'Coaches rate your performance. Your card improves in real time.',
+      image: 'assets/onboarding/player2.jpg',
+      accent: Color(0xFFB3F0FF),
     ),
-    (
-      title: 'One brain. Two interfaces.',
-      body: 'Player or staff, everything in one app.',
+    _Slide(
+      bgWord: 'EXCEL',
+      headline: 'One App.\nTwo Roles.',
+      subtitle: 'Player or coach — everything you need is right here.',
+      image: 'assets/onboarding/player3.jpg',
+      accent: Color(0xFFFFD6A5),
     ),
   ];
 
-  static const _slideIcons = [
-    LucideIcons.zap,
-    LucideIcons.sparkles,
-    LucideIcons.users,
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _fadeCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+    );
+    _fadeCtrl.forward();
+  }
 
   @override
   void dispose() {
     _controller.dispose();
+    _fadeCtrl.dispose();
+    super.dispose();
+  }
+
+  void _next() {
+    if (_index == _slides.length - 1) {
+      context.go('/role-pick');
+    } else {
+      _fadeCtrl.reverse().then((_) {
+        _controller.nextPage(
+          duration: const Duration(milliseconds: 320),
+          curve: Curves.easeOutCubic,
+        );
+        _fadeCtrl.forward();
+      });
+    }
+  }
+
+  void _skip() => context.go('/role-pick');
+
+  @override
+  Widget build(BuildContext context) {
+    final slide = _slides[_index];
+    final isLast = _index == _slides.length - 1;
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF2F2EF),
+        body: Stack(
+          children: [
+            // ── Page content ────────────────────────────────────────────────
+            PageView.builder(
+              controller: _controller,
+              itemCount: _slides.length,
+              onPageChanged: (i) => setState(() => _index = i),
+              itemBuilder: (context, i) => _SlidePage(slide: _slides[i]),
+            ),
+
+            // ── Bottom overlay (dots + button) ───────────────────────────
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: _BottomPanel(
+                slide: slide,
+                index: _index,
+                total: _slides.length,
+                isLast: isLast,
+                onNext: _next,
+                onSkip: _skip,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── SLIDE DATA ───────────────────────────────────────────────────────────────
+
+class _Slide {
+  const _Slide({
+    required this.bgWord,
+    required this.headline,
+    required this.subtitle,
+    required this.image,
+    required this.accent,
+  });
+  final String bgWord;
+  final String headline;
+  final String subtitle;
+  final String image;
+  final Color accent;
+}
+
+// ─── SLIDE PAGE ───────────────────────────────────────────────────────────────
+
+class _SlidePage extends StatelessWidget {
+  const _SlidePage({required this.slide});
+  final _Slide slide;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    final bottomPanelH = 240.0;
+
+    return Container(
+      color: const Color(0xFFF2F2EF),
+      child: Stack(
+        children: [
+          // ── Giant background word ──────────────────────────────────────
+          Positioned(
+            top: size.height * 0.12,
+            left: -24,
+            right: -24,
+            child: Text(
+              slide.bgWord,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Lexend',
+                fontSize: size.width * 0.32,
+                fontWeight: FontWeight.w900,
+                color: slide.accent.withValues(alpha: 0.55),
+                letterSpacing: -4,
+                height: 1.0,
+              ),
+            ),
+          ),
+
+          // ── Athlete photo (takes upper 60% of screen) ─────────────────
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: bottomPanelH - 40,
+            child: Image.asset(
+              slide.image,
+              fit: BoxFit.contain,
+              alignment: Alignment.bottomCenter,
+              errorBuilder: (ctx, err, st) => const SizedBox.shrink(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── BOTTOM PANEL ─────────────────────────────────────────────────────────────
+
+class _BottomPanel extends StatelessWidget {
+  const _BottomPanel({
+    required this.slide,
+    required this.index,
+    required this.total,
+    required this.isLast,
+    required this.onNext,
+    required this.onSkip,
+  });
+  final _Slide slide;
+  final int index;
+  final int total;
+  final bool isLast;
+  final VoidCallback onNext;
+  final VoidCallback onSkip;
+
+  @override
+  Widget build(BuildContext context) {
+    final bottom = MediaQuery.of(context).padding.bottom;
+
+    return Container(
+      color: const Color(0xFFF2F2EF),
+      padding: EdgeInsets.fromLTRB(28, 20, 28, bottom + 24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Headline
+          Text(
+            slide.headline,
+            style: const TextStyle(
+              fontFamily: 'Lexend',
+              fontSize: 34,
+              fontWeight: FontWeight.w900,
+              color: Color(0xFF0A0A0A),
+              height: 1.1,
+              letterSpacing: -0.5,
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          // Subtitle
+          Text(
+            slide.subtitle,
+            style: const TextStyle(
+              fontFamily: 'Lexend',
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+              color: Color(0xFF888888),
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Dots + Skip row
+          Row(
+            children: [
+              // Progress dots
+              for (var i = 0; i < total; i++)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 260),
+                  curve: Curves.easeOut,
+                  margin: const EdgeInsets.only(right: 6),
+                  width: i == index ? 22 : 7,
+                  height: 7,
+                  decoration: BoxDecoration(
+                    color: i == index
+                        ? const Color(0xFF0A0A0A)
+                        : const Color(0xFFCCCCCC),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              const Spacer(),
+              if (!isLast)
+                GestureDetector(
+                  onTap: onSkip,
+                  child: const Text(
+                    'Skip',
+                    style: TextStyle(
+                      fontFamily: 'Lexend',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF999999),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // CTA button
+          _PillButton(
+            label: isLast ? 'Get Started' : 'Next',
+            accent: slide.accent,
+            onTap: onNext,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── PILL BUTTON ──────────────────────────────────────────────────────────────
+
+class _PillButton extends StatefulWidget {
+  const _PillButton({
+    required this.label,
+    required this.accent,
+    required this.onTap,
+  });
+  final String label;
+  final Color accent;
+  final VoidCallback onTap;
+
+  @override
+  State<_PillButton> createState() => _PillButtonState();
+}
+
+class _PillButtonState extends State<_PillButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _press;
+  late Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _press = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 90),
+      lowerBound: 0.96,
+      upperBound: 1.0,
+      value: 1.0,
+    );
+    _scale = _press;
+  }
+
+  @override
+  void dispose() {
+    _press.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLast = _index == _slides.length - 1;
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: PageView.builder(
-                controller: _controller,
-                itemCount: _slides.length,
-                onPageChanged: (i) => setState(() => _index = i),
-                itemBuilder: (context, i) {
-                  final s = _slides[i];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x24),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SphereOnboardingIllustration(icon: _slideIcons[i]),
-                        const SizedBox(height: SphereSpacing.x32),
-                        Text(
-                          s.title,
-                          style: Theme.of(context).textTheme.headlineMedium,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: SphereSpacing.x12),
-                        Text(
-                          s.body,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: context.sc.onSurfaceMuted,
-                              ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  );
-                },
+    return GestureDetector(
+      onTapDown: (_) => _press.reverse(),
+      onTapUp: (_) {
+        _press.forward();
+        widget.onTap();
+      },
+      onTapCancel: () => _press.forward(),
+      child: ScaleTransition(
+        scale: _scale,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+          height: 58,
+          decoration: BoxDecoration(
+            color: widget.accent,
+            borderRadius: BorderRadius.circular(999),
+            boxShadow: [
+              BoxShadow(
+                color: widget.accent.withValues(alpha: 0.35),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
               ),
+            ],
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            widget.label,
+            style: const TextStyle(
+              fontFamily: 'Lexend',
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF0A0A0A),
+              letterSpacing: 0.2,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: SphereSpacing.x24,
-                vertical: SphereSpacing.x16,
-              ),
-              child: Row(
-                children: [
-                  for (var i = 0; i < _slides.length; i++)
-                    Container(
-                      margin: const EdgeInsets.only(right: 6),
-                      width: i == _index ? 24 : 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: i == _index
-                            ? context.sc.primary
-                            : context.sc.borderSubtle,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () => context.go('/role-pick'),
-                    child: Text(
-                      isLast ? '' : 'Skip',
-                      style: TextStyle(color: context.sc.onSurfaceMuted),
-                    ),
-                  ),
-                  const SizedBox(width: SphereSpacing.x8),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (isLast) {
-                        context.go('/role-pick');
-                      } else {
-                        _controller.nextPage(
-                          duration: const Duration(milliseconds: 280),
-                          curve: Curves.easeOutCubic,
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(120, 48),
-                    ),
-                    child: Text(isLast ? 'Get started' : 'Next'),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
