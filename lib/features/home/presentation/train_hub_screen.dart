@@ -56,11 +56,11 @@ class TrainHubScreen extends ConsumerWidget {
                 const SizedBox(height: SphereSpacing.x24),
 
                 // Row 1: Skills + Strength
-                SphereEntrance(
-                  delayMs: 80,
-                  child: Row(
-                    children: [
-                      Expanded(
+                Row(
+                  children: [
+                    Expanded(
+                      child: SphereEntrance(
+                        delayMs: 80,
                         child: SizedBox(
                           height: 156,
                           child: SphereFeatureGridCard(
@@ -76,24 +76,24 @@ class TrainHubScreen extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: SphereSpacing.x12),
-                      Expanded(
-                        child: SphereEntrance(
-                          delayMs: 140,
-                          child: SizedBox(
-                            height: 156,
-                            child: SphereFeatureGridCard(
-                              title: 'Strength',
-                              subtitle: 'Gym & conditioning',
-                              icon: LucideIcons.dumbbell,
-                              accentColor: const Color(0xFFF97316),
-                              onTap: () => context.push('/train/strength'),
-                            ),
+                    ),
+                    const SizedBox(width: SphereSpacing.x12),
+                    Expanded(
+                      child: SphereEntrance(
+                        delayMs: 140,
+                        child: SizedBox(
+                          height: 156,
+                          child: SphereFeatureGridCard(
+                            title: 'Strength',
+                            subtitle: 'Gym & conditioning',
+                            icon: LucideIcons.dumbbell,
+                            accentColor: const Color(0xFFF97316),
+                            onTap: () => context.push('/train/strength'),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: SphereSpacing.x12),
 
