@@ -19,12 +19,14 @@ class SpherePlayerHeroCard extends StatelessWidget {
     this.onTap,
     this.greeting,
     this.firstName,
+    this.clubLogoUrl,
   });
 
   final PlayerCardData card;
   final VoidCallback? onTap;
   final String? greeting;
   final String? firstName;
+  final String? clubLogoUrl;
 
   Color get _tierColor => switch (card.rarityTier) {
         RarityTier.gold => const Color(0xFFFFD700),
@@ -59,7 +61,7 @@ class SpherePlayerHeroCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _ClubRow(card: card),
+                  _ClubRow(card: card, clubLogoUrl: clubLogoUrl),
                   const SizedBox(height: 8),
                   Text(
                     card.playerName.toUpperCase(),
@@ -317,8 +319,9 @@ class _PhotoFallback extends StatelessWidget {
 // ─── CLUB ROW ─────────────────────────────────────────────────────────────────
 
 class _ClubRow extends StatelessWidget {
-  const _ClubRow({required this.card});
+  const _ClubRow({required this.card, this.clubLogoUrl});
   final PlayerCardData card;
+  final String? clubLogoUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -332,9 +335,14 @@ class _ClubRow extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: _kDarkBorder),
           ),
-          child: const Center(
-            child: Icon(LucideIcons.shield, size: 16, color: Colors.white38),
-          ),
+          clipBehavior: Clip.hardEdge,
+          child: clubLogoUrl != null
+              ? Image.network(
+                  clubLogoUrl!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (ctx, e, st) => const _SphereIconFallback(),
+                )
+              : const _SphereIconFallback(),
         ),
         const SizedBox(width: 10),
         Expanded(
@@ -369,6 +377,18 @@ class _ClubRow extends StatelessWidget {
       ],
     );
   }
+}
+
+// ─── SPHERE ICON FALLBACK ─────────────────────────────────────────────────────
+
+class _SphereIconFallback extends StatelessWidget {
+  const _SphereIconFallback();
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(6),
+        child: Image.asset('assets/brand/sphere_icon.png', fit: BoxFit.contain),
+      );
 }
 
 // ─── POSITION ROW ─────────────────────────────────────────────────────────────

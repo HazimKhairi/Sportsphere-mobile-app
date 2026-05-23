@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../auth/presentation/auth_providers.dart';
+import '../../club/presentation/club_providers.dart';
 import '../../player_card/presentation/player_card_providers.dart';
 import '_widgets/sphere_activity_timeline_item.dart';
 import '_widgets/sphere_entrance.dart';
@@ -42,6 +43,7 @@ class PlayerHomeScreen extends ConsumerWidget {
     final streakAsync = ref.watch(playerStreakProvider);
     final activityAsync = ref.watch(activityTimelineProvider);
     final cardAsync = ref.watch(playerCardProvider);
+    final clubLogoUrl = ref.watch(myClubProvider).valueOrNull?.logoUrl;
 
     return SafeArea(
       bottom: false,
@@ -58,6 +60,7 @@ class PlayerHomeScreen extends ConsumerWidget {
                   card: data.card,
                   greeting: _greeting(),
                   firstName: firstName,
+                  clubLogoUrl: clubLogoUrl,
                   onTap: () => context.push('/player-card'),
                 ),
                 loading: () => _CardShimmer(
