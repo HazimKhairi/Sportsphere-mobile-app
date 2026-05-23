@@ -699,8 +699,8 @@ class _ProfessionalTab extends StatelessWidget {
           ),
         ),
         _gap,
-        const _SectionLabel('SIJIL & LESEN'),
-        const _Label('Certificates & Licences'),
+        const _SectionLabel('CERTIFICATES & LICENCES'),
+        const _Label('Upload documents'),
         const SizedBox(height: 4),
         _CertGrid(
           urls: certUrls,
