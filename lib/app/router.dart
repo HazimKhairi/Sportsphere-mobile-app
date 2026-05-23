@@ -41,6 +41,8 @@ import '../features/splash/presentation/splash_screen.dart';
 import '../features/approvals/presentation/approvals_screen.dart';
 import '../features/roster/presentation/player_detail_screen.dart';
 import '../features/roster/presentation/roster_screen.dart';
+import '../features/scout/presentation/scout_edit_screen.dart';
+import '../features/scout/presentation/scout_screen.dart';
 import '../features/sphere_ai/presentation/sphere_ai_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -252,6 +254,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/sphere-ai',
             builder: (_, _) => const SphereAiScreen(),
+          ),
+          GoRoute(
+            path: '/scout',
+            builder: (_, _) => const ScoutScreen(),
+          ),
+          GoRoute(
+            path: '/scout/edit',
+            builder: (_, _) => const ScoutEditScreen(),
           ),
           GoRoute(
             path: '/staff/roster',

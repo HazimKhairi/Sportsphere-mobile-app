@@ -113,6 +113,11 @@ class ProfileScreen extends ConsumerWidget {
                           GoRouter.of(context).push('/profile/achievements'),
                     ),
                     ProfileRow(
+                      icon: LucideIcons.searchCheck,
+                      label: 'Scout Profile',
+                      onTap: () => GoRouter.of(context).push('/scout'),
+                    ),
+                    ProfileRow(
                       icon: LucideIcons.activity,
                       label: 'Body composition',
                       onTap: () => GoRouter.of(context)

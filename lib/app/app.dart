@@ -7,7 +7,6 @@ import '../features/notifications/presentation/fcm_providers.dart';
 import '../features/role_pick/presentation/role_providers.dart';
 import 'router.dart';
 import 'theme/sphere_theme.dart';
-import 'theme/theme_provider.dart';
 
 class SphereApp extends ConsumerStatefulWidget {
   const SphereApp({super.key});
@@ -22,14 +21,12 @@ class _SphereAppState extends ConsumerState<SphereApp> {
     super.initState();
     Future.microtask(() {
       ref.read(selectedRoleProvider.notifier).load();
-      ref.read(themeModeNotifierProvider.notifier).load();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
-    final themeMode = ref.watch(themeModeNotifierProvider);
 
     ref.listen<AsyncValue<AppUser?>>(currentUserProvider, (prev, next) {
       next.whenData((user) {
@@ -43,8 +40,7 @@ class _SphereAppState extends ConsumerState<SphereApp> {
       title: 'SportSphere',
       debugShowCheckedModeBanner: false,
       theme: buildSphereLightTheme(),
-      darkTheme: buildSphereTheme(),
-      themeMode: themeMode,
+      themeMode: ThemeMode.light,
       routerConfig: router,
     );
   }
