@@ -98,10 +98,14 @@ class _PlayerDetailContent extends StatelessWidget {
             child: _GradientHeader(),
           ),
           // Back button
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(SphereSpacing.x16),
-              child: _BackButton(onPressed: onBack),
+          Positioned(
+            top: 0,
+            left: 0,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(SphereSpacing.x16),
+                child: _BackButton(onPressed: onBack),
+              ),
             ),
           ),
           // Main scrollable content (below fold)
