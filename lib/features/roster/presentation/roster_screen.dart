@@ -118,6 +118,14 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                             ),
                         textAlign: TextAlign.center,
                       ),
+                      const SizedBox(height: 8),
+                      Text(
+                        e.toString(),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: SphereColors.danger,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
                       const SizedBox(height: SphereSpacing.x16),
                       TextButton(
                         onPressed: () =>

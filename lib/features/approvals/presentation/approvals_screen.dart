@@ -264,7 +264,6 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                                       .notifier)
                                   .reject(widget.payment.id,
                                       controller.text.trim());
-                              controller.dispose();
                               if (sheetCtx.mounted) {
                                 Navigator.of(sheetCtx).pop();
                               }
@@ -317,7 +316,7 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
           );
         },
       ),
-    );
+    ).then((_) => controller.dispose());
   }
 
   @override
