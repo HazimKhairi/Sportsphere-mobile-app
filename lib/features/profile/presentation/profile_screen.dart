@@ -83,51 +83,53 @@ class ProfileScreen extends ConsumerWidget {
                       label: 'Edit profile',
                       onTap: () => GoRouter.of(context).push('/profile/edit'),
                     ),
-                    ProfileRow(
-                      icon: LucideIcons.layoutGrid,
-                      label: 'Browse programs',
-                      onTap: () => GoRouter.of(context).push('/programs'),
-                    ),
-                    ProfileRow(
-                      icon: LucideIcons.receipt,
-                      label: 'Payment history',
-                      onTap: () =>
-                          GoRouter.of(context).push('/profile/payments'),
-                    ),
-                    ProfileRow(
-                      icon: LucideIcons.gift,
-                      label: 'Rewards',
-                      onTap: () =>
-                          GoRouter.of(context).push('/profile/rewards'),
-                    ),
-                    ProfileRow(
-                      icon: LucideIcons.star,
-                      label: 'Points & History',
-                      onTap: () =>
-                          GoRouter.of(context).push('/profile/points'),
-                    ),
-                    ProfileRow(
-                      icon: LucideIcons.award,
-                      label: 'Achievements',
-                      onTap: () =>
-                          GoRouter.of(context).push('/profile/achievements'),
-                    ),
-                    ProfileRow(
-                      icon: LucideIcons.idCard,
-                      label: 'My Player Card',
-                      onTap: () => GoRouter.of(context).push('/player-card'),
-                    ),
-                    ProfileRow(
-                      icon: LucideIcons.searchCheck,
-                      label: 'Scout Profile',
-                      onTap: () => GoRouter.of(context).push('/scout'),
-                    ),
-                    ProfileRow(
-                      icon: LucideIcons.activity,
-                      label: 'Body composition',
-                      onTap: () => GoRouter.of(context)
-                          .push('/profile/body-composition'),
-                    ),
+                    if (role == AppRole.player) ...[
+                      ProfileRow(
+                        icon: LucideIcons.layoutGrid,
+                        label: 'Browse programs',
+                        onTap: () => GoRouter.of(context).push('/programs'),
+                      ),
+                      ProfileRow(
+                        icon: LucideIcons.receipt,
+                        label: 'Payment history',
+                        onTap: () =>
+                            GoRouter.of(context).push('/profile/payments'),
+                      ),
+                      ProfileRow(
+                        icon: LucideIcons.gift,
+                        label: 'Rewards',
+                        onTap: () =>
+                            GoRouter.of(context).push('/profile/rewards'),
+                      ),
+                      ProfileRow(
+                        icon: LucideIcons.star,
+                        label: 'Points & History',
+                        onTap: () =>
+                            GoRouter.of(context).push('/profile/points'),
+                      ),
+                      ProfileRow(
+                        icon: LucideIcons.award,
+                        label: 'Achievements',
+                        onTap: () =>
+                            GoRouter.of(context).push('/profile/achievements'),
+                      ),
+                      ProfileRow(
+                        icon: LucideIcons.idCard,
+                        label: 'My Player Card',
+                        onTap: () => GoRouter.of(context).push('/player-card'),
+                      ),
+                      ProfileRow(
+                        icon: LucideIcons.searchCheck,
+                        label: 'Scout Profile',
+                        onTap: () => GoRouter.of(context).push('/scout'),
+                      ),
+                      ProfileRow(
+                        icon: LucideIcons.activity,
+                        label: 'Body composition',
+                        onTap: () => GoRouter.of(context)
+                            .push('/profile/body-composition'),
+                      ),
+                    ],
                     ProfileRow(
                       icon: LucideIcons.shield,
                       label: 'My Club',
