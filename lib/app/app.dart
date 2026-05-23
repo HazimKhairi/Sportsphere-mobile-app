@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,12 +19,45 @@ class SphereApp extends ConsumerStatefulWidget {
 }
 
 class _SphereAppState extends ConsumerState<SphereApp> {
+  StreamSubscription<RemoteMessage>? _fcmSub;
+
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
       ref.read(selectedRoleProvider.notifier).load();
     });
+    _initFcmHandlers();
+  }
+
+  void _initFcmHandlers() {
+    // Foreground messages — show an in-app snackbar with a tap-to-scan action.
+    _fcmSub = FirebaseMessaging.onMessage.listen(_handleMessage);
+
+    // App opened from a background notification tap.
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+
+    // App launched from a terminated state via notification.
+    FirebaseMessaging.instance.getInitialMessage().then((msg) {
+      if (msg != null) _handleMessage(msg);
+    });
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    final data = message.data;
+    final type = data['type'] as String?;
+    final sessionId = data['sessionId'] as String?;
+
+    if (type == 'session_start' && sessionId != null && sessionId.isNotEmpty) {
+      final router = ref.read(routerProvider);
+      router.push('/qr-scan/$sessionId');
+    }
+  }
+
+  @override
+  void dispose() {
+    _fcmSub?.cancel();
+    super.dispose();
   }
 
   @override

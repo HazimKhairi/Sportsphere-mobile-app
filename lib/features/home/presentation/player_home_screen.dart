@@ -9,6 +9,7 @@ import '_widgets/sphere_activity_timeline_item.dart';
 import '_widgets/sphere_drill_of_day_card.dart';
 import '_widgets/sphere_entrance.dart';
 import '_widgets/sphere_hero_gradient.dart';
+import '_widgets/session_live_banner.dart';
 import '_widgets/sphere_section_label.dart';
 import '_widgets/sphere_streak_card.dart';
 import 'player_home_providers.dart';
@@ -57,6 +58,10 @@ class PlayerHomeScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SphereEntrance(
+                  delayMs: 0,
+                  child: SessionLiveBanner(),
+                ),
                 SphereEntrance(
                   delayMs: 0,
                   child: Row(

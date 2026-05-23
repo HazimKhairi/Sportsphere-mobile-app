@@ -12,11 +12,8 @@ class CheckInRepository {
   }) async {
     try {
       await _dio.post<Map<String, dynamic>>(
-        '/api/attendance/check-in',
-        data: {
-          'sessionId': sessionId,
-          'qrPayload': qrPayload,
-        },
+        '/api/player-app/attendance/check-in',
+        data: {'sessionId': sessionId},
       );
       return CheckInResult.success;
     } on DioException catch (e) {
