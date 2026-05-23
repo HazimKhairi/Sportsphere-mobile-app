@@ -29,16 +29,20 @@ class ScheduleRepository {
     required DateTime from,
     required DateTime to,
   }) {
+    // arrayContains + range filter needs a composite index — filter attendees
+    // client-side instead to reuse the existing startTime single-field index.
     return _db
         .collection('clubs')
         .doc(clubId)
         .collection('training_sessions')
-        .where('attendees', arrayContains: playerId)
         .where('startTime', isGreaterThanOrEqualTo: Timestamp.fromDate(from))
         .where('startTime', isLessThan: Timestamp.fromDate(to))
         .orderBy('startTime')
         .snapshots()
-        .map((snap) => snap.docs.map(_fromDoc).toList());
+        .map((snap) => snap.docs
+            .map(_fromDoc)
+            .where((s) => s.attendees.contains(playerId))
+            .toList());
   }
 
   Future<TrainingSession?> sessionById({

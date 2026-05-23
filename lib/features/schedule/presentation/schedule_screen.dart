@@ -223,8 +223,8 @@ class _DaySessionsList extends StatelessWidget {
           ),
         ),
       ),
-      error: (_, _) => Text(
-        'Couldn’t load sessions.',
+      error: (e, _) => Text(
+        ‘Couldn’t load sessions. $e’,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: context.sc.onSurfaceMuted,
             ),
