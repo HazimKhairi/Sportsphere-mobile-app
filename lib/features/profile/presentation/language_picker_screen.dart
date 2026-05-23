@@ -10,8 +10,8 @@ import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 
 const _languages = [
-  ('en', 'English', 'EN'),
-  ('ms', 'Bahasa Malaysia', 'BM'),
+  ('en', 'English', '🇬🇧'),
+  ('ms', 'Bahasa Malaysia', '🇲🇾'),
 ];
 
 class LanguagePickerScreen extends StatefulWidget {
@@ -207,14 +207,7 @@ class _LangOption extends StatelessWidget {
               ),
               child: Text(
                 badge,
-                style: TextStyle(
-                  color: selected
-                      ? SphereColors.primary
-                      : SphereColors.onSurfaceMuted,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 11,
-                  letterSpacing: 0.5,
-                ),
+                style: const TextStyle(fontSize: 20),
               ),
             ),
             const SizedBox(width: SphereSpacing.x12),

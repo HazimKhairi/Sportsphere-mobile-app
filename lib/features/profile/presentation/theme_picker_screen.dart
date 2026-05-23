@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../app/theme/sphere_colors.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../../../app/theme/theme_provider.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 
-class ThemePickerScreen extends StatelessWidget {
+class ThemePickerScreen extends ConsumerWidget {
   const ThemePickerScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentMode = ref.watch(themeModeNotifierProvider);
+
     return Stack(
       children: [
         const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
@@ -75,63 +79,31 @@ class ThemePickerScreen extends StatelessWidget {
                         _ThemeOption(
                           icon: LucideIcons.moon,
                           label: 'Dark',
-                          subtitle: 'Easy on the eyes, always on',
-                          selected: true,
-                          onTap: () {},
+                          subtitle: 'Easy on the eyes',
+                          selected: currentMode == ThemeMode.dark,
+                          onTap: () => ref
+                              .read(themeModeNotifierProvider.notifier)
+                              .setMode(ThemeMode.dark),
                         ),
                         const Divider(color: SphereColors.borderSubtle, height: 1),
                         _ThemeOption(
                           icon: LucideIcons.sun,
                           label: 'Light',
                           subtitle: 'Bright and clean',
-                          selected: false,
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Light theme coming in next update.'),
-                              ),
-                            );
-                          },
+                          selected: currentMode == ThemeMode.light,
+                          onTap: () => ref
+                              .read(themeModeNotifierProvider.notifier)
+                              .setMode(ThemeMode.light),
                         ),
                         const Divider(color: SphereColors.borderSubtle, height: 1),
                         _ThemeOption(
                           icon: LucideIcons.smartphone,
                           label: 'System',
                           subtitle: 'Follows your device setting',
-                          selected: false,
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('System theme coming in next update.'),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: SphereSpacing.x24),
-                  Container(
-                    padding: const EdgeInsets.all(SphereSpacing.x16),
-                    decoration: BoxDecoration(
-                      color: SphereColors.primary.withValues(alpha: 0.08),
-                      borderRadius: SphereRadius.cardRect,
-                      border: Border.all(
-                          color: SphereColors.primary.withValues(alpha: 0.3)),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(LucideIcons.info,
-                            size: 16, color: SphereColors.primary),
-                        const SizedBox(width: SphereSpacing.x12),
-                        Expanded(
-                          child: Text(
-                            'SportSphere currently uses Dark mode. Light and System themes will be available in the next release.',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(color: SphereColors.primary),
-                          ),
+                          selected: currentMode == ThemeMode.system,
+                          onTap: () => ref
+                              .read(themeModeNotifierProvider.notifier)
+                              .setMode(ThemeMode.system),
                         ),
                       ],
                     ),

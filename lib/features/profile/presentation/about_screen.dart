@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../app/theme/sphere_colors.dart';
 import '../../../app/theme/sphere_radius.dart';
@@ -10,6 +11,17 @@ import '../../home/presentation/_widgets/sphere_section_label.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
+
+  Future<void> _launch(BuildContext context, String url) async {
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not open link.')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +67,7 @@ class AboutScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: SphereSpacing.x32),
-                  // Logo / brand block
+                  // Brand block
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(SphereSpacing.x24),
@@ -75,30 +87,17 @@ class AboutScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
+                        // SportSphere logo — same as onboarding
+                        Image.asset(
+                          'assets/brand/sphere_icon.png',
                           width: 56,
                           height: 56,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: SphereColors.primary.withValues(alpha: 0.18),
-                            border: Border.all(
-                              color: SphereColors.primary.withValues(alpha: 0.4),
-                            ),
-                          ),
-                          child: const Icon(LucideIcons.zap,
-                              color: SphereColors.primary, size: 26),
                         ),
                         const SizedBox(height: SphereSpacing.x16),
-                        Text(
-                          'SportSphere',
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayLarge
-                              ?.copyWith(
-                                color: SphereColors.onSurface,
-                                fontWeight: FontWeight.w800,
-                              ),
+                        Image.asset(
+                          'assets/brand/sphere_wordmark.png',
+                          height: 28,
+                          fit: BoxFit.fitHeight,
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -155,13 +154,15 @@ class AboutScreen extends StatelessWidget {
                         _LinkRow(
                           icon: LucideIcons.fileText,
                           label: 'Terms of Service',
-                          onTap: () {},
+                          onTap: () => _launch(
+                              context, 'https://sprtsphr.app/terms'),
                         ),
                         const Divider(color: SphereColors.borderSubtle, height: 1),
                         _LinkRow(
                           icon: LucideIcons.shield,
                           label: 'Privacy Policy',
-                          onTap: () {},
+                          onTap: () => _launch(
+                              context, 'https://sprtsphr.app/privacy'),
                         ),
                       ],
                     ),

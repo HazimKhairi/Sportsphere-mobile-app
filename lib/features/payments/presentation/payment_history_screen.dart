@@ -160,7 +160,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  error: (_, _) => Column(
+                  error: (e, _) => Column(
                     children: [
                       Text(
                         'Could not load your payments.',

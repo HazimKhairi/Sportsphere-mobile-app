@@ -11,13 +11,31 @@ class PaymentHistoryRepository {
     required String playerId,
     int limit = 10,
   }) {
-    return _db
+    // Merge two streams — documents may use either playerId or userId.
+    final byPlayerId = _db
         .collection('stripe_payments')
         .where('playerId', isEqualTo: playerId)
         .orderBy('createdAt', descending: true)
         .limit(limit)
-        .snapshots()
-        .map((snap) => snap.docs.map(_fromDoc).toList());
+        .snapshots();
+
+    final byUserId = _db
+        .collection('stripe_payments')
+        .where('userId', isEqualTo: playerId)
+        .orderBy('createdAt', descending: true)
+        .limit(limit)
+        .snapshots();
+
+    return byPlayerId.asyncMap((snap1) async {
+      final snap2 = await byUserId.first;
+      final seen = <String>{};
+      final merged = <PaymentRecord>[];
+      for (final doc in [...snap1.docs, ...snap2.docs]) {
+        if (seen.add(doc.id)) merged.add(_fromDoc(doc));
+      }
+      merged.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      return merged.take(limit).toList();
+    });
   }
 
   Future<PaymentRecord?> byId(String id) async {
