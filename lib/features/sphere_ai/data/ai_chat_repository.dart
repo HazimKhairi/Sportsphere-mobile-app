@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
 
@@ -15,18 +14,16 @@ class AiChatRepository {
   AiChatRepository({required Dio dio}) : _dio = dio;
   final Dio _dio;
 
-  /// Streams incremental text deltas as the assistant responds.
-  /// [messages] is the full conversation so far (user + assistant turns).
-  /// Emits ONLY content deltas (not raw SSE events). Completes when the
-  /// server emits `{"event":"done"}`.
+  /// Sends a chat message and returns the reply as a single-item stream.
+  /// Backend returns JSON { reply, suggestedPrompts, ... } — not SSE.
   Stream<String> streamMessage({
     required List<Map<String, String>> messages,
     required String threadId,
     String surface = 'club',
   }) async* {
-    final Response<ResponseBody> res;
+    final Response<Map<String, dynamic>> res;
     try {
-      res = await _dio.post<ResponseBody>(
+      res = await _dio.post<Map<String, dynamic>>(
         '/api/ai/chat',
         data: <String, dynamic>{
           'messages': messages,
@@ -34,9 +31,7 @@ class AiChatRepository {
           'surface': surface,
         },
         options: Options(
-          responseType: ResponseType.stream,
           receiveTimeout: const Duration(minutes: 3),
-          headers: const {'Accept': 'text/event-stream'},
         ),
       );
     } on DioException catch (e) {
@@ -49,30 +44,11 @@ class AiChatRepository {
     final body = res.data;
     if (body == null) return;
 
-    var buffer = '';
-    await for (final chunk in body.stream) {
-      buffer += utf8.decode(chunk, allowMalformed: true);
-      // Split on newlines; keep the trailing incomplete line in buffer.
-      final lines = buffer.split('\n');
-      buffer = lines.removeLast();
-      for (final line in lines) {
-        final trimmed = line.trim();
-        if (trimmed.isEmpty || !trimmed.startsWith('data:')) continue;
-        final jsonStr = trimmed.substring(5).trim();
-        if (jsonStr.isEmpty) continue;
-        try {
-          final obj = jsonDecode(jsonStr);
-          if (obj is Map) {
-            if (obj['event'] == 'done') return;
-            final delta = obj['delta'];
-            if (delta is String && delta.isNotEmpty) {
-              yield delta;
-            }
-          }
-        } catch (_) {
-          // Ignore malformed lines.
-        }
-      }
+    final reply = body['reply'];
+    if (reply is String && reply.isNotEmpty) {
+      yield reply;
+    } else {
+      throw AiChatException('Empty response from Sphere AI');
     }
   }
 }
