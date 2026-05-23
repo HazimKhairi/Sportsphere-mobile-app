@@ -239,34 +239,12 @@ class _NumField extends StatelessWidget {
               ),
         ),
         const SizedBox(height: 6),
-        Container(
-          decoration: BoxDecoration(
-            color: context.sc.surfaceElev1,
-            borderRadius: SphereRadius.pillRect,
-            border: Border.all(color: context.sc.borderSubtle),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-          child: Row(
-            children: [
-              Icon(icon, size: 16, color: context.sc.onSurfaceMuted),
-              const SizedBox(width: 8),
-              Expanded(
-                child: TextField(
-                  controller: controller,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  style: TextStyle(color: context.sc.onSurface),
-                  decoration: InputDecoration(
-                    hintText: '-',
-                    hintStyle: TextStyle(color: context.sc.onSurfaceMuted),
-                    border: InputBorder.none,
-                    isCollapsed: true,
-                    contentPadding: EdgeInsets.symmetric(vertical: 14),
-                  ),
-                ),
-              ),
-            ],
+        TextField(
+          controller: controller,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          decoration: InputDecoration(
+            hintText: '-',
+            prefixIcon: Icon(icon, size: 18),
           ),
         ),
       ],

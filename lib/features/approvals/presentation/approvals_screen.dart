@@ -222,30 +222,12 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                       ),
                 ),
                 const SizedBox(height: 6),
-                Container(
-                  decoration: BoxDecoration(
-                    color: context.sc.surfaceElev2,
-                    borderRadius: SphereRadius.cardRect,
-                    border: Border.all(color: context.sc.borderSubtle),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 4),
-                  child: TextField(
-                    controller: controller,
-                    maxLines: 3,
-                    style:
-                        TextStyle(color: context.sc.onSurface),
-                    onChanged: (_) => setSheetState(() {}),
-                    decoration: InputDecoration(
-                      hintText:
-                          'e.g. Amount does not match program fee.',
-                      hintStyle: TextStyle(
-                          color: context.sc.onSurfaceMuted),
-                      border: InputBorder.none,
-                      isCollapsed: true,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 12),
-                    ),
+                TextField(
+                  controller: controller,
+                  maxLines: 3,
+                  onChanged: (_) => setSheetState(() {}),
+                  decoration: const InputDecoration(
+                    hintText: 'e.g. Amount does not match program fee.',
                   ),
                 ),
                 const SizedBox(height: 20),

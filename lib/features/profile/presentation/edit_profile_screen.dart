@@ -243,33 +243,13 @@ class _SphereTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.sc.surfaceElev1,
-        borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: context.sc.borderSubtle),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x16, vertical: 4),
-      child: Row(
-        children: [
-          Icon(icon, size: 16, color: context.sc.onSurfaceMuted),
-          const SizedBox(width: SphereSpacing.x12),
-          Expanded(
-            child: TextFormField(
-              controller: controller,
-              keyboardType: keyboardType,
-              validator: validator,
-              style: TextStyle(color: context.sc.onSurface),
-              decoration: InputDecoration(
-                hintText: hint,
-                hintStyle: TextStyle(color: context.sc.onSurfaceMuted),
-                border: InputBorder.none,
-                isCollapsed: true,
-                contentPadding: const EdgeInsets.symmetric(vertical: SphereSpacing.x12),
-              ),
-            ),
-          ),
-        ],
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      validator: validator,
+      decoration: InputDecoration(
+        hintText: hint,
+        prefixIcon: Icon(icon, size: 18),
       ),
     );
   }
