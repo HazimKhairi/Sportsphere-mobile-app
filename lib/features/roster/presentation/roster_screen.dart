@@ -225,36 +225,11 @@ class _SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.sc.surfaceElev1,
-        borderRadius: SphereRadius.pillRect,
-        border: Border.all(color: context.sc.borderSubtle),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x16, vertical: 4),
-      child: Row(
-        children: [
-          Icon(
-            LucideIcons.search,
-            size: 16,
-            color: context.sc.onSurfaceMuted,
-          ),
-          const SizedBox(width: SphereSpacing.x8),
-          Expanded(
-            child: TextField(
-              onChanged: onChanged,
-              decoration: InputDecoration(
-                hintText: 'Search players...',
-                border: InputBorder.none,
-                isCollapsed: true,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: SphereSpacing.x12),
-                hintStyle: TextStyle(color: context.sc.onSurfaceMuted),
-              ),
-              style: TextStyle(color: context.sc.onSurface),
-            ),
-          ),
-        ],
+    return TextField(
+      onChanged: onChanged,
+      decoration: const InputDecoration(
+        hintText: 'Search players...',
+        prefixIcon: Icon(LucideIcons.search, size: 18),
       ),
     );
   }

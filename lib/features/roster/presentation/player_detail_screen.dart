@@ -150,35 +150,36 @@ class _PlayerDetailContent extends StatelessWidget {
                       _AvailabilityBadge(status: player.availability!),
                     const SizedBox(height: 24),
                     // Position + team row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 16,
+                      runSpacing: 4,
                       children: [
-                        Icon(
-                          LucideIcons.crosshair,
-                          size: 14,
-                          color: context.sc.onSurfaceMuted,
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(LucideIcons.crosshair, size: 14, color: context.sc.onSurfaceMuted),
+                            const SizedBox(width: 4),
+                            Text(
+                              player.position.isEmpty ? 'No position' : player.position,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: context.sc.onSurfaceMuted,
+                                  ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 4),
-                        Text(
-                          player.position.isEmpty
-                              ? 'No position'
-                              : player.position,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: context.sc.onSurfaceMuted,
-                              ),
-                        ),
-                        const SizedBox(width: 16),
-                        Icon(
-                          LucideIcons.shield,
-                          size: 14,
-                          color: context.sc.onSurfaceMuted,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          player.teamName.isEmpty ? 'No team' : player.teamName,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: context.sc.onSurfaceMuted,
-                              ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(LucideIcons.shield, size: 14, color: context.sc.onSurfaceMuted),
+                            const SizedBox(width: 4),
+                            Text(
+                              player.teamName.isEmpty ? 'No team' : player.teamName,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: context.sc.onSurfaceMuted,
+                                  ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
