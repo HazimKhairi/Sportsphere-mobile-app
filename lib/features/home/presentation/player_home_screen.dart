@@ -9,7 +9,6 @@ import '../../auth/presentation/auth_providers.dart';
 import '../../player_card/presentation/player_card_providers.dart';
 import '_widgets/sphere_activity_timeline_item.dart';
 import '_widgets/sphere_entrance.dart';
-import '_widgets/sphere_hero_gradient.dart';
 import '_widgets/sphere_player_hero_card.dart';
 import '_widgets/session_live_banner.dart';
 import '_widgets/sphere_section_label.dart';
@@ -45,166 +44,177 @@ class PlayerHomeScreen extends ConsumerWidget {
     final activityAsync = ref.watch(activityTimelineProvider);
     final cardAsync = ref.watch(playerCardProvider);
 
-    return Stack(
-      children: [
-        const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
-        SafeArea(
-          bottom: false,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              SphereSpacing.x24,
-              SphereSpacing.x16,
-              SphereSpacing.x24,
-              90,
+    return SafeArea(
+      bottom: false,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 90),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ── Header ────────────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                SphereSpacing.x24,
+                SphereSpacing.x16,
+                SphereSpacing.x24,
+                0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SphereEntrance(
+                    delayMs: 0,
+                    child: SessionLiveBanner(),
+                  ),
+                  SphereEntrance(
+                    delayMs: 0,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _greeting(),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: context.sc.onSurfaceMuted,
+                                    ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                firstName,
+                                style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                                      color: context.sc.onSurface,
+                                      height: 1.1,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Image.asset(
+                          'assets/brand/sphere_wordmark.png',
+                          height: 22,
+                          fit: BoxFit.fitHeight,
+                        ),
+                        const SizedBox(width: SphereSpacing.x12),
+                        _BellIconButton(onTap: () => context.push('/profile/notifications')),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SphereEntrance(
-                  delayMs: 0,
-                  child: SessionLiveBanner(),
+            const SizedBox(height: SphereSpacing.x20),
+
+            // ── Player hero (full-bleed, no card border) ──────────────────
+            SphereEntrance(
+              delayMs: 80,
+              child: cardAsync.when(
+                data: (data) => SpherePlayerHeroCard(
+                  card: data.card,
+                  onTap: () => context.push('/player-card'),
                 ),
-                SphereEntrance(
-                  delayMs: 0,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _greeting(),
+                loading: () => _CardShimmer(),
+                error: (e, st) => _CardPlaceholder(
+                  onTap: () => context.push('/player-card'),
+                ),
+              ),
+            ),
+
+            // ── Below-hero content ────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: SphereSpacing.x16),
+
+                  // Streak card
+                  SphereEntrance(
+                    delayMs: 140,
+                    child: streakAsync.when(
+                      data: (streak) => SphereStreakCard(
+                        streakDays: streak.days,
+                        goal: streak.goal,
+                        onTap: () {},
+                      ),
+                      loading: () => const SphereStreakCard(
+                        streakDays: 0,
+                        goal: 10,
+                        loading: true,
+                      ),
+                      error: (e, st) {
+                        debugPrint('[home] streak error: $e\n$st');
+                        return const SphereStreakCard(streakDays: 0, goal: 10);
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: SphereSpacing.x32),
+
+                  const SphereEntrance(
+                    delayMs: 200,
+                    child: SphereSectionLabel('Today'),
+                  ),
+                  const SizedBox(height: SphereSpacing.x16),
+
+                  // Activity timeline
+                  SphereEntrance(
+                    delayMs: 260,
+                    child: activityAsync.when(
+                      data: (items) {
+                        if (items.isEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Text(
+                              'No activity yet. Train today to start your streak.',
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: context.sc.onSurfaceMuted,
                                   ),
                             ),
-                            const SizedBox(height: 2),
-                            Text(
-                              firstName,
-                              style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                                    color: context.sc.onSurface,
-                                    height: 1.1,
-                                  ),
-                            ),
+                          );
+                        }
+                        return Column(
+                          children: [
+                            for (var i = 0; i < items.length; i++)
+                              SphereActivityTimelineItem(
+                                title: items[i].title,
+                                timeAgo: _timeAgo(items[i].createdAt),
+                                icon: items[i].icon,
+                                isLast: i == items.length - 1,
+                              ),
                           ],
+                        );
+                      },
+                      loading: () => const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Center(
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
                         ),
                       ),
-                      Image.asset(
-                        'assets/brand/sphere_wordmark.png',
-                        height: 22,
-                        fit: BoxFit.fitHeight,
-                      ),
-                      const SizedBox(width: SphereSpacing.x12),
-                      _BellIconButton(onTap: () => context.push('/profile/notifications')),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: SphereSpacing.x24),
-
-                // Player hero card (photo + identity + radar chart)
-                SphereEntrance(
-                  delayMs: 80,
-                  child: cardAsync.when(
-                    data: (data) => SpherePlayerHeroCard(
-                      card: data.card,
-                      onTap: () => context.push('/player-card'),
-                    ),
-                    loading: () => _CardShimmer(),
-                    error: (e, st) => _CardPlaceholder(
-                      onTap: () => context.push('/player-card'),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: SphereSpacing.x16),
-
-                // Streak card
-                SphereEntrance(
-                  delayMs: 140,
-                  child: streakAsync.when(
-                    data: (streak) => SphereStreakCard(
-                      streakDays: streak.days,
-                      goal: streak.goal,
-                      onTap: () {},
-                    ),
-                    loading: () => const SphereStreakCard(
-                      streakDays: 0,
-                      goal: 10,
-                      loading: true,
-                    ),
-                    error: (e, st) {
-                      debugPrint('[home] streak error: $e\n$st');
-                      return const SphereStreakCard(streakDays: 0, goal: 10);
-                    },
-                  ),
-                ),
-                const SizedBox(height: SphereSpacing.x32),
-
-                const SphereEntrance(
-                  delayMs: 200,
-                  child: SphereSectionLabel('Today'),
-                ),
-                const SizedBox(height: SphereSpacing.x16),
-
-                // Activity timeline
-                SphereEntrance(
-                  delayMs: 260,
-                  child: activityAsync.when(
-                    data: (items) {
-                      if (items.isEmpty) {
+                      error: (e, st) {
+                        debugPrint('[home] activity error: $e\n$st');
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Text(
-                            'No activity yet. Train today to start your streak.',
+                            'Couldn\'t load activity.',
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: context.sc.onSurfaceMuted,
                                 ),
                           ),
                         );
-                      }
-                      return Column(
-                        children: [
-                          for (var i = 0; i < items.length; i++)
-                            SphereActivityTimelineItem(
-                              title: items[i].title,
-                              timeAgo: _timeAgo(items[i].createdAt),
-                              icon: items[i].icon,
-                              isLast: i == items.length - 1,
-                            ),
-                        ],
-                      );
-                    },
-                    loading: () => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Center(
-                        child: SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation(context.sc.primary),
-                          ),
-                        ),
-                      ),
+                      },
                     ),
-                    error: (e, st) {
-                      debugPrint('[home] activity error: $e\n$st');
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          'Couldn\'t load activity.',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: context.sc.onSurfaceMuted,
-                              ),
-                        ),
-                      );
-                    },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

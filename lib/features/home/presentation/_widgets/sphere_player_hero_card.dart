@@ -35,23 +35,18 @@ class SpherePlayerHeroCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: _kDark,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: _kDarkBorder),
-        ),
-        clipBehavior: Clip.hardEdge,
+      child: ColoredBox(
+        color: _kDark,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // ── Photo hero ─────────────────────────────────────────────────
+            // ── Photo hero — full bleed ────────────────────────────────────
             _HeroPhoto(card: card, tierColor: _tierColor),
 
             // ── Identity panel ─────────────────────────────────────────────
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -79,11 +74,11 @@ class SpherePlayerHeroCard extends StatelessWidget {
               const SizedBox(height: 20),
               Container(
                 height: 1,
-                margin: const EdgeInsets.symmetric(horizontal: 16),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
                 color: _kDarkBorder,
               ),
               const Padding(
-                padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: EdgeInsets.fromLTRB(20, 16, 20, 0),
                 child: Text(
                   'SKILL PROFILE',
                   style: TextStyle(
@@ -96,7 +91,7 @@ class SpherePlayerHeroCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
+                padding: const EdgeInsets.fromLTRB(12, 4, 12, 0),
                 child: AspectRatio(
                   aspectRatio: 1.0,
                   child: CustomPaint(
@@ -116,7 +111,7 @@ class SpherePlayerHeroCard extends StatelessWidget {
 
             // ── Full view hint ──────────────────────────────────────────────
             Padding(
-              padding: EdgeInsets.fromLTRB(16, hasStats ? 4 : 16, 16, 16),
+              padding: EdgeInsets.fromLTRB(20, hasStats ? 4 : 16, 20, 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -151,7 +146,7 @@ class _HeroPhoto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 260,
+      height: 320,
       child: Stack(
         fit: StackFit.expand,
         children: [
