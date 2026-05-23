@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:gal/gal.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../app/theme/sphere_theme_ext.dart';
@@ -108,21 +108,19 @@ class _CardBodyState extends State<_CardBody> {
       if (byteData == null) return;
       final bytes = byteData.buffer.asUint8List();
 
-      final result = await ImageGallerySaver.saveImage(
+      await Gal.putImageBytes(
         bytes,
-        quality: 100,
         name: 'sportsphere_card_${widget.card.playerName.replaceAll(' ', '_')}',
       );
 
       if (!mounted) return;
-      final ok = result['isSuccess'] as bool? ?? false;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            ok ? 'Card saved to gallery!' : 'Could not save card.',
-            style: const TextStyle(fontFamily: 'Lexend'),
+          content: const Text(
+            'Card saved to gallery!',
+            style: TextStyle(fontFamily: 'Lexend'),
           ),
-          backgroundColor: ok ? const Color(0xFF22C55E) : const Color(0xFFEF4444),
+          backgroundColor: const Color(0xFF22C55E),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           margin: const EdgeInsets.all(16),
