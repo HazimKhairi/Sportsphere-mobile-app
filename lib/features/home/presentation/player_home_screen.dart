@@ -6,7 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../auth/presentation/auth_providers.dart';
-import '../../player_card/presentation/_widgets/sphere_player_fifa_card.dart';
+import '../../player_card/presentation/_widgets/sphere_player_card_preview.dart';
 import '../../player_card/presentation/player_card_providers.dart';
 import '../../scout/presentation/scout_providers.dart';
 import '_widgets/sphere_activity_timeline_item.dart';
@@ -169,14 +169,14 @@ class PlayerHomeScreen extends ConsumerWidget {
                         ],
                       ),
                       const SizedBox(height: SphereSpacing.x12),
-                      GestureDetector(
-                        onTap: () => context.push('/player-card'),
-                        child: cardAsync.when(
-                          data: (data) => SphereFifaCard(card: data.card),
-                          loading: () => _CardShimmer(),
-                          error: (e, st) => _CardPlaceholder(
-                            onTap: () => context.push('/player-card'),
-                          ),
+                      cardAsync.when(
+                        data: (data) => SpherePlayerCardPreview(
+                          card: data.card,
+                          onTap: () => context.push('/player-card'),
+                        ),
+                        loading: () => _CardShimmer(),
+                        error: (e, st) => _CardPlaceholder(
+                          onTap: () => context.push('/player-card'),
                         ),
                       ),
                     ],
@@ -257,21 +257,16 @@ class PlayerHomeScreen extends ConsumerWidget {
 class _CardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final w = (MediaQuery.sizeOf(context).width - 48).clamp(240.0, 340.0);
-    final h = w / (280 / 380);
-    return Center(
-      child: Container(
-        width: w,
-        height: h,
-        decoration: BoxDecoration(
-          color: context.sc.surfaceElev1,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation(context.sc.primary),
-          ),
+    return Container(
+      height: 360,
+      decoration: BoxDecoration(
+        color: const Color(0xFF141414),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation(context.sc.primary),
         ),
       ),
     );
@@ -284,42 +279,34 @@ class _CardPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final w = (MediaQuery.sizeOf(context).width - 48).clamp(240.0, 340.0);
-    final h = w / (280 / 380);
-    return Center(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: w,
-          height: h,
-          decoration: BoxDecoration(
-            color: context.sc.surfaceElev1,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: context.sc.borderSubtle,
-              style: BorderStyle.solid,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 360,
+        decoration: BoxDecoration(
+          color: const Color(0xFF141414),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFF2A2A2A)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(LucideIcons.idCard, size: 48, color: Colors.white12),
+            const SizedBox(height: 12),
+            Text(
+              'No card yet',
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: Colors.white38,
+                  ),
             ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(LucideIcons.idCard, size: 40, color: context.sc.onSurfaceMuted),
-              const SizedBox(height: 12),
-              Text(
-                'No card yet',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: context.sc.onSurfaceMuted,
-                    ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Get rated by a coach to unlock',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: context.sc.onSurfaceSubtle,
-                    ),
-              ),
-            ],
-          ),
+            const SizedBox(height: 4),
+            Text(
+              'Get rated by a coach to unlock',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.white24,
+                  ),
+            ),
+          ],
         ),
       ),
     );
