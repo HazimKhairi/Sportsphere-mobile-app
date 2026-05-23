@@ -139,6 +139,7 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(SphereSpacing.x24),
       decoration: BoxDecoration(
         color: context.sc.surfaceElev1,
