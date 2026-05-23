@@ -8,6 +8,7 @@ import '../../../app/theme/sphere_theme_ext.dart';
 import '../../auth/presentation/auth_providers.dart';
 import '../../club/presentation/club_providers.dart';
 import '../../player_card/presentation/player_card_providers.dart';
+import '../../profile/presentation/_widgets/pro_photo_sheet.dart';
 import '_widgets/sphere_activity_timeline_item.dart';
 import '_widgets/sphere_entrance.dart';
 import '_widgets/sphere_player_hero_card.dart';
@@ -217,33 +218,31 @@ class _CardPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 380,
-        decoration: const BoxDecoration(
-          color: Color(0xFF0F0F0F),
-        ),
-        child: Stack(
-          children: [
-            // Subtle radial glow
-            Positioned.fill(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                    center: Alignment.center,
-                    radius: 0.8,
-                    colors: [
-                      Colors.white.withValues(alpha: 0.04),
-                      Colors.transparent,
-                    ],
-                  ),
+    return Container(
+      height: 380,
+      decoration: const BoxDecoration(color: Color(0xFF0F0F0F)),
+      child: Stack(
+        children: [
+          // Subtle radial glow
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  center: Alignment.center,
+                  radius: 0.8,
+                  colors: [
+                    Colors.white.withValues(alpha: 0.04),
+                    Colors.transparent,
+                  ],
                 ),
               ),
             ),
+          ),
 
-            // Dashed silhouette border
-            Center(
+          // Avatar + text + upload button
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -252,17 +251,10 @@ class _CardPlaceholder extends StatelessWidget {
                     height: 88,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.white12,
-                        width: 1.5,
-                      ),
+                      border: Border.all(color: Colors.white12, width: 1.5),
                       color: Colors.white.withValues(alpha: 0.04),
                     ),
-                    child: const Icon(
-                      LucideIcons.user,
-                      size: 36,
-                      color: Colors.white24,
-                    ),
+                    child: const Icon(LucideIcons.user, size: 36, color: Colors.white24),
                   ),
                   const SizedBox(height: 20),
                   const Text(
@@ -276,7 +268,7 @@ class _CardPlaceholder extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Get rated by a coach to unlock\nyour official card',
+                    'Get rated by a coach to unlock your official card',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Lexend',
@@ -286,19 +278,47 @@ class _CardPlaceholder extends StatelessWidget {
                       height: 1.6,
                     ),
                   ),
+                  const SizedBox(height: 24),
+                  GestureDetector(
+                    onTap: () => ProPhotoSheet.show(context),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.06),
+                        borderRadius: BorderRadius.circular(999),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(LucideIcons.upload, size: 15, color: Colors.white60),
+                          SizedBox(width: 8),
+                          Text(
+                            'Upload Your Photo',
+                            style: TextStyle(
+                              fontFamily: 'Lexend',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white60,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
+          ),
 
-            // Bottom divider line
-            const Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Divider(color: Color(0xFF1A1A1A), height: 1),
-            ),
-          ],
-        ),
+          // Bottom divider line
+          const Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Divider(color: Color(0xFF1A1A1A), height: 1),
+          ),
+        ],
       ),
     );
   }
