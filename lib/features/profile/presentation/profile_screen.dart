@@ -113,6 +113,11 @@ class ProfileScreen extends ConsumerWidget {
                           GoRouter.of(context).push('/profile/achievements'),
                     ),
                     ProfileRow(
+                      icon: LucideIcons.idCard,
+                      label: 'My Player Card',
+                      onTap: () => GoRouter.of(context).push('/player-card'),
+                    ),
+                    ProfileRow(
                       icon: LucideIcons.searchCheck,
                       label: 'Scout Profile',
                       onTap: () => GoRouter.of(context).push('/scout'),
@@ -238,14 +243,42 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
     if (file == null || !mounted) return;
     setState(() => _uploading = true);
     try {
-      await repo.uploadPhoto(file);
+      final result = await repo.uploadWithBgRemoval(file);
       if (mounted) {
         ref.invalidate(currentUserProvider);
+        final msg = result.bgRemoved
+            ? 'Photo updated — background removed automatically'
+            : 'Photo updated';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.check_circle, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                Expanded(child: Text(msg)),
+              ],
+            ),
+            backgroundColor: SphereColors.primary,
+          ),
+        );
+      }
+    } on PhotoValidationException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Photo rejected: ${e.reason}'),
+            backgroundColor: SphereColors.danger,
+            duration: const Duration(seconds: 6),
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Photo upload failed. Try again.')),
+          SnackBar(
+            content: Text('Upload failed: $e'),
+            backgroundColor: SphereColors.danger,
+          ),
         );
       }
     } finally {
@@ -274,6 +307,18 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
               ),
             ),
             const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                'AI will validate your photo and automatically remove the background.',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: SphereColors.onSurfaceMuted),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 12),
             ListTile(
               leading: const Icon(LucideIcons.camera, color: SphereColors.onSurface),
               title: const Text('Take photo', style: TextStyle(color: SphereColors.onSurface)),
