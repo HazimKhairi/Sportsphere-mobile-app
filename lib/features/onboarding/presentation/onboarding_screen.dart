@@ -31,7 +31,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     ),
     _Slide(
       image: 'assets/onboarding/admin.webp',
-      alignment: Alignment.topLeft,
+      alignment: Alignment.centerRight,
       headline: 'One App.\nTwo Roles.',
       subtitle: 'Player or coach — everything you need is right here.',
     ),
