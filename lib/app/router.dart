@@ -64,10 +64,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       final atRolePick = loc == '/role-pick';
       final atLogin = loc.startsWith('/auth');
 
-      // No role: route through onboarding then role pick.
+      // No role selected yet.
+      // Allow onboarding (first-launch flow from splash) and role-pick through.
+      // All other locations (including post-logout) go straight to role-pick.
       if (role == null) {
         if (atOnboarding || atRolePick) return null;
-        return '/onboarding';
+        return '/role-pick';
       }
 
       // Role chosen, not authenticated yet: force login.

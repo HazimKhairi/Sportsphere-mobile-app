@@ -6,11 +6,8 @@ import '../../role_pick/presentation/role_providers.dart';
 
 /// Runs the full sign-out sequence:
 /// 1. Best-effort FCM device unregister (won't throw)
-/// 2. Clear selectedRole from SharedPreferences
+/// 2. Clear selectedRole (router redirects to /role-pick, not onboarding)
 /// 3. FirebaseAuth.signOut
-///
-/// The router's refreshListenable picks up both auth + role changes and
-/// redirects the user back to onboarding.
 Future<void> runSignOut(WidgetRef ref) async {
   final fcmCleanup = ref.read(fcmLogoutCleanupProvider);
   await fcmCleanup();
