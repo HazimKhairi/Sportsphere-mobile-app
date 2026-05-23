@@ -167,7 +167,6 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
   }
 
   void _showRejectSheet(BuildContext context) {
-    final controller = TextEditingController();
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -175,130 +174,17 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      builder: (sheetCtx) => StatefulBuilder(
-        builder: (ctx, setSheetState) {
-          bool busy = false;
-          return Padding(
-            padding: EdgeInsets.only(
-              left: 24,
-              right: 24,
-              top: 24,
-              bottom: MediaQuery.of(ctx).viewInsets.bottom + 32,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 36,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: context.sc.borderSubtle,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'Reject payment',
-                  style: Theme.of(ctx).textTheme.headlineMedium?.copyWith(
-                        color: context.sc.onSurface,
-                      ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'This will notify the player.',
-                  style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(
-                        color: context.sc.onSurfaceMuted,
-                      ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'Reason',
-                  style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
-                        color: context.sc.onSurfaceMuted,
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-                const SizedBox(height: 6),
-                TextField(
-                  controller: controller,
-                  maxLines: 3,
-                  onChanged: (_) => setSheetState(() {}),
-                  decoration: const InputDecoration(
-                    hintText: 'e.g. Amount does not match program fee.',
-                  ),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: busy ||
-                            controller.text.trim().length < 3
-                        ? null
-                        : () async {
-                            setSheetState(() => busy = true);
-                            try {
-                              await ref
-                                  .read(approvalsNotifierProvider
-                                      .notifier)
-                                  .reject(widget.payment.id,
-                                      controller.text.trim());
-                              if (sheetCtx.mounted) {
-                                Navigator.of(sheetCtx).pop();
-                              }
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(
-                                  const SnackBar(
-                                      content:
-                                          Text('Payment rejected.')),
-                                );
-                              }
-                            } catch (_) {
-                              setSheetState(() => busy = false);
-                              if (sheetCtx.mounted) {
-                                ScaffoldMessenger.of(sheetCtx)
-                                    .showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          'Reject failed. Try again.')),
-                                );
-                              }
-                            }
-                          },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: context.sc.danger,
-                      foregroundColor: Colors.white,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: SphereRadius.pillRect),
-                      elevation: 0,
-                    ),
-                    child: busy
-                        ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation(
-                                  Colors.white),
-                            ),
-                          )
-                        : const Text(
-                            'Reject payment',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700),
-                          ),
-                  ),
-                ),
-              ],
-            ),
-          );
+      builder: (_) => _RejectSheet(
+        paymentId: widget.payment.id,
+        onRejected: () {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Payment rejected.')),
+            );
+          }
         },
       ),
-    ).then((_) => controller.dispose());
+    );
   }
 
   @override
@@ -396,6 +282,132 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RejectSheet extends ConsumerStatefulWidget {
+  const _RejectSheet({required this.paymentId, required this.onRejected});
+  final String paymentId;
+  final VoidCallback onRejected;
+
+  @override
+  ConsumerState<_RejectSheet> createState() => _RejectSheetState();
+}
+
+class _RejectSheetState extends ConsumerState<_RejectSheet> {
+  final _controller = TextEditingController();
+  bool _busy = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 24,
+        right: 24,
+        top: 24,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 32,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: context.sc.borderSubtle,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Reject payment',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: context.sc.onSurface,
+                ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'This will notify the player.',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: context.sc.onSurfaceMuted,
+                ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Reason',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: context.sc.onSurfaceMuted,
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+          const SizedBox(height: 6),
+          TextField(
+            controller: _controller,
+            maxLines: 3,
+            onChanged: (_) => setState(() {}),
+            decoration: const InputDecoration(
+              hintText: 'e.g. Amount does not match program fee.',
+            ),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton(
+              onPressed: _busy || _controller.text.trim().length < 3
+                  ? null
+                  : () async {
+                      setState(() => _busy = true);
+                      try {
+                        await ref
+                            .read(approvalsNotifierProvider.notifier)
+                            .reject(widget.paymentId, _controller.text.trim());
+                        if (mounted) Navigator.of(context).pop();
+                        widget.onRejected();
+                      } catch (_) {
+                        if (mounted) {
+                          setState(() => _busy = false);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Reject failed. Try again.')),
+                          );
+                        }
+                      }
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: context.sc.danger,
+                foregroundColor: Colors.white,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: SphereRadius.pillRect),
+                elevation: 0,
+              ),
+              child: _busy
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                      ),
+                    )
+                  : const Text(
+                      'Reject payment',
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+            ),
           ),
         ],
       ),
