@@ -236,8 +236,6 @@ class _HeroPhoto extends StatelessWidget {
                     'assets/brand/sphere_wordmark.png',
                     height: 20,
                     fit: BoxFit.fitHeight,
-                    color: Colors.white,
-                    colorBlendMode: BlendMode.srcIn,
                   ),
                 ],
               ),
