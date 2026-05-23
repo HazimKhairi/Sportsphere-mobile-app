@@ -60,18 +60,6 @@ class _ClubContent extends StatelessWidget {
           child: SphereHeroGradient(height: 240),
         ),
         SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(SphereSpacing.x16),
-            child: _CircleIconButton(
-              onTap: () {
-                if (Navigator.of(context).canPop()) {
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ),
-        ),
-        SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.only(
               top: 64,
@@ -104,6 +92,19 @@ class _ClubContent extends StatelessWidget {
                   _SocialSection(storefront: club.storefront!),
                 ],
               ],
+            ),
+          ),
+        ),
+        // Back button last so it sits above the scroll view and receives taps
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(SphereSpacing.x16),
+            child: _CircleIconButton(
+              onTap: () {
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                }
+              },
             ),
           ),
         ),
