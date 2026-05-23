@@ -218,8 +218,8 @@ ThemeData buildSphereDarkTheme() {
   const muted = Color(0xFF9CA3AF);      // neutral-400 — readable muted text
   const borderSub = Color(0xFF1E3024);  // subtle border
   const borderMain = Color(0xFF2A4032); // main border
-  const green400 = Color(0xFF4ADE80);   // primary bright green
-  const green900 = Color(0xFF14532D);   // primary container dark
+  const green400 = Color(0xFF37F513);   // SportSphere brand green
+  const green900 = Color(0xFF0D3A04);   // primary container dark
 
   const cs = ColorScheme(
     brightness: Brightness.dark,

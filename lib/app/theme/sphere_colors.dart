@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 abstract final class SphereColors {
   // --- Brand ---
-  static const primary = Color(0xFF16A34A);       // green-600 (web light mode)
-  static const primaryLight = Color(0xFFDCFCE7);  // green-100 (pastel tint)
-  static const onPrimary = Color(0xFFFFFFFF);
+  static const primary = Color(0xFF37F513);       // SportSphere brand green
+  static const primaryLight = Color(0xFFD4FCCA);  // brand green pastel tint
+  static const onPrimary = Color(0xFF071A02);  // near-black for contrast on bright green
 
   // --- Surfaces (light/pastel) ---
   static const background = Color(0xFFF8FAFC);    // slate-50
