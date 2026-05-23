@@ -1,0 +1,136 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../../app/theme/sphere_radius.dart';
+import '../../../../app/theme/sphere_spacing.dart';
+
+/// A glassmorphism-styled feature card intended for use in a grid layout.
+class SphereFeatureGridCard extends StatelessWidget {
+  const SphereFeatureGridCard({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.accentColor,
+    required this.onTap,
+    this.metricWidget,
+    this.loading = false,
+  });
+
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color accentColor;
+  final VoidCallback onTap;
+  final Widget? metricWidget;
+  final bool loading;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: SphereRadius.cardRect,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.all(SphereSpacing.x16),
+            decoration: BoxDecoration(
+              color: context.sc.surfaceElev1.withValues(alpha: 0.60),
+              borderRadius: SphereRadius.cardRect,
+              border: Border(
+                top: BorderSide(
+                  color: accentColor.withValues(alpha: 0.40),
+                ),
+                left: BorderSide(
+                  color: accentColor.withValues(alpha: 0.40),
+                ),
+                right: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.08),
+                ),
+                bottom: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.08),
+                ),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: accentColor.withValues(alpha: 0.15),
+                  blurRadius: 20,
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  icon,
+                  size: 24,
+                  color: accentColor,
+                ),
+                const Spacer(),
+                Text(
+                  title,
+                  style: GoogleFonts.lexend(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: context.sc.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.geistMono(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w400,
+                    color: context.sc.onSurfaceMuted,
+                  ),
+                ),
+                if (metricWidget != null) ...[
+                  const SizedBox(height: 4),
+                  metricWidget!,
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A thin animated progress bar for use as a [metricWidget] inside [SphereFeatureGridCard].
+class SphereGridProgressBar extends StatelessWidget {
+  const SphereGridProgressBar({
+    super.key,
+    required this.value,
+    required this.color,
+  });
+
+  /// Progress value between 0.0 and 1.0.
+  final double value;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: value.clamp(0.0, 1.0)),
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeOut,
+      builder: (context, animatedValue, _) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(999),
+          child: LinearProgressIndicator(
+            value: animatedValue,
+            minHeight: 4,
+            backgroundColor: color.withValues(alpha: 0.15),
+            valueColor: AlwaysStoppedAnimation<Color>(color),
+          ),
+        );
+      },
+    );
+  }
+}
