@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:gal/gal.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -57,21 +56,7 @@ class _LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        const Center(child: CircularProgressIndicator(color: Colors.white54)),
-        SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: _OverlayButton(
-              icon: LucideIcons.chevronLeft,
-              onTap: () =>
-                  context.canPop() ? context.pop() : context.go('/card'),
-            ),
-          ),
-        ),
-      ],
-    );
+    return const Center(child: CircularProgressIndicator(color: Colors.white54));
   }
 }
 
@@ -198,8 +183,8 @@ class _CardBodyState extends State<_CardBody> {
                         const SizedBox(height: 28),
 
                         // ── FIFA CARD (downloadable) ───────────────────────
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
                           child: _SectionLabel('Player Card'),
                         ),
                         const SizedBox(height: 12),
@@ -221,9 +206,8 @@ class _CardBodyState extends State<_CardBody> {
 
                         // Stats grid
                         if (widget.card.activeStats.isNotEmpty) ...[
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
                             child: _SectionLabel('Attributes'),
                           ),
                           const SizedBox(height: 12),
@@ -276,27 +260,6 @@ class _CardBodyState extends State<_CardBody> {
           child: _HeroPhoto(card: widget.card),
         ),
 
-        // ── Overlay buttons ──────────────────────────────────────────────
-        SafeArea(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                _OverlayButton(
-                  icon: LucideIcons.chevronLeft,
-                  onTap: () =>
-                      context.canPop() ? context.pop() : context.go('/card'),
-                ),
-                const Spacer(),
-                _OverlayButton(
-                  icon: LucideIcons.refreshCw,
-                  onTap: widget.onRefresh,
-                ),
-              ],
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -867,29 +830,6 @@ class _TrainingRow extends StatelessWidget {
   }
 }
 
-// ─── OVERLAY BUTTON ───────────────────────────────────────────────────────────
-
-class _OverlayButton extends StatelessWidget {
-  const _OverlayButton({required this.icon, required this.onTap});
-  final IconData icon;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.black.withValues(alpha: 0.4),
-      shape: const CircleBorder(),
-      child: InkWell(
-        onTap: onTap,
-        customBorder: const CircleBorder(),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Icon(icon, size: 20, color: Colors.white),
-        ),
-      ),
-    );
-  }
-}
 
 // ─── ERROR ────────────────────────────────────────────────────────────────────
 
@@ -932,16 +872,6 @@ class _ErrorView extends StatelessWidget {
                   child: const Text('Retry'),
                 ),
               ],
-            ),
-          ),
-        ),
-        SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: _OverlayButton(
-              icon: LucideIcons.chevronLeft,
-              onTap: () =>
-                  context.canPop() ? context.pop() : context.go('/card'),
             ),
           ),
         ),
