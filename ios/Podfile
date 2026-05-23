@@ -1,6 +1,5 @@
 platform :ios, '15.5'
 
-# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 project 'Runner', {
@@ -35,14 +34,33 @@ target 'Runner' do
   end
 end
 
+# MLKit pods that ship iOS-device-only arm64 binaries and cannot link in
+# arm64 simulator. We exclude arm64 only for these pods in simulator builds.
+# All other pods (camera_avfoundation, Firebase, etc.) keep arm64 for simulator.
+MLKIT_PODS = %w[
+  MLImage
+  MLKitCommon
+  MLKitVision
+  MLKitXenoCommon
+  MLKitPoseDetection
+  MLKitPoseDetectionAccurate
+  MLKitPoseDetectionCommon
+  GoogleMLKit
+  GoogleToolboxForMac
+  google_mlkit_commons
+  google_mlkit_pose_detection
+  mobile_scanner
+].freeze
+
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
     target.build_configurations.each do |config|
-      # MLKit frameworks ship arm64-device-only slices — exclude arm64 from
-      # simulator SDK so the linker never sees iOS-device binaries in a sim build.
-      # Simulator builds run under Rosetta (x86_64) on Apple Silicon.
-      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+      if MLKIT_PODS.include?(target.name)
+        # These pods only have iOS-device arm64 slices — exclude from sim builds
+        # so the linker never picks them up when targeting the simulator.
+        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+      end
     end
   end
 end
