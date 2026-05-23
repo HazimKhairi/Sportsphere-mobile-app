@@ -11,6 +11,8 @@ import '_widgets/sphere_entrance.dart';
 import '_widgets/sphere_hero_gradient.dart';
 import '_widgets/sphere_next_session_card.dart';
 import '_widgets/sphere_pending_approvals_card.dart';
+import '_widgets/create_session_sheet.dart';
+import '_widgets/send_announcement_sheet.dart';
 import '_widgets/sphere_quick_action_chip.dart';
 import '_widgets/sphere_section_label.dart';
 import 'staff_home_providers.dart';
@@ -129,13 +131,13 @@ class StaffHomeScreen extends ConsumerWidget {
                         SphereQuickActionChip(
                           icon: LucideIcons.calendarPlus,
                           label: 'Create session',
-                          onTap: () {},
+                          onTap: () => CreateSessionSheet.show(context),
                         ),
                         const SizedBox(width: 8),
                         SphereQuickActionChip(
                           icon: LucideIcons.megaphone,
                           label: 'Send announcement',
-                          onTap: () {},
+                          onTap: () => SendAnnouncementSheet.show(context),
                         ),
                       ],
                     ),
