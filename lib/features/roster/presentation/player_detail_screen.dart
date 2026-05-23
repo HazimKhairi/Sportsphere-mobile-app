@@ -126,8 +126,8 @@ class _PlayerDetailContent extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Space for avatar overlap
-                    const SizedBox(height: 60),
+                    // Space for avatar overlap: avatar top=100, radius=72 → bottom=244, content top=140 → overlap=104px + gap
+                    const SizedBox(height: 120),
                     // Name
                     Text(
                       player.fullName,
