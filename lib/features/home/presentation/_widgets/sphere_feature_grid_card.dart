@@ -34,7 +34,7 @@ class SphereFeatureGridCard extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: GestureDetector(
-          onTap: onTap,
+          onTap: loading ? null : onTap,
           child: Container(
             padding: const EdgeInsets.all(SphereSpacing.x16),
             decoration: BoxDecoration(
@@ -83,7 +83,7 @@ class SphereFeatureGridCard extends StatelessWidget {
                   subtitle,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.geistMono(
+                  style: GoogleFonts.geist(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: context.sc.onSurfaceMuted,
