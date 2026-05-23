@@ -16,10 +16,11 @@ class AiChatRepository {
   final Dio _dio;
 
   /// Streams incremental text deltas as the assistant responds.
+  /// [messages] is the full conversation so far (user + assistant turns).
   /// Emits ONLY content deltas (not raw SSE events). Completes when the
   /// server emits `{"event":"done"}`.
   Stream<String> streamMessage({
-    required String message,
+    required List<Map<String, String>> messages,
     required String threadId,
     String surface = 'club',
   }) async* {
@@ -28,12 +29,13 @@ class AiChatRepository {
       res = await _dio.post<ResponseBody>(
         '/api/ai/chat',
         data: <String, dynamic>{
-          'message': message,
+          'messages': messages,
           'threadId': threadId,
           'surface': surface,
         },
         options: Options(
           responseType: ResponseType.stream,
+          receiveTimeout: const Duration(minutes: 3),
           headers: const {'Accept': 'text/event-stream'},
         ),
       );

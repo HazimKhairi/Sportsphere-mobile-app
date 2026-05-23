@@ -80,10 +80,19 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
     });
     _jumpToBottom();
 
+    // Build messages array from full conversation history (backend needs all turns).
+    final messagesPayload = _messages
+        .where((m) => !m.isStreaming || m.text.isNotEmpty)
+        .map((m) => {
+              'role': m.role == ChatRole.user ? 'user' : 'assistant',
+              'text': m.text,
+            })
+        .toList();
+
     try {
       await for (final delta in ref
           .read(aiChatRepositoryProvider)
-          .streamMessage(message: trimmed, threadId: _threadId)) {
+          .streamMessage(messages: messagesPayload, threadId: _threadId)) {
         if (!mounted) return;
         setState(() {
           assistant.text += delta;
