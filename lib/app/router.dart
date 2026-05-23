@@ -18,6 +18,8 @@ import '../features/home/presentation/rewards_screen.dart';
 import '../features/home/presentation/staff_home_screen.dart';
 import '../features/home/presentation/train_hub_screen.dart';
 import '../features/home/presentation/train_screen.dart';
+import '../features/strength/presentation/strength_screen.dart';
+import '../features/strength/presentation/active_workout_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/payments/presentation/cash_pay_screen.dart';
 import '../features/payments/presentation/payment_detail_screen.dart';
@@ -181,6 +183,17 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, state) {
               final id = state.pathParameters['id']!;
               return DrillDetailScreen(drillId: id);
+            },
+          ),
+          GoRoute(
+            path: '/train/strength',
+            builder: (_, _) => const StrengthScreen(),
+          ),
+          GoRoute(
+            path: '/train/strength/workout/:id',
+            builder: (_, state) {
+              final id = state.pathParameters['id']!;
+              return ActiveWorkoutScreen(templateId: id);
             },
           ),
           GoRoute(
