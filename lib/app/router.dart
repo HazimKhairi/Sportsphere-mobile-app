@@ -16,6 +16,7 @@ import '../features/home/presentation/player_home_screen.dart';
 import '../features/home/presentation/points_screen.dart';
 import '../features/home/presentation/rewards_screen.dart';
 import '../features/home/presentation/staff_home_screen.dart';
+import '../features/home/presentation/train_hub_screen.dart';
 import '../features/home/presentation/train_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/payments/presentation/cash_pay_screen.dart';
@@ -169,6 +170,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/train',
+            builder: (_, _) => const TrainHubScreen(),
+          ),
+          GoRoute(
+            path: '/train/skills',
             builder: (_, _) => const TrainScreen(),
           ),
           GoRoute(
