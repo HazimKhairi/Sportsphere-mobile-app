@@ -11,6 +11,7 @@ import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../../role_pick/presentation/role_providers.dart';
 import '../data/photo_upload_repository.dart';
+import '_widgets/pro_photo_sheet.dart';
 import '_widgets/profile_row.dart';
 import '_widgets/profile_section_card.dart';
 import '_widgets/sign_out_dialog.dart';
@@ -342,8 +343,27 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
     );
   }
 
+  Future<void> _showProPhotoSheet() async {
+    final adopted = await ProPhotoSheet.show(context);
+    if (adopted && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.white, size: 18),
+              SizedBox(width: 8),
+              Text('Pro photo set as your profile picture!'),
+            ],
+          ),
+          backgroundColor: SphereColors.primary,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isPlayer = ref.watch(selectedRoleProvider) == AppRole.player;
     return Container(
       padding: const EdgeInsets.all(SphereSpacing.x20),
       decoration: BoxDecoration(
@@ -359,7 +379,10 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
           ],
         ),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
         children: [
           GestureDetector(
             onTap: _showPhotoOptions,
@@ -489,6 +512,39 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
               ],
             ),
           ),
+        ],
+      ),
+          if (isPlayer && !_uploading) ...[
+            const SizedBox(height: SphereSpacing.x12),
+            GestureDetector(
+              onTap: _showProPhotoSheet,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: SphereColors.primary.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: SphereColors.primary.withValues(alpha: 0.3),
+                  ),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(LucideIcons.sparkles, size: 14, color: SphereColors.primary),
+                    SizedBox(width: 6),
+                    Text(
+                      'Generate AI Pro Photo',
+                      style: TextStyle(
+                        color: SphereColors.primary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

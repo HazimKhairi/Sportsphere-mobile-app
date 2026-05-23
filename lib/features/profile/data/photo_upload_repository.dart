@@ -102,6 +102,47 @@ class PhotoUploadRepository {
     }
   }
 
+  /// Calls the backend to generate an AI professional sports portrait from
+  /// the player's existing passport photo. Returns the generated photo URL.
+  Future<String> generateProPhoto() async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        '/api/profile-photo/generate-pro',
+        options: Options(
+          receiveTimeout: const Duration(minutes: 4),
+          sendTimeout: const Duration(seconds: 30),
+        ),
+      );
+      final url = res.data?['url'] as String?;
+      if (url == null || url.isEmpty) throw const PhotoUploadException('No URL returned');
+      return url;
+    } on DioException catch (e) {
+      final msg = e.response?.data is Map
+          ? ((e.response!.data as Map)['error'] ?? 'Generation failed').toString()
+          : 'Generation failed';
+      throw PhotoUploadException(msg);
+    }
+  }
+
+  /// Promotes the generated pro photo to the player's main passport photo.
+  Future<String> adoptProPhoto() async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        '/api/profile-photo/adopt-pro',
+        options: Options(receiveTimeout: const Duration(seconds: 30)),
+      );
+      final url = res.data?['url'] as String?;
+      if (url == null || url.isEmpty) throw const PhotoUploadException('No URL returned');
+      await _auth.currentUser?.updatePhotoURL(url);
+      return url;
+    } on DioException catch (e) {
+      final msg = e.response?.data is Map
+          ? ((e.response!.data as Map)['error'] ?? 'Adopt failed').toString()
+          : 'Adopt failed';
+      throw PhotoUploadException(msg);
+    }
+  }
+
   Future<String?> _resolvePlayerId() async {
     try {
       final res =
