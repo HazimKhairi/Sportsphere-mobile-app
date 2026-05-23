@@ -16,8 +16,11 @@ class SphereAvatarStack extends StatelessWidget {
   Widget build(BuildContext context) {
     final shown = visibleCount < total ? visibleCount : total;
     final remaining = total - shown;
+    final count = shown + (remaining > 0 ? 1 : 0);
+    final width = count == 0 ? avatarSize : (count - 1) * (avatarSize - 10) + avatarSize;
     return SizedBox(
       height: avatarSize,
+      width: width,
       child: Stack(
         children: [
           for (var i = 0; i < shown; i++)
