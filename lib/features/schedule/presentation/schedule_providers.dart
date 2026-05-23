@@ -24,7 +24,7 @@ Stream<List<TrainingSession>> monthSessions(
   final clubId = ref.watch(activeClubIdProvider).valueOrNull;
   final role = ref.watch(selectedRoleProvider);
   if (user == null || clubId == null) {
-    return const Stream.empty();
+    return Stream.value([]);
   }
 
   // Range: first day of previous month → first day of next-next month.
