@@ -220,29 +220,82 @@ class _CardPlaceholder extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 360,
-        decoration: BoxDecoration(
-          color: const Color(0xFF141414),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFF2A2A2A)),
+        height: 380,
+        decoration: const BoxDecoration(
+          color: Color(0xFF0F0F0F),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            const Icon(LucideIcons.idCard, size: 48, color: Colors.white12),
-            const SizedBox(height: 12),
-            Text(
-              'No card yet',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Colors.white38,
+            // Subtle radial glow
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    center: Alignment.center,
+                    radius: 0.8,
+                    colors: [
+                      Colors.white.withValues(alpha: 0.04),
+                      Colors.transparent,
+                    ],
                   ),
+                ),
+              ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              'Get rated by a coach to unlock',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.white24,
+
+            // Dashed silhouette border
+            Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 88,
+                    height: 88,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white12,
+                        width: 1.5,
+                      ),
+                      color: Colors.white.withValues(alpha: 0.04),
+                    ),
+                    child: const Icon(
+                      LucideIcons.user,
+                      size: 36,
+                      color: Colors.white24,
+                    ),
                   ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'No Player Card Yet',
+                    style: TextStyle(
+                      fontFamily: 'Lexend',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white38,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Get rated by a coach to unlock\nyour official card',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Lexend',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white24,
+                      height: 1.6,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Bottom divider line
+            const Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Divider(color: Color(0xFF1A1A1A), height: 1),
             ),
           ],
         ),
