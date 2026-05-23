@@ -209,39 +209,51 @@ ThemeData buildSphereLightTheme() {
 }
 
 ThemeData buildSphereDarkTheme() {
+  // Green-tinted dark palette — SportSphere brand, zero blue/slate.
+  const bg = Color(0xFF091410);         // near-black, green tint
+  const surf = Color(0xFF111E15);       // dark green surface
+  const elev1 = Color(0xFF1A2B1E);      // cards / surfaceElev1
+  const elev2 = Color(0xFF243529);      // surfaceElev2
+  const onSurf = Color(0xFFF0FDF4);     // green-50 — readable white
+  const muted = Color(0xFF9CA3AF);      // neutral-400 — readable muted text
+  const borderSub = Color(0xFF1E3024);  // subtle border
+  const borderMain = Color(0xFF2A4032); // main border
+  const green400 = Color(0xFF4ADE80);   // primary bright green
+  const green900 = Color(0xFF14532D);   // primary container dark
+
   const cs = ColorScheme(
     brightness: Brightness.dark,
-    primary: Color(0xFF4ADE80),         // green-400 — brighter for dark bg
-    onPrimary: Color(0xFF052E16),       // green-950
-    primaryContainer: Color(0xFF14532D), // green-900
+    primary: green400,
+    onPrimary: Color(0xFF052E16),
+    primaryContainer: green900,
     onPrimaryContainer: Color(0xFFBBF7D0),
-    secondary: Color(0xFF60A5FA),       // blue-400
-    onSecondary: Color(0xFF1E3A5F),
-    secondaryContainer: Color(0xFF1E40AF),
-    onSecondaryContainer: Color(0xFFBFDBFE),
-    tertiary: Color(0xFFA78BFA),        // purple-400
-    onTertiary: Color(0xFF2E1065),
-    tertiaryContainer: Color(0xFF4C1D95),
-    onTertiaryContainer: Color(0xFFEDE9FE),
-    error: Color(0xFFF87171),           // red-400
+    secondary: Color(0xFF34D399),        // emerald-400
+    onSecondary: Color(0xFF022C22),
+    secondaryContainer: Color(0xFF065F46),
+    onSecondaryContainer: Color(0xFFA7F3D0),
+    tertiary: Color(0xFF86EFAC),         // green-300
+    onTertiary: Color(0xFF052E16),
+    tertiaryContainer: Color(0xFF166534),
+    onTertiaryContainer: Color(0xFFDCFCE7),
+    error: Color(0xFFF87171),
     onError: Color(0xFF450A0A),
     errorContainer: Color(0xFF7F1D1D),
     onErrorContainer: Color(0xFFFECACA),
-    surface: Color(0xFF1E293B),         // slate-800
-    onSurface: Color(0xFFF1F5F9),       // slate-100
-    surfaceContainerHighest: Color(0xFF334155), // slate-700
-    surfaceContainerHigh: Color(0xFF475569),    // slate-600 — surfaceElev2 dark
-    surfaceContainer: Color(0xFF0F172A),  // slate-900
-    surfaceContainerLow: Color(0xFF0F172A),
-    surfaceContainerLowest: Color(0xFF020617), // slate-950
-    onSurfaceVariant: Color(0xFF94A3B8),  // slate-400
-    outline: Color(0xFF475569),           // slate-600
-    outlineVariant: Color(0xFF334155),    // slate-700
+    surface: surf,
+    onSurface: onSurf,
+    surfaceContainerHighest: elev1,      // → sc.surfaceElev1
+    surfaceContainerHigh: elev2,         // → sc.surfaceElev2
+    surfaceContainer: bg,                // → sc.background
+    surfaceContainerLow: bg,
+    surfaceContainerLowest: Color(0xFF050C08),
+    onSurfaceVariant: muted,             // → sc.onSurfaceMuted
+    outline: borderMain,
+    outlineVariant: borderSub,
     shadow: Color(0x33000000),
     scrim: Color(0x80000000),
-    inverseSurface: Color(0xFFF1F5F9),
-    onInverseSurface: Color(0xFF1E293B),
-    inversePrimary: Color(0xFF16A34A),
+    inverseSurface: onSurf,
+    onInverseSurface: surf,
+    inversePrimary: SphereColors.primary,
   );
 
   final textTheme = buildSphereTextTheme(cs);
@@ -251,37 +263,37 @@ ThemeData buildSphereDarkTheme() {
     brightness: Brightness.dark,
     colorScheme: cs,
     textTheme: textTheme,
-    scaffoldBackgroundColor: const Color(0xFF0F172A),
+    scaffoldBackgroundColor: bg,
     splashFactory: InkRipple.splashFactory,
 
     appBarTheme: AppBarTheme(
-      backgroundColor: const Color(0xFF1E293B),
+      backgroundColor: surf,
       elevation: 0,
       scrolledUnderElevation: 0.5,
-      shadowColor: const Color(0xFF334155),
-      foregroundColor: const Color(0xFFF1F5F9),
+      shadowColor: borderSub,
+      foregroundColor: onSurf,
       systemOverlayStyle: SystemUiOverlayStyle.light,
       titleTextStyle: GoogleFonts.lexend(
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFFF1F5F9),
+        color: onSurf,
         letterSpacing: -0.2,
       ),
     ),
 
     cardTheme: CardThemeData(
-      color: const Color(0xFF1E293B),
+      color: elev1,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: Color(0xFF334155)),
+        side: const BorderSide(color: borderSub),
       ),
       margin: EdgeInsets.zero,
     ),
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF4ADE80),
+        backgroundColor: green400,
         foregroundColor: const Color(0xFF052E16),
         minimumSize: const Size.fromHeight(52),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -292,9 +304,9 @@ ThemeData buildSphereDarkTheme() {
 
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: const Color(0xFF4ADE80),
+        foregroundColor: green400,
         minimumSize: const Size.fromHeight(52),
-        side: const BorderSide(color: Color(0xFF4ADE80)),
+        side: const BorderSide(color: green400),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         textStyle: GoogleFonts.lexend(fontWeight: FontWeight.w600, fontSize: 15),
       ),
@@ -302,107 +314,101 @@ ThemeData buildSphereDarkTheme() {
 
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: const Color(0xFF4ADE80),
+        foregroundColor: green400,
         textStyle: GoogleFonts.lexend(fontWeight: FontWeight.w600, fontSize: 14),
       ),
     ),
 
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: const Color(0xFF334155),
+      fillColor: elev1,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF475569)),
+        borderSide: const BorderSide(color: borderMain),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF475569)),
+        borderSide: const BorderSide(color: borderMain),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF4ADE80), width: 1.5),
+        borderSide: const BorderSide(color: green400, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: Color(0xFFF87171)),
       ),
-      hintStyle: GoogleFonts.lexend(
-        fontSize: 14,
-        color: const Color(0xFF64748B),
-      ),
-      labelStyle: GoogleFonts.lexend(
-        fontSize: 14,
-        color: const Color(0xFF94A3B8),
-      ),
+      hintStyle: GoogleFonts.lexend(fontSize: 14, color: muted),
+      labelStyle: GoogleFonts.lexend(fontSize: 14, color: muted),
     ),
 
     chipTheme: ChipThemeData(
-      backgroundColor: const Color(0xFF334155),
-      selectedColor: const Color(0xFF14532D),
+      backgroundColor: elev2,
+      selectedColor: green900,
       labelStyle: GoogleFonts.lexend(fontSize: 13, fontWeight: FontWeight.w500),
-      side: const BorderSide(color: Color(0xFF475569)),
+      side: const BorderSide(color: borderMain),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     ),
 
     dividerTheme: const DividerThemeData(
-      color: Color(0xFF334155),
+      color: borderSub,
       thickness: 1,
       space: 1,
     ),
 
     listTileTheme: ListTileThemeData(
-      tileColor: const Color(0xFF1E293B),
+      tileColor: surf,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
 
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Color(0xFF1E293B),
-      selectedItemColor: Color(0xFF4ADE80),
-      unselectedItemColor: Color(0xFF94A3B8),
+      backgroundColor: surf,
+      selectedItemColor: green400,
+      unselectedItemColor: muted,
       elevation: 0,
       type: BottomNavigationBarType.fixed,
     ),
 
     navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: const Color(0xFF1E293B),
-      indicatorColor: const Color(0xFF14532D),
+      backgroundColor: surf,
+      indicatorColor: green900,
       iconTheme: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return const IconThemeData(color: Color(0xFF4ADE80));
+          return const IconThemeData(color: green400);
         }
-        return const IconThemeData(color: Color(0xFF94A3B8));
+        return const IconThemeData(color: muted);
       }),
       labelTextStyle: WidgetStateProperty.resolveWith((states) {
         final selected = states.contains(WidgetState.selected);
         return GoogleFonts.lexend(
           fontSize: 11,
           fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-          color: selected ? const Color(0xFF4ADE80) : const Color(0xFF94A3B8),
+          color: selected ? green400 : muted,
         );
       }),
     ),
 
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: const Color(0xFF334155),
-      contentTextStyle: GoogleFonts.lexend(color: const Color(0xFFF1F5F9)),
+      backgroundColor: elev2,
+      contentTextStyle: GoogleFonts.lexend(color: onSurf),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       behavior: SnackBarBehavior.floating,
     ),
 
     dialogTheme: DialogThemeData(
-      backgroundColor: const Color(0xFF1E293B),
+      backgroundColor: elev1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       titleTextStyle: GoogleFonts.lexend(
         fontSize: 18,
         fontWeight: FontWeight.w700,
-        color: const Color(0xFFF1F5F9),
+        color: onSurf,
       ),
     ),
 
     bottomSheetTheme: const BottomSheetThemeData(
-      backgroundColor: Color(0xFF1E293B),
+      backgroundColor: elev1,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
