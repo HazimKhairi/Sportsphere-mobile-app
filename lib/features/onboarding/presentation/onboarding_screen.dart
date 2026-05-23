@@ -15,88 +15,72 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     with TickerProviderStateMixin {
   final _controller = PageController();
   int _index = 0;
-  late AnimationController _fadeCtrl;
 
   static const _slides = [
     _Slide(
-      bgWord: 'TRAIN',
+      image: 'assets/onboarding/player.webp',
+      alignment: Alignment.topCenter,
       headline: 'Train Smart,\nGrow Faster',
       subtitle: 'AI-powered drills and real-time feedback built for serious athletes.',
-      image: 'assets/onboarding/player1.png',
     ),
     _Slide(
-      bgWord: 'PERFORM',
+      image: 'assets/onboarding/coach.webp',
+      alignment: Alignment.topCenter,
       headline: 'Track Every\nSession Live',
       subtitle: 'Coaches rate your performance. Your card improves in real time.',
-      image: 'assets/onboarding/player2.png',
     ),
     _Slide(
-      bgWord: 'EXCEL',
+      image: 'assets/onboarding/admin.webp',
+      alignment: Alignment.topLeft,
       headline: 'One App.\nTwo Roles.',
       subtitle: 'Player or coach — everything you need is right here.',
-      image: 'assets/onboarding/player3.png',
     ),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    _fadeCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 220),
-    );
-    _fadeCtrl.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    _fadeCtrl.dispose();
-    super.dispose();
-  }
 
   void _next() {
     if (_index == _slides.length - 1) {
       context.go('/role-pick');
     } else {
-      _fadeCtrl.reverse().then((_) {
-        _controller.nextPage(
-          duration: const Duration(milliseconds: 320),
-          curve: Curves.easeOutCubic,
-        );
-        _fadeCtrl.forward();
-      });
+      _controller.nextPage(
+        duration: const Duration(milliseconds: 380),
+        curve: Curves.easeOutCubic,
+      );
     }
   }
 
   void _skip() => context.go('/role-pick');
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final slide = _slides[_index];
     final isLast = _index == _slides.length - 1;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        backgroundColor: const Color(0xFF0A0F0A),
+        backgroundColor: const Color(0xFF080D08),
         body: Stack(
           children: [
-            // ── Page content ────────────────────────────────────────────────
+            // ── Full-screen page view ────────────────────────────────────
             PageView.builder(
               controller: _controller,
               itemCount: _slides.length,
               onPageChanged: (i) => setState(() => _index = i),
-              itemBuilder: (context, i) => _SlidePage(slide: _slides[i]),
+              itemBuilder: (_, i) => _SlidePage(slide: _slides[i]),
             ),
 
-            // ── Bottom overlay (dots + button) ───────────────────────────
+            // ── Bottom overlay ───────────────────────────────────────────
             Positioned(
               left: 0,
               right: 0,
               bottom: 0,
               child: _BottomPanel(
-                slide: slide,
+                slide: _slides[_index],
                 index: _index,
                 total: _slides.length,
                 isLast: isLast,
@@ -115,15 +99,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
 class _Slide {
   const _Slide({
-    required this.bgWord,
+    required this.image,
+    required this.alignment,
     required this.headline,
     required this.subtitle,
-    required this.image,
   });
-  final String bgWord;
+  final String image;
+  final Alignment alignment;
   final String headline;
   final String subtitle;
-  final String image;
 }
 
 // ─── SLIDE PAGE ───────────────────────────────────────────────────────────────
@@ -135,65 +119,66 @@ class _SlidePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    final bottomPanelH = 240.0;
+    // Image covers the top ~70% of screen, bottom panel sits over the gradient
+    const panelH = 280.0;
 
-    return Container(
-      color: const Color(0xFF0A0F0A),
-      child: Stack(
-        children: [
-          // ── Giant background word ──────────────────────────────────────
-          Positioned(
-            top: size.height * 0.12,
-            left: -24,
-            right: -24,
-            child: Text(
-              slide.bgWord,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Lexend',
-                fontSize: size.width * 0.32,
-                fontWeight: FontWeight.w900,
-                color: SphereColors.primary.withValues(alpha: 0.18),
-                letterSpacing: -4,
-                height: 1.0,
-              ),
-            ),
+    return Stack(
+      children: [
+        // ── Photo background (top portion, full-bleed) ─────────────────
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: panelH - 80,
+          child: Image.asset(
+            slide.image,
+            fit: BoxFit.cover,
+            alignment: slide.alignment,
+            filterQuality: FilterQuality.high,
           ),
+        ),
 
-          // ── Athlete photo (cutout PNG, overlaps bg word) ───────────────
-          Positioned(
-            top: size.height * 0.04,
-            left: 0,
-            right: 0,
-            bottom: bottomPanelH - 60,
-            child: Image.asset(
-              slide.image,
-              fit: BoxFit.contain,
-              alignment: Alignment.bottomCenter,
-              errorBuilder: (ctx, err, st) => const SizedBox.shrink(),
-            ),
-          ),
-
-          // ── Green glow behind player ───────────────────────────────────
-          Positioned(
-            bottom: bottomPanelH,
-            left: size.width * 0.2,
-            right: size.width * 0.2,
-            child: Container(
-              height: 120,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: SphereColors.primary.withValues(alpha: 0.25),
-                    blurRadius: 80,
-                    spreadRadius: 20,
-                  ),
+        // ── Gradient overlay: dark vignette from top + strong from bottom
+        Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: const [0.0, 0.25, 0.55, 0.78, 1.0],
+                colors: [
+                  const Color(0xFF080D08).withValues(alpha: 0.45),
+                  Colors.transparent,
+                  Colors.transparent,
+                  const Color(0xFF080D08).withValues(alpha: 0.7),
+                  const Color(0xFF080D08),
                 ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+
+        // ── Left-edge green accent line ────────────────────────────────
+        Positioned(
+          top: size.height * 0.18,
+          bottom: panelH + 40,
+          left: 0,
+          child: Container(
+            width: 3,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  SphereColors.primary.withValues(alpha: 0.8),
+                  Colors.transparent,
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -222,51 +207,68 @@ class _BottomPanel extends StatelessWidget {
 
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xFF111811),
+        color: Color(0xFF0D120D),
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
-      padding: EdgeInsets.fromLTRB(28, 24, 28, bottom + 24),
+      padding: EdgeInsets.fromLTRB(28, 28, 28, bottom + 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Headline
-          Text(
-            slide.headline,
-            style: const TextStyle(
-              fontFamily: 'Lexend',
-              fontSize: 34,
-              fontWeight: FontWeight.w900,
-              color: Color(0xFFF5F5F5),
-              height: 1.1,
-              letterSpacing: -0.5,
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            transitionBuilder: (child, anim) => FadeTransition(
+              opacity: anim,
+              child: SlideTransition(
+                position: Tween(
+                  begin: const Offset(0, 0.08),
+                  end: Offset.zero,
+                ).animate(anim),
+                child: child,
+              ),
+            ),
+            child: Text(
+              slide.headline,
+              key: ValueKey(slide.headline),
+              style: const TextStyle(
+                fontFamily: 'Lexend',
+                fontSize: 34,
+                fontWeight: FontWeight.w900,
+                color: Color(0xFFF5F5F5),
+                height: 1.1,
+                letterSpacing: -0.5,
+              ),
             ),
           ),
           const SizedBox(height: 8),
 
           // Subtitle
-          Text(
-            slide.subtitle,
-            style: const TextStyle(
-              fontFamily: 'Lexend',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              color: Color(0xFF7A8A7A),
-              height: 1.5,
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: Text(
+              slide.subtitle,
+              key: ValueKey(slide.subtitle),
+              style: const TextStyle(
+                fontFamily: 'Lexend',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                color: Color(0xFF7A8A7A),
+                height: 1.55,
+              ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 28),
 
-          // Dots + Skip row
+          // Dots + Skip
           Row(
             children: [
-              // Progress dots
               for (var i = 0; i < total; i++)
                 AnimatedContainer(
-                  duration: const Duration(milliseconds: 260),
+                  duration: const Duration(milliseconds: 280),
                   curve: Curves.easeOut,
                   margin: const EdgeInsets.only(right: 6),
-                  width: i == index ? 22 : 7,
+                  width: i == index ? 24 : 7,
                   height: 7,
                   decoration: BoxDecoration(
                     color: i == index
@@ -307,10 +309,7 @@ class _BottomPanel extends StatelessWidget {
 // ─── PILL BUTTON ──────────────────────────────────────────────────────────────
 
 class _PillButton extends StatefulWidget {
-  const _PillButton({
-    required this.label,
-    required this.onTap,
-  });
+  const _PillButton({required this.label, required this.onTap});
   final String label;
   final VoidCallback onTap;
 
@@ -321,7 +320,6 @@ class _PillButton extends StatefulWidget {
 class _PillButtonState extends State<_PillButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _press;
-  late Animation<double> _scale;
 
   @override
   void initState() {
@@ -333,7 +331,6 @@ class _PillButtonState extends State<_PillButton>
       upperBound: 1.0,
       value: 1.0,
     );
-    _scale = _press;
   }
 
   @override
@@ -352,10 +349,8 @@ class _PillButtonState extends State<_PillButton>
       },
       onTapCancel: () => _press.forward(),
       child: ScaleTransition(
-        scale: _scale,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
+        scale: _press,
+        child: Container(
           height: 58,
           decoration: BoxDecoration(
             color: SphereColors.primary,
