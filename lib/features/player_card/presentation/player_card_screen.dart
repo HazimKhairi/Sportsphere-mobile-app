@@ -56,7 +56,9 @@ class _LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: CircularProgressIndicator(color: Colors.white54));
+    return const Center(
+      child: CircularProgressIndicator(color: Colors.white54),
+    );
   }
 }
 
@@ -107,15 +109,17 @@ class _CardBodyState extends State<_CardBody> {
           ),
           backgroundColor: const Color(0xFF22C55E),
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           margin: const EdgeInsets.all(16),
         ),
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to save card.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Failed to save card.')));
     } finally {
       if (mounted) setState(() => _downloading = false);
     }
@@ -143,44 +147,14 @@ class _CardBodyState extends State<_CardBody> {
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       color: _kDark,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(24)),
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(24),
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 20),
-
-                        // Club + jersey
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: _ClubBadgeRow(card: widget.card),
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Player name
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            widget.card.playerName.toUpperCase(),
-                            style: const TextStyle(
-                              fontFamily: 'Lexend',
-                              fontSize: 36,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
-                              height: 1.0,
-                              letterSpacing: -0.5,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-
-                        // Position + OVR
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: _PositionOvrRow(card: widget.card),
-                        ),
-                        const SizedBox(height: 28),
 
                         // ── FIFA CARD (downloadable) ───────────────────────
                         const Padding(
@@ -212,8 +186,7 @@ class _CardBodyState extends State<_CardBody> {
                           ),
                           const SizedBox(height: 12),
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: _StatsGrid(stats: widget.card.activeStats),
                           ),
                           const SizedBox(height: 28),
@@ -222,9 +195,10 @@ class _CardBodyState extends State<_CardBody> {
                         // Radar chart
                         if (widget.card.activeStats.isNotEmpty) ...[
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20),
-                            child: _RadarSection(stats: widget.card.activeStats),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: _RadarSection(
+                              stats: widget.card.activeStats,
+                            ),
                           ),
                           const SizedBox(height: 28),
                         ],
@@ -233,15 +207,15 @@ class _CardBodyState extends State<_CardBody> {
                         if (widget.summary != null &&
                             widget.summary!.totalRatedSessions > 0) ...[
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: _TrainingRow(summary: widget.summary!),
                           ),
                           const SizedBox(height: 28),
                         ],
 
                         SizedBox(
-                            height: MediaQuery.of(context).padding.bottom + 24),
+                          height: MediaQuery.of(context).padding.bottom + 24,
+                        ),
                       ],
                     ),
                   ),
@@ -251,7 +225,7 @@ class _CardBodyState extends State<_CardBody> {
           ],
         ),
 
-        // ── Hero photo ───────────────────────────────────────────────────
+        // ── Hero photo ────────────────────────────────────────────────────
         Positioned(
           top: 0,
           left: 0,
@@ -259,7 +233,6 @@ class _CardBodyState extends State<_CardBody> {
           height: heroH,
           child: _HeroPhoto(card: widget.card),
         ),
-
       ],
     );
   }
@@ -297,7 +270,11 @@ class _DownloadButton extends StatelessWidget {
             : const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(LucideIcons.download, size: 16, color: Color(0xFF0A0A0A)),
+                  Icon(
+                    LucideIcons.download,
+                    size: 16,
+                    color: Color(0xFF0A0A0A),
+                  ),
                   SizedBox(width: 8),
                   Text(
                     'Save Card to Gallery',
@@ -322,11 +299,11 @@ class _HeroPhoto extends StatelessWidget {
   final PlayerCardData card;
 
   Color _tierColor() => switch (card.rarityTier) {
-        RarityTier.gold => const Color(0xFFFFD700),
-        RarityTier.diamond => const Color(0xFF48CAE4),
-        RarityTier.silver => const Color(0xFFC0C0C0),
-        _ => const Color(0xFFCD7F32),
-      };
+    RarityTier.gold => const Color(0xFFFFD700),
+    RarityTier.diamond => const Color(0xFF48CAE4),
+    RarityTier.silver => const Color(0xFFC0C0C0),
+    _ => const Color(0xFFCD7F32),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -392,13 +369,11 @@ class _HeroPhoto extends StatelessWidget {
           right: 20,
           bottom: 32,
           child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(999),
-              border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.2)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
             ),
             child: Text(
               card.rarityTier.label.toUpperCase(),
@@ -421,113 +396,11 @@ class _PhotoFallback extends StatelessWidget {
   const _PhotoFallback();
   @override
   Widget build(BuildContext context) => Container(
-        color: const Color(0xFF1A1A1A),
-        child: const Center(
-          child: Icon(LucideIcons.user, size: 80, color: Colors.white12),
-        ),
-      );
-}
-
-// ─── CLUB + JERSEY ROW ────────────────────────────────────────────────────────
-
-class _ClubBadgeRow extends StatelessWidget {
-  const _ClubBadgeRow({required this.card});
-  final PlayerCardData card;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 36,
-          height: 36,
-          decoration: BoxDecoration(
-            color: _kDarkElev,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: _kDarkBorder),
-          ),
-          child: const Center(
-            child: Icon(LucideIcons.shield, size: 18, color: Colors.white38),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Text(
-            card.clubName ?? 'Independent',
-            style: const TextStyle(
-              fontFamily: 'Lexend',
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Colors.white70,
-            ),
-          ),
-        ),
-        if (card.age != null)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-              color: _kDarkElev,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: _kDarkBorder),
-            ),
-            child: Text(
-              '${card.age} yrs',
-              style: const TextStyle(
-                fontFamily: 'Lexend',
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: Colors.white54,
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-// ─── POSITION + OVR ROW ───────────────────────────────────────────────────────
-
-class _PositionOvrRow extends StatelessWidget {
-  const _PositionOvrRow({required this.card});
-  final PlayerCardData card;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-          decoration: BoxDecoration(
-            color: context.sc.primary.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(
-                color: context.sc.primary.withValues(alpha: 0.3)),
-          ),
-          child: Text(
-            card.position,
-            style: TextStyle(
-              fontFamily: 'Lexend',
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: context.sc.primary,
-              letterSpacing: 0.8,
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        const Text(
-          'SPORTSPHERE',
-          style: TextStyle(
-            fontFamily: 'Lexend',
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-            color: Colors.white24,
-            letterSpacing: 2,
-          ),
-        ),
-      ],
-    );
-  }
+    color: const Color(0xFF1A1A1A),
+    child: const Center(
+      child: Icon(LucideIcons.user, size: 80, color: Colors.white12),
+    ),
+  );
 }
 
 // ─── SECTION LABEL ────────────────────────────────────────────────────────────
@@ -621,8 +494,7 @@ class _RadarSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final values =
-        stats.map((s) => (s.value / 100).clamp(0.0, 1.0)).toList();
+    final values = stats.map((s) => (s.value / 100).clamp(0.0, 1.0)).toList();
     final labels = stats.map((s) => s.key).toList();
 
     return Container(
@@ -697,7 +569,11 @@ class _PlayerRadarPainter extends CustomPainter {
       final path = Path();
       for (int i = 0; i < n; i++) {
         final p = _point(center, radius, i, n);
-        if (i == 0) { path.moveTo(p.dx, p.dy); } else { path.lineTo(p.dx, p.dy); }
+        if (i == 0) {
+          path.moveTo(p.dx, p.dy);
+        } else {
+          path.lineTo(p.dx, p.dy);
+        }
       }
       path.close();
       canvas.drawPath(path, gridPaint);
@@ -719,7 +595,11 @@ class _PlayerRadarPainter extends CustomPainter {
     final dataPath = Path();
     for (int i = 0; i < n; i++) {
       final p = _point(center, maxR * values[i], i, n);
-      if (i == 0) { dataPath.moveTo(p.dx, p.dy); } else { dataPath.lineTo(p.dx, p.dy); }
+      if (i == 0) {
+        dataPath.moveTo(p.dx, p.dy);
+      } else {
+        dataPath.lineTo(p.dx, p.dy);
+      }
     }
     dataPath.close();
     canvas.drawPath(dataPath, fillPaint);
@@ -742,11 +622,19 @@ class _PlayerRadarPainter extends CustomPainter {
           children: [
             TextSpan(
               text: '${labels[i]}\n',
-              style: TextStyle(color: labelColor, fontSize: 9, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: labelColor,
+                fontSize: 9,
+                fontWeight: FontWeight.w500,
+              ),
             ),
             TextSpan(
               text: '$displayVal',
-              style: TextStyle(color: fillColor, fontSize: 10, fontWeight: FontWeight.w700),
+              style: TextStyle(
+                color: fillColor,
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ],
         ),
@@ -830,7 +718,6 @@ class _TrainingRow extends StatelessWidget {
   }
 }
 
-
 // ─── ERROR ────────────────────────────────────────────────────────────────────
 
 class _ErrorView extends StatelessWidget {
@@ -862,13 +749,18 @@ class _ErrorView extends StatelessWidget {
                 const Text(
                   'Your player card appears when a coach has rated your attributes at least once.',
                   textAlign: TextAlign.center,
-                  style:
-                      TextStyle(fontSize: 13, color: Colors.white38, height: 1.5),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.white38,
+                    height: 1.5,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 OutlinedButton(
                   onPressed: onRetry,
-                  style: OutlinedButton.styleFrom(foregroundColor: Colors.white),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                  ),
                   child: const Text('Retry'),
                 ),
               ],
