@@ -6,13 +6,11 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../auth/presentation/auth_providers.dart';
-import '../../player_card/presentation/_widgets/sphere_player_card_preview.dart';
 import '../../player_card/presentation/player_card_providers.dart';
-import '../../scout/presentation/scout_providers.dart';
 import '_widgets/sphere_activity_timeline_item.dart';
 import '_widgets/sphere_entrance.dart';
 import '_widgets/sphere_hero_gradient.dart';
-import '_widgets/sphere_skill_radar_card.dart';
+import '_widgets/sphere_player_hero_card.dart';
 import '_widgets/session_live_banner.dart';
 import '_widgets/sphere_section_label.dart';
 import '_widgets/sphere_streak_card.dart';
@@ -44,7 +42,6 @@ class PlayerHomeScreen extends ConsumerWidget {
     final firstName = displayName.split(' ').first;
 
     final streakAsync = ref.watch(playerStreakProvider);
-    final scoutAsync = ref.watch(scoutProfileNotifierProvider);
     final activityAsync = ref.watch(activityTimelineProvider);
     final cardAsync = ref.watch(playerCardProvider);
 
@@ -102,11 +99,27 @@ class PlayerHomeScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: SphereSpacing.x32),
+                const SizedBox(height: SphereSpacing.x24),
+
+                // Player hero card (photo + identity + radar chart)
+                SphereEntrance(
+                  delayMs: 80,
+                  child: cardAsync.when(
+                    data: (data) => SpherePlayerHeroCard(
+                      card: data.card,
+                      onTap: () => context.push('/player-card'),
+                    ),
+                    loading: () => _CardShimmer(),
+                    error: (e, st) => _CardPlaceholder(
+                      onTap: () => context.push('/player-card'),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: SphereSpacing.x16),
 
                 // Streak card
                 SphereEntrance(
-                  delayMs: 80,
+                  delayMs: 140,
                   child: streakAsync.when(
                     data: (streak) => SphereStreakCard(
                       streakDays: streak.days,
@@ -122,64 +135,6 @@ class PlayerHomeScreen extends ConsumerWidget {
                       debugPrint('[home] streak error: $e\n$st');
                       return const SphereStreakCard(streakDays: 0, goal: 10);
                     },
-                  ),
-                ),
-                const SizedBox(height: SphereSpacing.x16),
-
-                // Skill radar
-                SphereEntrance(
-                  delayMs: 140,
-                  child: scoutAsync.when(
-                    data: (profile) => SphereSkillRadarCard(
-                      skills: profile?.skills ?? const {},
-                      onTap: () => context.push('/scout'),
-                    ),
-                    loading: () => const SphereSkillRadarCard(
-                      skills: {},
-                      loading: true,
-                    ),
-                    error: (_, __) => SphereSkillRadarCard(
-                      skills: const {},
-                      onTap: () => context.push('/scout'),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: SphereSpacing.x24),
-
-                // My Player Card section
-                SphereEntrance(
-                  delayMs: 180,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const SphereSectionLabel('My Card'),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () => context.push('/player-card'),
-                            child: Text(
-                              'Full View',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: context.sc.primary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: SphereSpacing.x12),
-                      cardAsync.when(
-                        data: (data) => SpherePlayerCardPreview(
-                          card: data.card,
-                          onTap: () => context.push('/player-card'),
-                        ),
-                        loading: () => _CardShimmer(),
-                        error: (e, st) => _CardPlaceholder(
-                          onTap: () => context.push('/player-card'),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
                 const SizedBox(height: SphereSpacing.x32),
@@ -219,7 +174,7 @@ class PlayerHomeScreen extends ConsumerWidget {
                       );
                     },
                     loading: () => Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       child: Center(
                         child: SizedBox(
                           width: 24,
@@ -328,7 +283,7 @@ class _BellIconButton extends StatelessWidget {
             onTap: onTap,
             customBorder: const CircleBorder(),
             child: Padding(
-              padding: EdgeInsets.all(11),
+              padding: const EdgeInsets.all(11),
               child: Icon(LucideIcons.bell, size: 20, color: context.sc.onSurface),
             ),
           ),
