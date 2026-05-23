@@ -287,7 +287,7 @@ class _ContentState extends State<_Content> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Hero (YouTube thumbnail or gradient placeholder)
+        // Hero (YouTube thumbnail or gradient placeholder) — no interactive children here
         Positioned(
           top: 0,
           left: 0,
@@ -319,39 +319,7 @@ class _ContentState extends State<_Content> {
                   ),
                 ),
               ),
-              // Play button overlay
-              if (widget.videoId != null && widget.onOpenYoutube != null)
-                Center(
-                  child: Material(
-                    color: context.sc.primary,
-                    shape: const CircleBorder(),
-                    elevation: 6,
-                    child: InkWell(
-                      onTap: widget.onOpenYoutube,
-                      customBorder: const CircleBorder(),
-                      child: Padding(
-                        padding: EdgeInsets.all(18),
-                        child: Icon(
-                          LucideIcons.play,
-                          size: 28,
-                          color: context.sc.onPrimary,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
             ],
-          ),
-        ),
-
-        // Back button overlay
-        SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(SphereSpacing.x16),
-            child: _CircleIconButton(
-              icon: LucideIcons.chevronLeft,
-              onTap: widget.onBack,
-            ),
           ),
         ),
 
@@ -435,6 +403,45 @@ class _ContentState extends State<_Content> {
                   ],
                 ],
               ),
+            ),
+          ),
+        ),
+
+        // Play button — above scrollable content so taps register
+        if (widget.videoId != null && widget.onOpenYoutube != null)
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 260,
+            child: Center(
+              child: Material(
+                color: context.sc.primary,
+                shape: const CircleBorder(),
+                elevation: 6,
+                child: InkWell(
+                  onTap: widget.onOpenYoutube,
+                  customBorder: const CircleBorder(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(18),
+                    child: Icon(
+                      LucideIcons.play,
+                      size: 28,
+                      color: context.sc.onPrimary,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+        // Back button — last in Stack so it's always on top
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(SphereSpacing.x16),
+            child: _CircleIconButton(
+              icon: LucideIcons.chevronLeft,
+              onTap: widget.onBack,
             ),
           ),
         ),
