@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../app/theme/sphere_colors.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -21,22 +22,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       bgWord: 'TRAIN',
       headline: 'Train Smart,\nGrow Faster',
       subtitle: 'AI-powered drills and real-time feedback built for serious athletes.',
-      image: 'assets/onboarding/player1.jpg',
-      accent: Color(0xFFD6FF4B),
+      image: 'assets/onboarding/player1.png',
     ),
     _Slide(
       bgWord: 'PERFORM',
       headline: 'Track Every\nSession Live',
       subtitle: 'Coaches rate your performance. Your card improves in real time.',
-      image: 'assets/onboarding/player2.jpg',
-      accent: Color(0xFFB3F0FF),
+      image: 'assets/onboarding/player2.png',
     ),
     _Slide(
       bgWord: 'EXCEL',
       headline: 'One App.\nTwo Roles.',
       subtitle: 'Player or coach — everything you need is right here.',
-      image: 'assets/onboarding/player3.jpg',
-      accent: Color(0xFFFFD6A5),
+      image: 'assets/onboarding/player3.png',
     ),
   ];
 
@@ -79,9 +77,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     final isLast = _index == _slides.length - 1;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.dark,
+      value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        backgroundColor: const Color(0xFFF2F2EF),
+        backgroundColor: const Color(0xFF0A0F0A),
         body: Stack(
           children: [
             // ── Page content ────────────────────────────────────────────────
@@ -121,13 +119,11 @@ class _Slide {
     required this.headline,
     required this.subtitle,
     required this.image,
-    required this.accent,
   });
   final String bgWord;
   final String headline;
   final String subtitle;
   final String image;
-  final Color accent;
 }
 
 // ─── SLIDE PAGE ───────────────────────────────────────────────────────────────
@@ -142,7 +138,7 @@ class _SlidePage extends StatelessWidget {
     final bottomPanelH = 240.0;
 
     return Container(
-      color: const Color(0xFFF2F2EF),
+      color: const Color(0xFF0A0F0A),
       child: Stack(
         children: [
           // ── Giant background word ──────────────────────────────────────
@@ -157,24 +153,43 @@ class _SlidePage extends StatelessWidget {
                 fontFamily: 'Lexend',
                 fontSize: size.width * 0.32,
                 fontWeight: FontWeight.w900,
-                color: slide.accent.withValues(alpha: 0.55),
+                color: SphereColors.primary.withValues(alpha: 0.18),
                 letterSpacing: -4,
                 height: 1.0,
               ),
             ),
           ),
 
-          // ── Athlete photo (takes upper 60% of screen) ─────────────────
+          // ── Athlete photo (cutout PNG, overlaps bg word) ───────────────
           Positioned(
-            top: 0,
+            top: size.height * 0.04,
             left: 0,
             right: 0,
-            bottom: bottomPanelH - 40,
+            bottom: bottomPanelH - 60,
             child: Image.asset(
               slide.image,
               fit: BoxFit.contain,
               alignment: Alignment.bottomCenter,
               errorBuilder: (ctx, err, st) => const SizedBox.shrink(),
+            ),
+          ),
+
+          // ── Green glow behind player ───────────────────────────────────
+          Positioned(
+            bottom: bottomPanelH,
+            left: size.width * 0.2,
+            right: size.width * 0.2,
+            child: Container(
+              height: 120,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: SphereColors.primary.withValues(alpha: 0.25),
+                    blurRadius: 80,
+                    spreadRadius: 20,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -206,8 +221,11 @@ class _BottomPanel extends StatelessWidget {
     final bottom = MediaQuery.of(context).padding.bottom;
 
     return Container(
-      color: const Color(0xFFF2F2EF),
-      padding: EdgeInsets.fromLTRB(28, 20, 28, bottom + 24),
+      decoration: const BoxDecoration(
+        color: Color(0xFF111811),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      padding: EdgeInsets.fromLTRB(28, 24, 28, bottom + 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,7 +237,7 @@ class _BottomPanel extends StatelessWidget {
               fontFamily: 'Lexend',
               fontSize: 34,
               fontWeight: FontWeight.w900,
-              color: Color(0xFF0A0A0A),
+              color: Color(0xFFF5F5F5),
               height: 1.1,
               letterSpacing: -0.5,
             ),
@@ -233,7 +251,7 @@ class _BottomPanel extends StatelessWidget {
               fontFamily: 'Lexend',
               fontSize: 13,
               fontWeight: FontWeight.w400,
-              color: Color(0xFF888888),
+              color: Color(0xFF7A8A7A),
               height: 1.5,
             ),
           ),
@@ -252,8 +270,8 @@ class _BottomPanel extends StatelessWidget {
                   height: 7,
                   decoration: BoxDecoration(
                     color: i == index
-                        ? const Color(0xFF0A0A0A)
-                        : const Color(0xFFCCCCCC),
+                        ? SphereColors.primary
+                        : const Color(0xFF2A3A2A),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -267,7 +285,7 @@ class _BottomPanel extends StatelessWidget {
                       fontFamily: 'Lexend',
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF999999),
+                      color: Color(0xFF4A5A4A),
                     ),
                   ),
                 ),
@@ -278,7 +296,6 @@ class _BottomPanel extends StatelessWidget {
           // CTA button
           _PillButton(
             label: isLast ? 'Get Started' : 'Next',
-            accent: slide.accent,
             onTap: onNext,
           ),
         ],
@@ -292,11 +309,9 @@ class _BottomPanel extends StatelessWidget {
 class _PillButton extends StatefulWidget {
   const _PillButton({
     required this.label,
-    required this.accent,
     required this.onTap,
   });
   final String label;
-  final Color accent;
   final VoidCallback onTap;
 
   @override
@@ -343,11 +358,11 @@ class _PillButtonState extends State<_PillButton>
           curve: Curves.easeOut,
           height: 58,
           decoration: BoxDecoration(
-            color: widget.accent,
+            color: SphereColors.primary,
             borderRadius: BorderRadius.circular(999),
             boxShadow: [
               BoxShadow(
-                color: widget.accent.withValues(alpha: 0.35),
+                color: SphereColors.primary.withValues(alpha: 0.35),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
@@ -360,7 +375,7 @@ class _PillButtonState extends State<_PillButton>
               fontFamily: 'Lexend',
               fontSize: 16,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF0A0A0A),
+              color: Color(0xFF071A02),
               letterSpacing: 0.2,
             ),
           ),
