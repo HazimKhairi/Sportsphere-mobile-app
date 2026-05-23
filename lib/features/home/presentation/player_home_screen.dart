@@ -141,6 +141,13 @@ class PlayerHomeScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
+                const SizedBox(height: SphereSpacing.x16),
+
+                // My Card banner
+                SphereEntrance(
+                  delayMs: 180,
+                  child: _PlayerCardBanner(onTap: () => context.push('/player-card')),
+                ),
                 const SizedBox(height: SphereSpacing.x32),
 
                 const SphereEntrance(
@@ -209,6 +216,63 @@ class PlayerHomeScreen extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _PlayerCardBanner extends StatelessWidget {
+  const _PlayerCardBanner({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: SphereSpacing.x16,
+          vertical: SphereSpacing.x16,
+        ),
+        decoration: BoxDecoration(
+          color: context.sc.onSurface,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(LucideIcons.idCard, size: 20, color: Colors.white),
+            ),
+            const SizedBox(width: SphereSpacing.x12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'My Player Card',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  Text(
+                    'View stats, OVR and skill profile',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.white54,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(LucideIcons.chevronRight, size: 18, color: Colors.white38),
+          ],
+        ),
+      ),
     );
   }
 }
