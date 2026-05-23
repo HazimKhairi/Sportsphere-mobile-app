@@ -109,10 +109,13 @@ class TrainScreen extends ConsumerWidget {
                       drillSubtitle: '',
                       loading: true,
                     ),
-                    error: (_, _) => const SphereDrillOfDayCard(
-                      drillName: 'Couldn\'t load drill',
-                      drillSubtitle: 'Try again later.',
-                    ),
+                    error: (e, st) {
+                      debugPrint('[train] todayDrill error: $e\n$st');
+                      return const SphereDrillOfDayCard(
+                        drillName: 'Couldn\'t load drill',
+                        drillSubtitle: 'Try again later.',
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: SphereSpacing.x32),
@@ -206,12 +209,15 @@ class TrainScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  error: (_, _) => Text(
-                    'Couldn\'t load drills.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
-                        ),
-                  ),
+                  error: (e, st) {
+                    debugPrint('[train] allDrills error: $e\n$st');
+                    return Text(
+                      'Couldn\'t load drills.',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: SphereColors.onSurfaceMuted,
+                          ),
+                    );
+                  },
                 ),
               ],
             ),

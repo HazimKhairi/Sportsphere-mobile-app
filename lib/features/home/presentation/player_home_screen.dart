@@ -102,10 +102,10 @@ class PlayerHomeScreen extends ConsumerWidget {
                       goal: 10,
                       loading: true,
                     ),
-                    error: (_, _) => const SphereStreakCard(
-                      streakDays: 0,
-                      goal: 10,
-                    ),
+                    error: (e, st) {
+                      debugPrint('[home] streak error: $e\n$st');
+                      return const SphereStreakCard(streakDays: 0, goal: 10);
+                    },
                   ),
                 ),
                 const SizedBox(height: SphereSpacing.x16),
@@ -126,10 +126,13 @@ class PlayerHomeScreen extends ConsumerWidget {
                       drillSubtitle: '',
                       loading: true,
                     ),
-                    error: (_, _) => const SphereDrillOfDayCard(
-                      drillName: 'Couldn’t load drill',
-                      drillSubtitle: 'Try again later.',
-                    ),
+                    error: (e, st) {
+                      debugPrint('[home] drill error: $e\n$st');
+                      return const SphereDrillOfDayCard(
+                        drillName: 'Couldn\'t load drill',
+                        drillSubtitle: 'Try again later.',
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: SphereSpacing.x32),
@@ -181,15 +184,18 @@ class PlayerHomeScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    error: (_, _) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Text(
-                        'Couldn’t load activity.',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: SphereColors.onSurfaceMuted,
-                            ),
-                      ),
-                    ),
+                    error: (e, st) {
+                      debugPrint('[home] activity error: $e\n$st');
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          'Couldn\'t load activity.',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: SphereColors.onSurfaceMuted,
+                              ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
