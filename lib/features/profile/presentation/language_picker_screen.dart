@@ -119,7 +119,10 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
                             label: _languages[i].$2,
                             badge: _languages[i].$3,
                             selected: _selected == _languages[i].$1,
-                            onTap: () => _select(_languages[i].$1),
+                            comingSoon: _languages[i].$1 == 'ms',
+                            onTap: _languages[i].$1 == 'ms'
+                                ? null
+                                : () => _select(_languages[i].$1),
                           ),
                           if (i < _languages.length - 1)
                             const Divider(
@@ -170,6 +173,7 @@ class _LangOption extends StatelessWidget {
     required this.label,
     required this.badge,
     required this.selected,
+    required this.comingSoon,
     required this.onTap,
   });
 
@@ -177,12 +181,17 @@ class _LangOption extends StatelessWidget {
   final String label;
   final String badge;
   final bool selected;
-  final VoidCallback onTap;
+  final bool comingSoon;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
+    final textColor = comingSoon
+        ? SphereColors.onSurfaceSubtle
+        : SphereColors.onSurface;
+
     return InkWell(
-      onTap: onTap,
+      onTap: comingSoon ? null : onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: SphereSpacing.x16,
@@ -196,31 +205,61 @@ class _LangOption extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: selected
-                    ? SphereColors.primary.withValues(alpha: 0.18)
-                    : SphereColors.surfaceElev2,
+                color: comingSoon
+                    ? SphereColors.surfaceElev1
+                    : selected
+                        ? SphereColors.primary.withValues(alpha: 0.18)
+                        : SphereColors.surfaceElev2,
                 border: Border.all(
-                  color: selected
-                      ? SphereColors.primary.withValues(alpha: 0.5)
-                      : SphereColors.borderSubtle,
+                  color: comingSoon
+                      ? SphereColors.borderSubtle
+                      : selected
+                          ? SphereColors.primary.withValues(alpha: 0.5)
+                          : SphereColors.borderSubtle,
                 ),
               ),
-              child: Text(
-                badge,
-                style: const TextStyle(fontSize: 20),
+              child: Opacity(
+                opacity: comingSoon ? 0.4 : 1.0,
+                child: Text(badge, style: const TextStyle(fontSize: 20)),
               ),
             ),
             const SizedBox(width: SphereSpacing.x12),
             Expanded(
-              child: Text(
-                label,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: SphereColors.onSurface,
-                      fontWeight: FontWeight.w600,
-                    ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: textColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  if (comingSoon)
+                    const SizedBox(height: 2),
+                ],
               ),
             ),
-            if (selected)
+            if (comingSoon)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: SphereColors.accentAmberPastel,
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: SphereColors.accentAmber.withValues(alpha: 0.4),
+                  ),
+                ),
+                child: Text(
+                  'Coming Soon',
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: SphereColors.accentAmber,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 10,
+                      ),
+                ),
+              )
+            else if (selected)
               const Icon(LucideIcons.check,
                   size: 16, color: SphereColors.primary),
           ],
