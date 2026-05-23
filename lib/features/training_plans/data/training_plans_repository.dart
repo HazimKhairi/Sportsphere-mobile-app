@@ -49,6 +49,7 @@ class TrainingPlansRepository {
       weeks.add(PlanWeek(
         id: weekDoc.id,
         weekNumber: (data['weekNumber'] as int?) ?? 1,
+        title: (data['title'] as String?) ?? '',
         theme: (data['theme'] as String?) ?? '',
         sessions: sessions,
       ));

@@ -61,12 +61,14 @@ class PlanWeek {
   const PlanWeek({
     required this.id,
     required this.weekNumber,
+    required this.title,
     required this.theme,
     required this.sessions,
   });
 
   final String id;
   final int weekNumber;
+  final String title;
   final String theme;
   final List<PlanSession> sessions;
 }
