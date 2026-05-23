@@ -38,7 +38,7 @@ class StrengthScreen extends ConsumerWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(
             SphereSpacing.x24, SphereSpacing.x8,
-            SphereSpacing.x24, 90,
+            SphereSpacing.x24, SphereSpacing.bottomNavSafe,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +104,7 @@ class _WorkoutCard extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: SphereSpacing.x4),
           Text(
             '${template.exercises.length} exercises · Est. ${template.estimatedMinutes} min',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -118,7 +118,7 @@ class _WorkoutCard extends StatelessWidget {
               onPressed: () =>
                   context.push('/train/strength/workout/${template.id}'),
               style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFFF97316),
+                backgroundColor: context.sc.warning,
                 foregroundColor: Colors.white,
                 shape: const RoundedRectangleBorder(
                   borderRadius: SphereRadius.pillRect,
@@ -155,7 +155,7 @@ class _EmptyState extends StatelessWidget {
                   color: context.sc.onSurfaceMuted,
                 ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: SphereSpacing.x4),
           Text(
             'Your coach will assign programs here.',
             textAlign: TextAlign.center,
