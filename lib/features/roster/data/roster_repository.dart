@@ -59,19 +59,19 @@ class RosterRepository {
       final data = res.data ?? const <String, dynamic>{};
       final p = (data['player'] as Map<String, dynamic>?) ?? data;
       return PlayerDetail(
-        id: p['id'] as String? ?? id,
-        firstName: p['firstName'] as String? ?? '',
-        lastName: p['lastName'] as String? ?? '',
-        email: p['email'] as String? ?? '',
-        phone: p['phone'] as String? ?? '',
-        position: p['position'] as String? ?? '',
-        teamName: p['teamName'] as String? ?? '',
-        photoUrl: p['photoUrl'] as String? ?? p['passportPhotoUrl'] as String?,
-        dateOfBirth: p['dateOfBirth'] as String?,
-        availability: p['availability'] as String?,
+        id: _str(p['id']) ?? id,
+        firstName: _str(p['firstName']) ?? '',
+        lastName: _str(p['lastName']) ?? '',
+        email: _str(p['email']) ?? '',
+        phone: _str(p['phone']) ?? '',
+        position: _str(p['position']) ?? '',
+        teamName: _str(p['teamName']) ?? '',
+        photoUrl: _str(p['photoUrl'] ?? p['passportPhotoUrl']),
+        dateOfBirth: _str(p['dateOfBirth']),
+        availability: _str(p['availability']),
         jerseyNumber: (p['jerseyNumber'] as num?)?.toInt(),
-        parentName: p['parentName'] as String?,
-        parentPhone: p['parentPhone'] as String?,
+        parentName: _str(p['parentName']),
+        parentPhone: _str(p['parentPhone']),
       );
     } on DioException catch (e) {
       throw RosterException(
@@ -120,17 +120,19 @@ class RosterRepository {
 
   PlayerCard _fromJson(Map<String, dynamic> e) {
     return PlayerCard(
-      id: e['id'] as String? ?? '',
-      firstName: e['firstName'] as String? ?? '',
-      lastName: e['lastName'] as String? ?? '',
-      email: e['email'] as String? ?? '',
-      phone: e['phone'] as String? ?? '',
-      position: e['position'] as String? ?? '',
-      teamName: e['teamName'] as String? ?? '',
-      photoUrl: e['photoUrl'] as String?,
-      dateOfBirth: e['dateOfBirth'] as String?,
+      id: _str(e['id']) ?? '',
+      firstName: _str(e['firstName']) ?? '',
+      lastName: _str(e['lastName']) ?? '',
+      email: _str(e['email']) ?? '',
+      phone: _str(e['phone']) ?? '',
+      position: _str(e['position']) ?? '',
+      teamName: _str(e['teamName']) ?? '',
+      photoUrl: _str(e['photoUrl'] ?? e['passportPhotoUrl']),
+      dateOfBirth: _str(e['dateOfBirth']),
     );
   }
+
+  static String? _str(dynamic v) => v is String ? v : null;
 }
 
 class RosterException implements Exception {
