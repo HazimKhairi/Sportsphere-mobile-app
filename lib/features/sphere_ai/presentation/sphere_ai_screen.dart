@@ -247,7 +247,7 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                         SphereSpacing.x16,
                         SphereSpacing.x8,
                         SphereSpacing.x16,
-                        110,
+                        SphereSpacing.x8,
                       ),
                       itemCount: _messages.length,
                       itemBuilder: (context, i) {
@@ -261,7 +261,7 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                 SphereSpacing.x16,
                 SphereSpacing.x8,
                 SphereSpacing.x16,
-                100,
+                SphereSpacing.x16,
               ),
               child: _Composer(
                 controller: _composer,
