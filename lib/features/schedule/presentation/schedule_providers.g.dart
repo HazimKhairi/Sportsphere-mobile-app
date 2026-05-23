@@ -24,7 +24,7 @@ final scheduleRepositoryProvider = Provider<ScheduleRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ScheduleRepositoryRef = ProviderRef<ScheduleRepository>;
-String _$monthSessionsHash() => r'd5d9ad55bb8bcce4052405ee32c8485fcd590721';
+String _$monthSessionsHash() => r'c7ffe7facf16af05c7b08fe8b0ccc3e2760fa3c9';
 
 /// Copied from Dart SDK
 class _SystemHash {
