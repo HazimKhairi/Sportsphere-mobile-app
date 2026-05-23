@@ -2,11 +2,22 @@ name: Flutter CI
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
     branches: [main]
 
+# ─── Secrets used ─────────────────────────────────────────────────────────────
+#
+#  GOOGLE_SERVICES_JSON              → android/app/google-services.json (client config)
+#  GOOGLE_SERVICE_INFO_PLIST         → ios/Runner/GoogleService-Info.plist (client config)
+#  FIREBASE_PRIVATE_KEY_BASE64       → base64-encoded service account JSON for `firebase deploy`
+#  NEXT_PUBLIC_STRIPE_TEST_PUBLISHABLE_KEY → passed as --dart-define for test/debug builds
+#
+#  Backend-only secrets (Stripe secret, Resend, Gemini, etc.) live in Vercel — NOT needed here.
+# ──────────────────────────────────────────────────────────────────────────────
+
 jobs:
+  # ── 1. Analyze & Test ────────────────────────────────────────────────────────
   analyze-and-test:
     name: Analyze & Test
     runs-on: ubuntu-latest
@@ -22,6 +33,14 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Write Firebase config files
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          GOOGLE_SERVICE_INFO_PLIST: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST }}
+        run: |
+          echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+          echo "$GOOGLE_SERVICE_INFO_PLIST" > ios/Runner/GoogleService-Info.plist
+
       - name: Install dependencies
         run: flutter pub get
 
@@ -34,6 +53,31 @@ jobs:
       - name: Run tests
         run: flutter test --coverage
 
+  # ── 2. Deploy Firestore Rules ────────────────────────────────────────────────
+  deploy-rules:
+    name: Deploy Firestore Rules
+    runs-on: ubuntu-latest
+    needs: analyze-and-test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Decode service account key
+        env:
+          FIREBASE_PRIVATE_KEY_BASE64: ${{ secrets.FIREBASE_PRIVATE_KEY_BASE64 }}
+        run: |
+          echo "$FIREBASE_PRIVATE_KEY_BASE64" | base64 --decode > /tmp/sa-key.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/sa-key.json" >> $GITHUB_ENV
+
+      - name: Deploy Firestore rules
+        run: firebase deploy --only firestore:rules --project sportsphere-production --non-interactive
+
+  # ── 3. Build Android Debug APK ───────────────────────────────────────────────
   build-android:
     name: Build Android APK (debug)
     runs-on: ubuntu-latest
@@ -56,11 +100,10 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Write google-services.json
+      - name: Write Firebase config
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: |
-          echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+        run: echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
 
       - name: Install dependencies
         run: flutter pub get
@@ -68,12 +111,17 @@ jobs:
       - name: Run build_runner
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Build APK
-        run: flutter build apk --debug --no-tree-shake-icons
+      - name: Build APK (debug, test Stripe key)
+        env:
+          STRIPE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_TEST_PUBLISHABLE_KEY }}
+        run: |
+          flutter build apk --debug --no-tree-shake-icons \
+            --dart-define=STRIPE_PUBLISHABLE_KEY=$STRIPE_KEY \
+            --dart-define=API_BASE_URL=https://sprtsphr.app
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: debug-apk
+          name: debug-apk-${{ github.sha }}
           path: build/app/outputs/flutter-apk/app-debug.apk
-          retention-days: 7
+          retention-days: 14
