@@ -53,6 +53,9 @@ import '../features/sphere_ai/presentation/sphere_ai_screen.dart';
 import '../features/coach/domain/coach_profile.dart';
 import '../features/coach/presentation/coach_profile_screen.dart';
 import '../features/club/presentation/club_detail_screen.dart';
+import '../features/recovery/presentation/recovery_screen.dart';
+import '../features/recovery/presentation/wellness_checkin_screen.dart';
+import '../features/recovery/presentation/recovery_content_detail_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -207,6 +210,21 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, state) {
               final id = state.pathParameters['planId']!;
               return PlanDetailScreen(planId: id);
+            },
+          ),
+          GoRoute(
+            path: '/train/recovery',
+            builder: (_, _) => const RecoveryScreen(),
+          ),
+          GoRoute(
+            path: '/train/recovery/check-in',
+            builder: (_, _) => const WellnessCheckInScreen(),
+          ),
+          GoRoute(
+            path: '/train/recovery/content/:id',
+            builder: (_, state) {
+              final id = state.pathParameters['id']!;
+              return RecoveryContentDetailScreen(contentId: id);
             },
           ),
           GoRoute(
