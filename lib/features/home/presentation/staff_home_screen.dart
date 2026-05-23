@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +8,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../auth/presentation/auth_providers.dart';
+import '../../notifications/presentation/notifications_sheet.dart';
 import '_widgets/sphere_avatar_stack.dart';
 import '_widgets/sphere_entrance.dart';
 import '_widgets/sphere_hero_gradient.dart';
@@ -97,7 +100,8 @@ class StaffHomeScreen extends ConsumerWidget {
                           ],
                         ),
                       ),
-                      _BellIconButton(onTap: () {}),
+                      _BellIconButton(
+                          onTap: () => NotificationsSheet.show(context)),
                     ],
                   ),
                 ),
@@ -210,34 +214,65 @@ class _BellIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Material(
-          color: context.sc.surfaceElev1,
-          shape: const CircleBorder(),
-          child: InkWell(
-            onTap: onTap,
-            customBorder: const CircleBorder(),
-            child: Padding(
-              padding: EdgeInsets.all(11),
-              child: Icon(LucideIcons.bell, size: 20, color: context.sc.onSurface),
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      stream: uid == null
+          ? const Stream.empty()
+          : FirebaseFirestore.instance
+              .collection('users')
+              .doc(uid)
+              .collection('notifications')
+              .where('read', isEqualTo: false)
+              .snapshots(),
+      builder: (context, snap) {
+        final unread = snap.data?.docs.length ?? 0;
+
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Material(
+              color: context.sc.surfaceElev1,
+              shape: const CircleBorder(),
+              child: InkWell(
+                onTap: onTap,
+                customBorder: const CircleBorder(),
+                child: Padding(
+                  padding: const EdgeInsets.all(11),
+                  child: Icon(LucideIcons.bell,
+                      size: 20, color: context.sc.onSurface),
+                ),
+              ),
             ),
-          ),
-        ),
-        Positioned(
-          right: 8,
-          top: 8,
-          child: Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: context.sc.primary,
-              border: Border.all(color: context.sc.surface, width: 1.5),
-            ),
-          ),
-        ),
-      ],
+            if (unread > 0)
+              Positioned(
+                right: 2,
+                top: 2,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 4, vertical: 1),
+                  decoration: BoxDecoration(
+                    color: context.sc.primary,
+                    borderRadius: BorderRadius.circular(99),
+                    border: Border.all(
+                        color: context.sc.surface, width: 1.5),
+                  ),
+                  constraints: const BoxConstraints(minWidth: 16),
+                  child: Text(
+                    unread > 99 ? '99+' : '$unread',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w800,
+                      height: 1.2,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }
