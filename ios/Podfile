@@ -40,6 +40,17 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
   end
 
+  # Allow arm64 simulator builds — MLKit frameworks are patched below.
+  # Set at both project and target level to override the xcconfig value.
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'i386'
+  end
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'i386'
+    end
+  end
+
   require 'fileutils'
 
   # Patch device-only arm64 frameworks for arm64 iOS Simulator compatibility.
