@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +8,7 @@ import '../data/fcm_repository.dart';
 
 part 'fcm_providers.g.dart';
 
-const _kFcmDeviceIdKey = 'fcm_device_id';
+const _kFcmTokenKey = 'fcm_token';
 
 @Riverpod(keepAlive: true)
 FcmRepository fcmRepository(FcmRepositoryRef ref) {
@@ -26,36 +24,25 @@ class FcmBootstrap extends _$FcmBootstrap {
     if (settings.authorizationStatus == AuthorizationStatus.denied) return;
     final token = await fm.getToken();
     if (token == null) return;
-    final info = await PackageInfo.fromPlatform();
-    final platform = Platform.isIOS ? 'ios' : 'android';
-    final deviceId = await ref.read(fcmRepositoryProvider).registerDevice(
-          token: token,
-          platform: platform,
-          appVersion: '${info.version}+${info.buildNumber}',
-        );
+    await ref.read(fcmRepositoryProvider).registerToken(token);
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_kFcmDeviceIdKey, deviceId);
+    await prefs.setString(_kFcmTokenKey, token);
   }
 }
 
-/// Best-effort: read the persisted deviceId, call unregisterDevice, clear pref.
-/// Never throws — logout must always succeed locally.
+/// Best-effort: unregister FCM token on logout.
 @riverpod
 Future<void> Function() fcmLogoutCleanup(FcmLogoutCleanupRef ref) {
   return () async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final deviceId = prefs.getString(_kFcmDeviceIdKey);
-      if (deviceId != null) {
+      final token = prefs.getString(_kFcmTokenKey);
+      if (token != null) {
         try {
-          await ref.read(fcmRepositoryProvider).unregisterDevice(deviceId);
-        } catch (_) {
-          // Server unreachable: keep local cleanup going.
-        }
-        await prefs.remove(_kFcmDeviceIdKey);
+          await ref.read(fcmRepositoryProvider).unregisterToken(token);
+        } catch (_) {}
+        await prefs.remove(_kFcmTokenKey);
       }
-    } catch (_) {
-      // Even reading prefs failed — log nothing, continue.
-    }
+    } catch (_) {}
   };
 }

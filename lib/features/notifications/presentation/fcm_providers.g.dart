@@ -23,10 +23,9 @@ final fcmRepositoryProvider = Provider<FcmRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FcmRepositoryRef = ProviderRef<FcmRepository>;
-String _$fcmLogoutCleanupHash() => r'13cb697a2763a8d98029aec137a1efd940615ccf';
+String _$fcmLogoutCleanupHash() => r'409a1611a2b9bcdd6dcda01226687e2d71da0952';
 
-/// Best-effort: read the persisted deviceId, call unregisterDevice, clear pref.
-/// Never throws — logout must always succeed locally.
+/// Best-effort: unregister FCM token on logout.
 ///
 /// Copied from [fcmLogoutCleanup].
 @ProviderFor(fcmLogoutCleanup)
@@ -44,7 +43,7 @@ final fcmLogoutCleanupProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FcmLogoutCleanupRef = AutoDisposeProviderRef<Future<void> Function()>;
-String _$fcmBootstrapHash() => r'165f5091ee7b3cd7b25211d9d5c502bc2ae488f6';
+String _$fcmBootstrapHash() => r'93cce37b6524f94073b4fec24ebbe94842158e28';
 
 /// See also [FcmBootstrap].
 @ProviderFor(FcmBootstrap)

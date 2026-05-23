@@ -95,7 +95,7 @@ class PlayerHomeScreen extends ConsumerWidget {
                         fit: BoxFit.fitHeight,
                       ),
                       const SizedBox(width: SphereSpacing.x12),
-                      _BellIconButton(onTap: () {}),
+                      _BellIconButton(onTap: () => context.push('/profile/notifications')),
                     ],
                   ),
                 ),
