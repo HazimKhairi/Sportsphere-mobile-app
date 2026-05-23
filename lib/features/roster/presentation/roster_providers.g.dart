@@ -6,7 +6,25 @@ part of 'roster_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$rosterRepositoryHash() => r'cb1163681c6b3a4a1939c4aba2586b0970336515';
+String _$rosterClubIdInterceptorHash() =>
+    r'4d942f70d0cfab8b47d7ad0e7edf4f8521a7f48d';
+
+/// See also [rosterClubIdInterceptor].
+@ProviderFor(rosterClubIdInterceptor)
+final rosterClubIdInterceptorProvider = Provider<ClubIdInterceptor>.internal(
+  rosterClubIdInterceptor,
+  name: r'rosterClubIdInterceptorProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$rosterClubIdInterceptorHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef RosterClubIdInterceptorRef = ProviderRef<ClubIdInterceptor>;
+String _$rosterRepositoryHash() => r'a8da2460165ace1b24aaf22e272a46f81c640a07';
 
 /// See also [rosterRepository].
 @ProviderFor(rosterRepository)
@@ -181,7 +199,7 @@ class _PlayerDetailProviderElement
   String get playerId => (origin as PlayerDetailProvider).playerId;
 }
 
-String _$rosterNotifierHash() => r'443f8742da814b7a17cdaa949ac7e7b58aad1a71';
+String _$rosterNotifierHash() => r'a9f8e3e52eb595a1227175bd94f42e2ee6608e35';
 
 /// See also [RosterNotifier].
 @ProviderFor(RosterNotifier)
