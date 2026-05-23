@@ -21,9 +21,10 @@ class DrillRepository {
     final pick = shuffled.first;
     final data = pick.data();
 
+    final name = data['name'];
     return TodayDrill(
       id: pick.id,
-      name: (data['name'] as String?) ?? 'Drill',
+      name: name is String && name.isNotEmpty ? name : 'Drill',
       difficulty: _parseDifficulty(data['difficulty']),
     );
   }
