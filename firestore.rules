@@ -1,0 +1,100 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helper functions ─────────────────────────────────────────────────────
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isStaff() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'staff';
+    }
+
+    function isMemberOfClub(clubId) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/clubs/$(clubId)/members/$(request.auth.uid));
+    }
+
+    // ─── Users ────────────────────────────────────────────────────────────────
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // ─── Players ─────────────────────────────────────────────────────────────
+
+    match /players/{playerId} {
+      // Players can read and update their own player document.
+      allow read, update: if isOwner(playerId);
+      // Staff can read all players (club-scoped via server logic).
+      allow read: if isStaff();
+
+      // Body composition subcollection — player owns their data.
+      match /body_composition/{entryId} {
+        allow read, write: if isOwner(playerId);
+        allow read: if isStaff();
+      }
+    }
+
+    // ─── Stripe / Payments ────────────────────────────────────────────────────
+
+    match /stripe_payments/{paymentId} {
+      // Players can read payments where they are the payer.
+      allow read: if isSignedIn() &&
+        (resource.data.playerId == request.auth.uid ||
+         resource.data.userId == request.auth.uid);
+      // Staff can read all payments (server-side scoped by clubId).
+      allow read: if isStaff();
+      // Only server (Cloud Functions) should write payments — no client writes.
+    }
+
+    // ─── Clubs ───────────────────────────────────────────────────────────────
+
+    match /clubs/{clubId} {
+      // Any club member can read the club doc.
+      allow read: if isMemberOfClub(clubId);
+      // Only staff can write club data.
+      allow write: if isStaff();
+
+      // Rewards catalog — members can read, staff can manage.
+      match /rewards/{rewardId} {
+        allow read: if isMemberOfClub(clubId);
+        allow write: if isStaff();
+      }
+
+      // Sessions — members can read.
+      match /sessions/{sessionId} {
+        allow read: if isMemberOfClub(clubId);
+        allow write: if isStaff();
+      }
+
+      // Members subcollection.
+      match /members/{memberId} {
+        allow read: if isMemberOfClub(clubId) || isOwner(memberId);
+        allow write: if isStaff();
+      }
+    }
+
+    // ─── Drills ──────────────────────────────────────────────────────────────
+
+    match /drills/{drillId} {
+      allow read: if isSignedIn();
+      allow write: if isStaff();
+    }
+
+    // ─── Activity / Timeline ─────────────────────────────────────────────────
+
+    match /activity/{userId}/{entryId} {
+      allow read: if isOwner(userId);
+      allow write: if isOwner(userId) || isStaff();
+    }
+  }
+}

@@ -354,11 +354,26 @@ class _VouchersTab extends ConsumerWidget {
           ),
         ),
       ),
-      error: (_, _) => Text(
-        'Could not load vouchers.',
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: SphereColors.onSurfaceMuted,
+      error: (_, _) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32),
+        child: Column(
+          children: [
+            Text(
+              'Could not load vouchers.',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: SphereColors.onSurfaceMuted,
+                  ),
             ),
+            const SizedBox(height: 12),
+            TextButton(
+              onPressed: () => ref.invalidate(myVouchersProvider),
+              child: const Text(
+                'Retry',
+                style: TextStyle(color: SphereColors.primary),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

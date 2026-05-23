@@ -23,7 +23,13 @@ import '../features/payments/presentation/payment_detail_screen.dart';
 import '../features/payments/presentation/payment_failure_screen.dart';
 import '../features/payments/presentation/payment_history_screen.dart';
 import '../features/payments/presentation/payment_success_screen.dart';
+import '../features/profile/presentation/about_screen.dart';
+import '../features/profile/presentation/edit_profile_screen.dart';
+import '../features/profile/presentation/help_faq_screen.dart';
+import '../features/profile/presentation/language_picker_screen.dart';
+import '../features/profile/presentation/notification_settings_screen.dart';
 import '../features/profile/presentation/profile_screen.dart';
+import '../features/profile/presentation/theme_picker_screen.dart';
 import '../features/programs/presentation/program_detail_screen.dart';
 import '../features/programs/presentation/programs_list_screen.dart';
 import '../features/role_pick/presentation/role_pick_screen.dart';
@@ -74,6 +80,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (atOnboarding || atLogin || atRolePick) {
         return '/home';
       }
+
+      // Block players from accessing staff-only routes.
+      if (role == AppRole.player && loc.startsWith('/staff/')) {
+        return '/home';
+      }
+
       return null;
     },
     routes: [
@@ -172,6 +184,30 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/profile',
             builder: (_, _) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: '/profile/edit',
+            builder: (_, _) => const EditProfileScreen(),
+          ),
+          GoRoute(
+            path: '/profile/notifications',
+            builder: (_, _) => const NotificationSettingsScreen(),
+          ),
+          GoRoute(
+            path: '/profile/theme',
+            builder: (_, _) => const ThemePickerScreen(),
+          ),
+          GoRoute(
+            path: '/profile/language',
+            builder: (_, _) => const LanguagePickerScreen(),
+          ),
+          GoRoute(
+            path: '/profile/help',
+            builder: (_, _) => const HelpFaqScreen(),
+          ),
+          GoRoute(
+            path: '/profile/about',
+            builder: (_, _) => const AboutScreen(),
           ),
           GoRoute(
             path: '/profile/achievements',

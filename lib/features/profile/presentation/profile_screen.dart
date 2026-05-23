@@ -81,7 +81,7 @@ class ProfileScreen extends ConsumerWidget {
                     ProfileRow(
                       icon: LucideIcons.userPen,
                       label: 'Edit profile',
-                      onTap: () => _comingSoon(context, 'Edit profile'),
+                      onTap: () => GoRouter.of(context).push('/profile/edit'),
                     ),
                     ProfileRow(
                       icon: LucideIcons.layoutGrid,
@@ -126,7 +126,7 @@ class ProfileScreen extends ConsumerWidget {
                     ProfileRow(
                       icon: LucideIcons.bell,
                       label: 'Notifications',
-                      onTap: () => _comingSoon(context, 'Notification settings'),
+                      onTap: () => GoRouter.of(context).push('/profile/notifications'),
                     ),
                   ],
                 ),
@@ -140,23 +140,23 @@ class ProfileScreen extends ConsumerWidget {
                       icon: LucideIcons.palette,
                       label: 'Theme',
                       trailingText: 'Dark',
-                      onTap: () => _comingSoon(context, 'Theme picker'),
+                      onTap: () => GoRouter.of(context).push('/profile/theme'),
                     ),
                     ProfileRow(
                       icon: LucideIcons.languages,
                       label: 'Language',
                       trailingText: 'EN',
-                      onTap: () => _comingSoon(context, 'Language picker'),
+                      onTap: () => GoRouter.of(context).push('/profile/language'),
                     ),
                     ProfileRow(
                       icon: LucideIcons.circleHelp,
                       label: 'Help and FAQ',
-                      onTap: () => _comingSoon(context, 'Help'),
+                      onTap: () => GoRouter.of(context).push('/profile/help'),
                     ),
                     ProfileRow(
                       icon: LucideIcons.info,
                       label: 'About',
-                      onTap: () => _comingSoon(context, 'About'),
+                      onTap: () => GoRouter.of(context).push('/profile/about'),
                     ),
                   ],
                 ),
@@ -187,12 +187,6 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-
-  void _comingSoon(BuildContext context, String label) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$label coming soon.')),
     );
   }
 

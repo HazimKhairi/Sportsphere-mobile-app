@@ -144,11 +144,43 @@ class BodyCompositionScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  error: (_, _) => Text(
-                    'Could not load entries.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                  error: (e, _) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Could not load entries.',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: SphereColors.onSurfaceMuted,
+                            ),
+                      ),
+                      const SizedBox(height: 8),
+                      if (e.toString().toLowerCase().contains('permission'))
+                        Container(
+                          padding: const EdgeInsets.all(SphereSpacing.x16),
+                          margin: const EdgeInsets.only(top: 4),
+                          decoration: BoxDecoration(
+                            color: SphereColors.warning.withValues(alpha: 0.1),
+                            borderRadius: SphereRadius.cardRect,
+                            border: Border.all(
+                                color: SphereColors.warning.withValues(alpha: 0.4)),
+                          ),
+                          child: Text(
+                            'Firestore permission denied. Ask your club admin to update the security rules so players can access their own body composition data.',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: SphereColors.warning,
+                                  height: 1.5,
+                                ),
+                          ),
                         ),
+                      const SizedBox(height: SphereSpacing.x16),
+                      TextButton(
+                        onPressed: () => ref.invalidate(myBodyCompositionProvider),
+                        child: const Text(
+                          'Retry',
+                          style: TextStyle(color: SphereColors.primary),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

@@ -160,11 +160,23 @@ class PaymentHistoryScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  error: (_, _) => Text(
-                    'Couldn’t load your payments.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: SphereColors.onSurfaceMuted,
+                  error: (_, _) => Column(
+                    children: [
+                      Text(
+                        'Could not load your payments.',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: SphereColors.onSurfaceMuted,
+                            ),
+                      ),
+                      const SizedBox(height: SphereSpacing.x12),
+                      TextButton(
+                        onPressed: () => ref.invalidate(myPaymentHistoryProvider),
+                        child: const Text(
+                          'Retry',
+                          style: TextStyle(color: SphereColors.primary),
                         ),
+                      ),
+                    ],
                   ),
                 ),
               ],
