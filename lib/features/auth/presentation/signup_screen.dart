@@ -460,32 +460,30 @@ class _SphereInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.sc.surfaceElev2,
-        borderRadius: SphereRadius.pillRect,
-        border: Border.all(color: context.sc.borderSubtle),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: controller,
-              keyboardType: keyboardType,
-              obscureText: obscureText,
-              style: TextStyle(color: context.sc.onSurface),
-              decoration: InputDecoration(
-                hintText: hint,
-                hintStyle: TextStyle(color: context.sc.onSurfaceMuted),
-                border: InputBorder.none,
-                isCollapsed: true,
-                contentPadding: const EdgeInsets.symmetric(vertical: 16),
-              ),
-            ),
-          ),
-          ?trailing,
-        ],
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      obscureText: obscureText,
+      style: TextStyle(color: context.sc.onSurface, fontSize: 15),
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: TextStyle(color: context.sc.onSurfaceMuted, fontSize: 15),
+        suffixIcon: trailing,
+        filled: true,
+        fillColor: context.sc.surfaceElev2,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: SphereRadius.cardRect,
+          borderSide: BorderSide(color: context.sc.borderSubtle),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: SphereRadius.cardRect,
+          borderSide: BorderSide(color: context.sc.primary, width: 1.5),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: SphereRadius.cardRect,
+          borderSide: BorderSide(color: context.sc.borderSubtle),
+        ),
       ),
     );
   }
