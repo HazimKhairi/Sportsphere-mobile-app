@@ -133,7 +133,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                     shape: const RoundedRectangleBorder(
                       borderRadius: SphereRadius.pillRect,
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    padding: const EdgeInsets.symmetric(vertical: SphereSpacing.x16),
                   ),
                   child: const Text('Log Set + Start Rest'),
                 ),
@@ -224,7 +224,7 @@ class _NumberField extends StatelessWidget {
               borderRadius: SphereRadius.cardRect,
               borderSide: BorderSide(color: context.sc.borderSubtle),
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(vertical: SphereSpacing.x12),
           ),
         ),
       ],
