@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../../app/theme/sphere_theme_ext.dart';
 import '../../../../app/theme/sphere_radius.dart';
 import '../../../../app/theme/sphere_spacing.dart';
 
@@ -30,73 +30,69 @@ class SphereFeatureGridCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: SphereRadius.cardRect,
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: _kCardBlur, sigmaY: _kCardBlur),
-        child: GestureDetector(
-          onTap: loading ? null : onTap,
-          child: Container(
-            padding: const EdgeInsets.all(SphereSpacing.x16),
-            decoration: BoxDecoration(
-              color: context.sc.surfaceElev1.withValues(alpha: 0.60),
-              borderRadius: SphereRadius.cardRect,
-              border: Border(
-                top: BorderSide(
-                  color: accentColor.withValues(alpha: 0.40),
-                ),
-                left: BorderSide(
-                  color: accentColor.withValues(alpha: 0.40),
-                ),
-                right: BorderSide(
-                  color: context.sc.onSurface.withValues(alpha: 0.08),
-                ),
-                bottom: BorderSide(
-                  color: context.sc.onSurface.withValues(alpha: 0.08),
+    return GestureDetector(
+      onTap: loading ? null : onTap,
+      child: ClipRRect(
+        borderRadius: SphereRadius.cardRect,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Layer 1: blur + glass background
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: _kCardBlur, sigmaY: _kCardBlur),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: context.sc.surfaceElev1.withValues(alpha: 0.60),
+                  border: Border(
+                    top: BorderSide(color: accentColor.withValues(alpha: 0.40)),
+                    left: BorderSide(color: accentColor.withValues(alpha: 0.40)),
+                    right: BorderSide(color: context.sc.onSurface.withValues(alpha: 0.08)),
+                    bottom: BorderSide(color: context.sc.onSurface.withValues(alpha: 0.08)),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: accentColor.withValues(alpha: 0.15),
+                      blurRadius: _kCardBlur,
+                    ),
+                  ],
                 ),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: accentColor.withValues(alpha: 0.15),
-                  blurRadius: _kCardBlur,
-                ),
-              ],
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  icon,
-                  size: SphereSpacing.x24,
-                  color: accentColor,
-                ),
-                const Spacer(),
-                Text(
-                  title,
-                  style: GoogleFonts.lexend(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: context.sc.onSurface,
+            // Layer 2: content — sits above blur, renders sharply
+            Padding(
+              padding: const EdgeInsets.all(SphereSpacing.x16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(icon, size: SphereSpacing.x24, color: accentColor),
+                  const Spacer(),
+                  Text(
+                    title,
+                    style: GoogleFonts.lexend(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: context.sc.onSurface,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.geist(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w400,
-                    color: context.sc.onSurfaceMuted,
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.geist(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w400,
+                      color: context.sc.onSurfaceMuted,
+                    ),
                   ),
-                ),
-                if (metricWidget != null) ...[
-                  const SizedBox(height: 4),
-                  metricWidget!,
+                  if (metricWidget != null) ...[
+                    const SizedBox(height: 4),
+                    metricWidget!,
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
