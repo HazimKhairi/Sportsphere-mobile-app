@@ -32,9 +32,8 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider).valueOrNull;
     final role = ref.watch(selectedRoleProvider);
-    final displayName = user?.displayName.isNotEmpty == true
-        ? user!.displayName
-        : (role == AppRole.staff ? 'Coach' : 'Player');
+    final displayName = ref.watch(userDisplayNameProvider).valueOrNull
+        ?? (role == AppRole.staff ? 'Coach' : 'Player');
     final email = user?.email ?? '';
     final roleLabel = role == AppRole.staff ? 'Staff' : 'Player';
 
