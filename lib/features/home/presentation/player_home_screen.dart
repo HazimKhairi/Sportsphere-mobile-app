@@ -89,6 +89,12 @@ class PlayerHomeScreen extends ConsumerWidget {
                           ],
                         ),
                       ),
+                      Image.asset(
+                        'assets/brand/sphere_wordmark.png',
+                        height: 22,
+                        fit: BoxFit.fitHeight,
+                      ),
+                      const SizedBox(width: SphereSpacing.x12),
                       _BellIconButton(onTap: () {}),
                     ],
                   ),

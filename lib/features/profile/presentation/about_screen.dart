@@ -87,16 +87,9 @@ class AboutScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // SportSphere logo — same as onboarding
-                        Image.asset(
-                          'assets/brand/sphere_icon.png',
-                          width: 56,
-                          height: 56,
-                        ),
-                        const SizedBox(height: SphereSpacing.x16),
                         Image.asset(
                           'assets/brand/sphere_wordmark.png',
-                          height: 28,
+                          height: 32,
                           fit: BoxFit.fitHeight,
                         ),
                         const SizedBox(height: 4),
