@@ -16,7 +16,6 @@ import '_widgets/profile_row.dart';
 import '_widgets/profile_section_card.dart';
 import '_widgets/sign_out_dialog.dart';
 import 'sign_out_flow.dart';
-import 'switch_club_sheet.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -134,11 +133,6 @@ class ProfileScreen extends ConsumerWidget {
                       icon: LucideIcons.shield,
                       label: 'My Club',
                       onTap: () => GoRouter.of(context).push('/club'),
-                    ),
-                    ProfileRow(
-                      icon: LucideIcons.arrowRightLeft,
-                      label: 'Switch club',
-                      onTap: () => SwitchClubSheet.show(context),
                     ),
                     ProfileRow(
                       icon: LucideIcons.bell,
