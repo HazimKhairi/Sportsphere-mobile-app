@@ -1,23 +1,18 @@
 import 'dart:math' as math;
-import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gal/gal.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../domain/player_card_data.dart';
-import '_widgets/sphere_player_fifa_card.dart';
 import 'player_card_providers.dart';
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 
 const _kDark = Color(0xFF0A0A0A);
 const _kDarkCard = Color(0xFF141414);
-const _kDarkElev = Color(0xFF1E1E1E);
 const _kDarkBorder = Color(0xFF2A2A2A);
 
 // ─── SCREEN ───────────────────────────────────────────────────────────────────
@@ -79,52 +74,6 @@ class _CardBody extends StatefulWidget {
 }
 
 class _CardBodyState extends State<_CardBody> {
-  final _cardKey = GlobalKey();
-  bool _downloading = false;
-
-  Future<void> _downloadCard() async {
-    if (_downloading) return;
-    setState(() => _downloading = true);
-    try {
-      final boundary =
-          _cardKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
-      if (boundary == null) return;
-
-      final image = await boundary.toImage(pixelRatio: 3.0);
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      if (byteData == null) return;
-      final bytes = byteData.buffer.asUint8List();
-
-      await Gal.putImageBytes(
-        bytes,
-        name: 'sportsphere_card_${widget.card.playerName.replaceAll(' ', '_')}',
-      );
-
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text(
-            'Card saved to gallery!',
-            style: TextStyle(fontFamily: 'Lexend'),
-          ),
-          backgroundColor: const Color(0xFF22C55E),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          margin: const EdgeInsets.all(16),
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Failed to save card.')));
-    } finally {
-      if (mounted) setState(() => _downloading = false);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenH = MediaQuery.sizeOf(context).height;
@@ -154,29 +103,7 @@ class _CardBodyState extends State<_CardBody> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 20),
-
-                        // ── FIFA CARD (downloadable) ───────────────────────
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: _SectionLabel('Player Card'),
-                        ),
-                        const SizedBox(height: 12),
-                        RepaintBoundary(
-                          key: _cardKey,
-                          child: SphereFifaCard(card: widget.card),
-                        ),
-                        const SizedBox(height: 12),
-
-                        // Download button
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: _DownloadButton(
-                            loading: _downloading,
-                            onTap: _downloadCard,
-                          ),
-                        ),
-                        const SizedBox(height: 28),
+                        const SizedBox(height: 24),
 
                         // Stats grid
                         if (widget.card.activeStats.isNotEmpty) ...[
@@ -234,60 +161,6 @@ class _CardBodyState extends State<_CardBody> {
           child: _HeroPhoto(card: widget.card),
         ),
       ],
-    );
-  }
-}
-
-// ─── DOWNLOAD BUTTON ──────────────────────────────────────────────────────────
-
-class _DownloadButton extends StatelessWidget {
-  const _DownloadButton({required this.loading, required this.onTap});
-  final bool loading;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: loading ? null : onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        height: 50,
-        decoration: BoxDecoration(
-          color: loading ? _kDarkElev : Colors.white,
-          borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: _kDarkBorder),
-        ),
-        alignment: Alignment.center,
-        child: loading
-            ? const SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white54,
-                ),
-              )
-            : const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    LucideIcons.download,
-                    size: 16,
-                    color: Color(0xFF0A0A0A),
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    'Save Card to Gallery',
-                    style: TextStyle(
-                      fontFamily: 'Lexend',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF0A0A0A),
-                    ),
-                  ),
-                ],
-              ),
-      ),
     );
   }
 }
