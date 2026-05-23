@@ -17,10 +17,14 @@ class SpherePlayerHeroCard extends StatelessWidget {
     super.key,
     required this.card,
     this.onTap,
+    this.greeting,
+    this.firstName,
   });
 
   final PlayerCardData card;
   final VoidCallback? onTap;
+  final String? greeting;
+  final String? firstName;
 
   Color get _tierColor => switch (card.rarityTier) {
         RarityTier.gold => const Color(0xFFFFD700),
@@ -42,7 +46,12 @@ class SpherePlayerHeroCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             // ── Photo hero — full bleed ────────────────────────────────────
-            _HeroPhoto(card: card, tierColor: _tierColor),
+            _HeroPhoto(
+              card: card,
+              tierColor: _tierColor,
+              greeting: greeting,
+              firstName: firstName,
+            ),
 
             // ── Identity panel ─────────────────────────────────────────────
             Padding(
@@ -139,14 +148,21 @@ class SpherePlayerHeroCard extends StatelessWidget {
 // ─── PHOTO HERO ───────────────────────────────────────────────────────────────
 
 class _HeroPhoto extends StatelessWidget {
-  const _HeroPhoto({required this.card, required this.tierColor});
+  const _HeroPhoto({
+    required this.card,
+    required this.tierColor,
+    this.greeting,
+    this.firstName,
+  });
   final PlayerCardData card;
   final Color tierColor;
+  final String? greeting;
+  final String? firstName;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 320,
+      height: 380,
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -160,16 +176,16 @@ class _HeroPhoto extends StatelessWidget {
           else
             const _PhotoFallback(),
 
-          // Gradient — dark at top, fade out, then dark at bottom
+          // Gradient — stronger dark at top for text, fade, then dark at bottom
           Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  stops: const [0.0, 0.35, 1.0],
+                  stops: const [0.0, 0.45, 1.0],
                   colors: [
-                    Colors.black.withValues(alpha: 0.35),
+                    Colors.black.withValues(alpha: 0.65),
                     Colors.transparent,
                     _kDark,
                   ],
@@ -178,9 +194,58 @@ class _HeroPhoto extends StatelessWidget {
             ),
           ),
 
+          // Greeting + wordmark overlay — top
+          if (greeting != null || firstName != null)
+            Positioned(
+              top: 16,
+              left: 20,
+              right: 20,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (greeting != null)
+                          Text(
+                            greeting!,
+                            style: const TextStyle(
+                              fontFamily: 'Lexend',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white60,
+                            ),
+                          ),
+                        if (firstName != null)
+                          Text(
+                            firstName!,
+                            style: const TextStyle(
+                              fontFamily: 'Lexend',
+                              fontSize: 32,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                              height: 1.1,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  Image.asset(
+                    'assets/brand/sphere_wordmark.png',
+                    height: 20,
+                    fit: BoxFit.fitHeight,
+                    color: Colors.white,
+                    colorBlendMode: BlendMode.srcIn,
+                  ),
+                ],
+              ),
+            ),
+
           // OVR — bottom left
           Positioned(
-            left: 16,
+            left: 20,
             bottom: 20,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

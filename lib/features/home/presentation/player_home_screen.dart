@@ -10,7 +10,6 @@ import '../../player_card/presentation/player_card_providers.dart';
 import '_widgets/sphere_activity_timeline_item.dart';
 import '_widgets/sphere_entrance.dart';
 import '_widgets/sphere_player_hero_card.dart';
-import '_widgets/session_live_banner.dart';
 import '_widgets/sphere_section_label.dart';
 import '_widgets/sphere_streak_card.dart';
 import 'player_home_providers.dart';
@@ -51,70 +50,20 @@ class PlayerHomeScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Header ────────────────────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                SphereSpacing.x24,
-                SphereSpacing.x16,
-                SphereSpacing.x24,
-                0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SphereEntrance(
-                    delayMs: 0,
-                    child: SessionLiveBanner(),
-                  ),
-                  SphereEntrance(
-                    delayMs: 0,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _greeting(),
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: context.sc.onSurfaceMuted,
-                                    ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                firstName,
-                                style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                                      color: context.sc.onSurface,
-                                      height: 1.1,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Image.asset(
-                          'assets/brand/sphere_wordmark.png',
-                          height: 22,
-                          fit: BoxFit.fitHeight,
-                        ),
-                        const SizedBox(width: SphereSpacing.x12),
-                        _BellIconButton(onTap: () => context.push('/profile/notifications')),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: SphereSpacing.x20),
-
-            // ── Player hero (full-bleed, no card border) ──────────────────
+            // ── Player hero (full-bleed) — greeting + logo overlaid inside ──
             SphereEntrance(
-              delayMs: 80,
+              delayMs: 0,
               child: cardAsync.when(
                 data: (data) => SpherePlayerHeroCard(
                   card: data.card,
+                  greeting: _greeting(),
+                  firstName: firstName,
                   onTap: () => context.push('/player-card'),
                 ),
-                loading: () => _CardShimmer(),
+                loading: () => _CardShimmer(
+                  greeting: _greeting(),
+                  firstName: firstName,
+                ),
                 error: (e, st) => _CardPlaceholder(
                   onTap: () => context.push('/player-card'),
                 ),
@@ -220,19 +169,40 @@ class PlayerHomeScreen extends ConsumerWidget {
 }
 
 class _CardShimmer extends StatelessWidget {
+  const _CardShimmer({this.greeting, this.firstName});
+  final String? greeting;
+  final String? firstName;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 360,
-      decoration: BoxDecoration(
-        color: const Color(0xFF141414),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Center(
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation(context.sc.primary),
-        ),
+      height: 380,
+      color: const Color(0xFF141414),
+      child: Stack(
+        children: [
+          const Center(child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white24)),
+          if (greeting != null || firstName != null)
+            Positioned(
+              top: 16,
+              left: 20,
+              right: 20,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (greeting != null)
+                    Text(greeting!, style: const TextStyle(color: Colors.white60, fontSize: 13)),
+                  if (firstName != null)
+                    Text(firstName!, style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'Lexend',
+                    )),
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -278,40 +248,3 @@ class _CardPlaceholder extends StatelessWidget {
   }
 }
 
-class _BellIconButton extends StatelessWidget {
-  const _BellIconButton({required this.onTap});
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Material(
-          color: context.sc.surfaceElev1,
-          shape: const CircleBorder(),
-          child: InkWell(
-            onTap: onTap,
-            customBorder: const CircleBorder(),
-            child: Padding(
-              padding: const EdgeInsets.all(11),
-              child: Icon(LucideIcons.bell, size: 20, color: context.sc.onSurface),
-            ),
-          ),
-        ),
-        Positioned(
-          right: 8,
-          top: 8,
-          child: Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: context.sc.primary,
-              border: Border.all(color: context.sc.surface, width: 1.5),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
