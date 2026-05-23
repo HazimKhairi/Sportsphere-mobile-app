@@ -45,6 +45,9 @@ import '../features/player_card/presentation/player_card_screen.dart';
 import '../features/scout/presentation/scout_edit_screen.dart';
 import '../features/scout/presentation/scout_screen.dart';
 import '../features/sphere_ai/presentation/sphere_ai_screen.dart';
+import '../features/coach/domain/coach_profile.dart';
+import '../features/coach/presentation/coach_profile_screen.dart';
+import '../features/club/presentation/club_detail_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -282,6 +285,18 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/staff/approvals',
             builder: (_, _) => const ApprovalsScreen(),
+          ),
+          GoRoute(
+            path: '/club',
+            builder: (_, _) => const ClubDetailScreen(),
+          ),
+          GoRoute(
+            path: '/coach/:id',
+            builder: (_, state) {
+              final coach = state.extra as CoachProfile?;
+              if (coach == null) return const SizedBox.shrink();
+              return CoachProfileScreen(coach: coach);
+            },
           ),
         ],
       ),

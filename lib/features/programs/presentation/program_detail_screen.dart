@@ -8,6 +8,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_colors.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../../coach/domain/coach_profile.dart';
+import '../../coach/presentation/coach_providers.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../../payments/presentation/payment_method_sheet.dart';
 import '../../payments/presentation/stripe_checkout_flow.dart';
@@ -106,7 +108,7 @@ class _ProgramDetailScreenState extends ConsumerState<ProgramDetailScreen> {
   }
 }
 
-class _Content extends StatelessWidget {
+class _Content extends ConsumerWidget {
   const _Content({
     required this.program,
     required this.formatDate,
@@ -123,7 +125,8 @@ class _Content extends StatelessWidget {
   final bool alreadyRegistered;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final coachesAsync = ref.watch(myCoachesProvider);
     final hasCover =
         program.coverImageUrl != null && program.coverImageUrl!.isNotEmpty;
     return Stack(
@@ -269,6 +272,41 @@ class _Content extends StatelessWidget {
                         ),
                       ('Currency', program.currency),
                     ],
+                  ),
+                  const SizedBox(height: SphereSpacing.x16),
+
+                  // Meet the Coaches
+                  coachesAsync.when(
+                    data: (coaches) {
+                      if (coaches.isEmpty) return const SizedBox.shrink();
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SphereSectionLabel('Meet the Coaches'),
+                          const SizedBox(height: SphereSpacing.x12),
+                          ...coaches.map(
+                            (coach) => Padding(
+                              padding: const EdgeInsets.only(bottom: SphereSpacing.x12),
+                              child: _CoachCard(
+                                coach: coach,
+                                onTap: () => context.push(
+                                  '/coach/${coach.id}',
+                                  extra: coach,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, s) => const SizedBox.shrink(),
+                  ),
+
+                  // About the Club
+                  const SizedBox(height: SphereSpacing.x8),
+                  _AboutClubBanner(
+                    onTap: () => context.push('/club'),
                   ),
                   const SizedBox(height: SphereSpacing.x16),
                 ],
@@ -435,6 +473,164 @@ class _CircleIconButton extends StatelessWidget {
       ),
     );
   }
+}
+
+class _CoachCard extends StatelessWidget {
+  const _CoachCard({required this.coach, required this.onTap});
+  final CoachProfile coach;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final initials = coach.name.trim().isEmpty
+        ? '?'
+        : coach.name.trim().split(RegExp(r'\s+')).let((parts) =>
+            parts.length == 1
+                ? parts.first[0].toUpperCase()
+                : '${parts.first[0]}${parts.last[0]}'.toUpperCase());
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(SphereSpacing.x16),
+        decoration: BoxDecoration(
+          color: SphereColors.surfaceElev1,
+          borderRadius: SphereRadius.cardRect,
+          border: Border.all(color: SphereColors.borderSubtle),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: SphereColors.primary.withValues(alpha: 0.15),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: coach.photoUrl != null && coach.photoUrl!.isNotEmpty
+                  ? Image.network(
+                      coach.photoUrl!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, e, s) => Center(
+                        child: Text(
+                          initials,
+                          style: const TextStyle(
+                            color: SphereColors.primary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: Text(
+                        initials,
+                        style: const TextStyle(
+                          color: SphereColors.primary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+            ),
+            const SizedBox(width: SphereSpacing.x12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    coach.name,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: SphereColors.onSurface,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  Text(
+                    coach.role,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: SphereColors.onSurfaceMuted,
+                        ),
+                  ),
+                  if (coach.yearsExperience != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      '${coach.yearsExperience} yrs experience'
+                      '${coach.certificationsCount > 0 ? ' · ${coach.certificationsCount} cert${coach.certificationsCount > 1 ? 's' : ''}' : ''}',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: SphereColors.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            const Icon(LucideIcons.chevronRight, size: 16, color: SphereColors.onSurfaceMuted),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AboutClubBanner extends StatelessWidget {
+  const _AboutClubBanner({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(SphereSpacing.x16),
+        decoration: BoxDecoration(
+          color: SphereColors.surfaceElev1,
+          borderRadius: SphereRadius.cardRect,
+          border: Border.all(color: SphereColors.borderSubtle),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: SphereColors.primary.withValues(alpha: 0.12),
+              ),
+              child: const Icon(LucideIcons.shield, size: 20, color: SphereColors.primary),
+            ),
+            const SizedBox(width: SphereSpacing.x12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'About the Club',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: SphereColors.onSurface,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  Text(
+                    'View certifications, contact details and more',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: SphereColors.onSurfaceMuted,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(LucideIcons.chevronRight, size: 16, color: SphereColors.onSurfaceMuted),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+extension _Let<T> on T {
+  R let<R>(R Function(T) block) => block(this);
 }
 
 class _NotFound extends StatelessWidget {

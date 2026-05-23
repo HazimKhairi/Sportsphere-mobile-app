@@ -130,6 +130,11 @@ class ProfileScreen extends ConsumerWidget {
                           .push('/profile/body-composition'),
                     ),
                     ProfileRow(
+                      icon: LucideIcons.shield,
+                      label: 'My Club',
+                      onTap: () => GoRouter.of(context).push('/club'),
+                    ),
+                    ProfileRow(
                       icon: LucideIcons.arrowRightLeft,
                       label: 'Switch club',
                       onTap: () => SwitchClubSheet.show(context),
