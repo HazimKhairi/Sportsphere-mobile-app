@@ -86,7 +86,7 @@ class SphereSkillRadarCard extends StatelessWidget {
                   painter: _RadarPainter(
                     values: List.generate(
                       _axes.length,
-                      (i) => ((skills[_axes[i]] ?? 0) / 100).clamp(0.0, 1.0),
+                      (i) => ((skills[_axes[i]] ?? 0) / 5).clamp(0.0, 1.0),
                     ),
                     labels: _labels,
                     fillColor: context.sc.primary,
@@ -196,7 +196,7 @@ class _RadarPainter extends CustomPainter {
     for (int i = 0; i < n; i++) {
       final labelPt = _point(center, maxR + _labelPad - 6, i, n);
       final angle = (2 * math.pi / n) * i - math.pi / 2;
-      final pct = (values[i] * 100).round();
+      final pct = (values[i] * 5).round(); // 1-5 rating
 
       final textPainter = TextPainter(
         text: TextSpan(

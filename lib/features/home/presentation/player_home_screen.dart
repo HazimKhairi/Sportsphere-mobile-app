@@ -38,9 +38,7 @@ class PlayerHomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final displayName = ref.watch(userDisplayNameProvider).valueOrNull
-        ?? ref.watch(currentUserProvider).valueOrNull?.displayName
-        ?? 'Player';
+    final displayName = ref.watch(userDisplayNameProvider).valueOrNull ?? 'Player';
     final firstName = displayName.split(' ').first;
 
     final streakAsync = ref.watch(playerStreakProvider);
