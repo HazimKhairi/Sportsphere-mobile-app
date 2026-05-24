@@ -715,17 +715,9 @@ class _IconBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: context.sc.surfaceElev1,
-      shape: const CircleBorder(),
-      child: InkWell(
-        onTap: onTap,
-        customBorder: const CircleBorder(),
-        child: Padding(
-          padding: const EdgeInsets.all(11),
-          child: Icon(icon, size: 20, color: context.sc.onSurface),
-        ),
-      ),
+    return IconButton(
+      onPressed: onTap,
+      icon: Icon(icon, size: 22, color: context.sc.onSurface),
     );
   }
 }
