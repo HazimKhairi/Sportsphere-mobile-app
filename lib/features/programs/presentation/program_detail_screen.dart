@@ -166,17 +166,6 @@ class _Content extends ConsumerWidget {
           ),
         ),
 
-        // Back button overlay
-        SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(SphereSpacing.x16),
-            child: _CircleIconButton(
-              icon: LucideIcons.chevronLeft,
-              onTap: onBack,
-            ),
-          ),
-        ),
-
         // Scrollable content
         Padding(
           padding: const EdgeInsets.only(bottom: 170),
@@ -374,6 +363,17 @@ class _Content extends ConsumerWidget {
                           fontSize: 16, fontWeight: FontWeight.w700),
                     ),
                   ),
+          ),
+        ),
+
+        // Back button last so it sits above scroll view and receives taps
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(SphereSpacing.x16),
+            child: _CircleIconButton(
+              icon: LucideIcons.chevronLeft,
+              onTap: onBack,
+            ),
           ),
         ),
       ],
