@@ -318,7 +318,8 @@ class AppLocalizationsMs extends AppLocalizations {
   String get passwordMinChars => 'Sekurang-kurangnya 8 aksara';
 
   @override
-  String get passwordTooShort => 'Kata laluan mesti sekurang-kurangnya 8 aksara.';
+  String get passwordTooShort =>
+      'Kata laluan mesti sekurang-kurangnya 8 aksara.';
 
   @override
   String get passwordsDoNotMatch => 'Kata laluan tidak sepadan.';
@@ -459,10 +460,12 @@ class AppLocalizationsMs extends AppLocalizations {
   String get programNotFound => 'Program tidak dijumpai';
 
   @override
-  String get coachWillAssignPrograms => 'Jurulatih anda akan menetapkan program latihan di sini.';
+  String get coachWillAssignPrograms =>
+      'Jurulatih anda akan menetapkan program latihan di sini.';
 
   @override
-  String get checkBackLater => 'Semak semula kemudian atau minta jurulatih anda menerbitkan program baru.';
+  String get checkBackLater =>
+      'Semak semula kemudian atau minta jurulatih anda menerbitkan program baru.';
 
   @override
   String get details => 'Butiran';
@@ -519,7 +522,8 @@ class AppLocalizationsMs extends AppLocalizations {
   String get noMediaForSession => 'Tiada media untuk sesi ini.';
 
   @override
-  String get noMediaYet => 'Tiada media lagi. Tambah foto atau video dari sesi ini.';
+  String get noMediaYet =>
+      'Tiada media lagi. Tambah foto atau video dari sesi ini.';
 
   @override
   String get deleteMedia => 'Padam media?';
@@ -597,10 +601,12 @@ class AppLocalizationsMs extends AppLocalizations {
   String get viewReceipt => 'Lihat resit';
 
   @override
-  String get handCashToStaff => 'Serahkan tunai kepada kakitangan di kaunter. Leret di bawah untuk merekod pembayaran anda.';
+  String get handCashToStaff =>
+      'Serahkan tunai kepada kakitangan di kaunter. Leret di bawah untuk merekod pembayaran anda.';
 
   @override
-  String get staffWillConfirm => 'Anda akan menerima pemberitahuan setelah kakitangan mengesahkan pembayaran anda.';
+  String get staffWillConfirm =>
+      'Anda akan menerima pemberitahuan setelah kakitangan mengesahkan pembayaran anda.';
 
   @override
   String get pendingCashPayments => 'Pembayaran tunai yang menunggu semakan.';
@@ -633,10 +639,12 @@ class AppLocalizationsMs extends AppLocalizations {
   String get couldNotOpenReceipt => 'Tidak dapat membuka resit.';
 
   @override
-  String get registrationConfirmed => 'Pendaftaran anda disahkan. Kami menghantar resit ke e-mel anda.';
+  String get registrationConfirmed =>
+      'Pendaftaran anda disahkan. Kami menghantar resit ke e-mel anda.';
 
   @override
-  String get registerForProgram => 'Daftar untuk program untuk melihat sejarah pembayaran anda di sini.';
+  String get registerForProgram =>
+      'Daftar untuk program untuk melihat sejarah pembayaran anda di sini.';
 
   @override
   String get yourLast10Transactions => '10 transaksi terbaru anda.';
@@ -705,10 +713,12 @@ class AppLocalizationsMs extends AppLocalizations {
   String get manageWorkouts => 'Urus senaman & rancangan';
 
   @override
-  String get createFirstPlan => 'Ketik + untuk mencipta rancangan latihan pertama anda.';
+  String get createFirstPlan =>
+      'Ketik + untuk mencipta rancangan latihan pertama anda.';
 
   @override
-  String get createFirstTemplate => 'Ketik + untuk mencipta templat senaman pertama anda.';
+  String get createFirstTemplate =>
+      'Ketik + untuk mencipta templat senaman pertama anda.';
 
   @override
   String get addExercise => 'Tambah sekurang-kurangnya satu latihan.';
@@ -759,7 +769,8 @@ class AppLocalizationsMs extends AppLocalizations {
   String get noDrillsAvailable => 'Tiada gerak kerja tersedia';
 
   @override
-  String get coachCanPublishDrills => 'Jurulatih anda boleh menerbitkan gerak kerja dari papan pemuka.';
+  String get coachCanPublishDrills =>
+      'Jurulatih anda boleh menerbitkan gerak kerja dari papan pemuka.';
 
   @override
   String get drillComplete => 'Gerak kerja selesai';
@@ -807,7 +818,8 @@ class AppLocalizationsMs extends AppLocalizations {
   String get tapAddEntry => 'Ketik Tambah rekod untuk log ukuran pertama anda.';
 
   @override
-  String get trackWeightHeight => 'Jejak berat, tinggi, dan komposisi dari masa ke masa.';
+  String get trackWeightHeight =>
+      'Jejak berat, tinggi, dan komposisi dari masa ke masa.';
 
   @override
   String get couldNotLoadEntries => 'Tidak dapat memuatkan rekod.';
@@ -879,7 +891,8 @@ class AppLocalizationsMs extends AppLocalizations {
   String get couldNotAttachImage => 'Tidak dapat melampirkan imej. Cuba lagi.';
 
   @override
-  String get sphereAiDisclaimer => 'Untuk panduan sukan umum sahaja. Bukan pengganti nasihat profesional.';
+  String get sphereAiDisclaimer =>
+      'Untuk panduan sukan umum sahaja. Bukan pengganti nasihat profesional.';
 
   @override
   String get scoutProfile => 'Profil Pengakap';
@@ -900,7 +913,8 @@ class AppLocalizationsMs extends AppLocalizations {
   String get hiddenFromClubs => 'Tersembunyi dari kelab';
 
   @override
-  String get couldNotLoadScoutProfile => 'Tidak dapat memuatkan profil pengakap';
+  String get couldNotLoadScoutProfile =>
+      'Tidak dapat memuatkan profil pengakap';
 
   @override
   String get turnOnDiscoverable => 'Hidupkan untuk boleh dijumpai oleh kelab';
@@ -930,7 +944,8 @@ class AppLocalizationsMs extends AppLocalizations {
   String get playerCardLive => 'Kad anda aktif — kelab boleh menjumpai anda';
 
   @override
-  String get getCardRated => 'Dinilai oleh jurulatih untuk membuka kad rasmi anda';
+  String get getCardRated =>
+      'Dinilai oleh jurulatih untuk membuka kad rasmi anda';
 
   @override
   String get selfRateSkills => 'Nilai Kemahiran Sendiri';
@@ -939,7 +954,8 @@ class AppLocalizationsMs extends AppLocalizations {
   String get saveCardToGallery => 'Simpan Kad ke Galeri';
 
   @override
-  String get coachesRatePerformance => 'Jurulatih menilai prestasi anda. Kad anda bertambah baik secara masa nyata.';
+  String get coachesRatePerformance =>
+      'Jurulatih menilai prestasi anda. Kad anda bertambah baik secara masa nyata.';
 
   @override
   String get cardSavedToGallery => 'Kad disimpan ke galeri!';
@@ -963,7 +979,8 @@ class AppLocalizationsMs extends AppLocalizations {
   String get manageAlerts => 'Urus amaran dan tetapan tolak';
 
   @override
-  String get notificationsBlocked => 'Pemberitahuan disekat. Pergi ke Tetapan peranti untuk mengaktifkannya.';
+  String get notificationsBlocked =>
+      'Pemberitahuan disekat. Pergi ke Tetapan peranti untuk mengaktifkannya.';
 
   @override
   String get chooseWhatToNotify => 'Pilih apa yang anda mahu diberitahu.';
@@ -993,13 +1010,16 @@ class AppLocalizationsMs extends AppLocalizations {
   String get couldNotLoadVouchers => 'Tidak dapat memuatkan baucar.';
 
   @override
-  String get spendPoints => 'Belanjakan mata untuk barang yang disediakan kelab anda.';
+  String get spendPoints =>
+      'Belanjakan mata untuk barang yang disediakan kelab anda.';
 
   @override
-  String get earnBadges => 'Kumpul lencana semasa anda berlatih. Semakin susah tahap, semakin jarang dibuka.';
+  String get earnBadges =>
+      'Kumpul lencana semasa anda berlatih. Semakin susah tahap, semakin jarang dibuka.';
 
   @override
-  String get coachCanPublishRewards => 'Jurulatih anda boleh menerbitkan ganjaran dari papan pemuka.';
+  String get coachCanPublishRewards =>
+      'Jurulatih anda boleh menerbitkan ganjaran dari papan pemuka.';
 
   @override
   String get achievements => 'Pencapaian';
@@ -1056,7 +1076,8 @@ class AppLocalizationsMs extends AppLocalizations {
   String get yourPerformanceHub => 'Pusat prestasi anda.';
 
   @override
-  String get noActivityYet => 'Tiada aktiviti lagi. Berlatih hari ini untuk mulakan siri anda.';
+  String get noActivityYet =>
+      'Tiada aktiviti lagi. Berlatih hari ini untuk mulakan siri anda.';
 
   @override
   String get loadMore => 'Muatkan lagi';
@@ -1102,4 +1123,61 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get tryAgainLater => 'Cuba lagi sebentar.';
+
+  @override
+  String get trackMeals => 'Jejak pemakanan anda dan tingkatkan prestasi.';
+
+  @override
+  String get todaysMeals => 'Hidangan Hari Ini';
+
+  @override
+  String get noMealsLoggedToday => 'Tiada hidangan dilog hari ini';
+
+  @override
+  String get tapToLogMeal => 'Ketik + untuk log hidangan pertama anda';
+
+  @override
+  String get logMeal => 'Log Hidangan';
+
+  @override
+  String get analysePhoto => 'Analisis';
+
+  @override
+  String get retake => 'Ambil Semula';
+
+  @override
+  String get mealType => 'Jenis hidangan';
+
+  @override
+  String get breakfast => 'Sarapan';
+
+  @override
+  String get lunch => 'Tengah Hari';
+
+  @override
+  String get dinner => 'Makan Malam';
+
+  @override
+  String get snack => 'Snek';
+
+  @override
+  String get photoAnalysisFailed => 'Analisis foto gagal. Cuba lagi.';
+
+  @override
+  String get saveLog => 'Simpan';
+
+  @override
+  String get foodsDetected => 'Makanan dikesan';
+
+  @override
+  String kcalTotal(int calories) => '$calories kcal jumlah';
+
+  @override
+  String get deleteMealLog => 'Padam log hidangan';
+
+  @override
+  String get deleteMealLogConfirm => 'Buang hidangan ini daripada log hari ini?';
+
+  @override
+  String get nutritionTracker => 'Pemakanan';
 }

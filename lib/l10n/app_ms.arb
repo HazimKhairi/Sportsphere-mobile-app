@@ -365,5 +365,26 @@
   "goBack": "Kembali",
   "goHome": "Pergi ke laman utama",
   "backToHome": "Kembali ke laman utama",
-  "tryAgainLater": "Cuba lagi sebentar."
+  "tryAgainLater": "Cuba lagi sebentar.",
+
+  "trackMeals": "Jejak pemakanan anda dan tingkatkan prestasi.",
+  "todaysMeals": "Hidangan Hari Ini",
+  "noMealsLoggedToday": "Tiada hidangan dilog hari ini",
+  "tapToLogMeal": "Ketik + untuk log hidangan pertama anda",
+  "logMeal": "Log Hidangan",
+  "analysePhoto": "Analisis",
+  "retake": "Ambil Semula",
+  "mealType": "Jenis hidangan",
+  "breakfast": "Sarapan",
+  "lunch": "Tengah Hari",
+  "dinner": "Makan Malam",
+  "snack": "Snek",
+  "photoAnalysisFailed": "Analisis foto gagal. Cuba lagi.",
+  "saveLog": "Simpan",
+  "foodsDetected": "Makanan dikesan",
+  "kcalTotal": "{calories} kcal jumlah",
+  "@kcalTotal": { "placeholders": { "calories": { "type": "int" } } },
+  "deleteMealLog": "Padam log hidangan",
+  "deleteMealLogConfirm": "Buang hidangan ini daripada log hari ini?",
+  "nutritionTracker": "Pemakanan"
 }

@@ -67,6 +67,7 @@ import '../features/club/presentation/club_detail_screen.dart';
 import '../features/recovery/presentation/recovery_screen.dart';
 import '../features/recovery/presentation/wellness_checkin_screen.dart';
 import '../features/recovery/presentation/recovery_content_detail_screen.dart';
+import '../features/nutrition/presentation/nutrition_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -237,6 +238,10 @@ final routerProvider = Provider<GoRouter>((ref) {
               final id = state.pathParameters['id']!;
               return RecoveryContentDetailScreen(contentId: id);
             },
+          ),
+          GoRoute(
+            path: '/train/recovery/nutrition',
+            builder: (_, _) => const NutritionScreen(),
           ),
           GoRoute(
             path: '/schedule',

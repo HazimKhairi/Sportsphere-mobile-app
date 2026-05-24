@@ -459,10 +459,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get programNotFound => 'Program not found';
 
   @override
-  String get coachWillAssignPrograms => 'Your coach will assign training programs here.';
+  String get coachWillAssignPrograms =>
+      'Your coach will assign training programs here.';
 
   @override
-  String get checkBackLater => 'Check back later or ask your coach to publish a new program.';
+  String get checkBackLater =>
+      'Check back later or ask your coach to publish a new program.';
 
   @override
   String get details => 'Details';
@@ -519,7 +521,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noMediaForSession => 'No media for this session.';
 
   @override
-  String get noMediaYet => 'No media yet. Add photos or videos from this session.';
+  String get noMediaYet =>
+      'No media yet. Add photos or videos from this session.';
 
   @override
   String get deleteMedia => 'Delete media?';
@@ -597,10 +600,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get viewReceipt => 'View receipt';
 
   @override
-  String get handCashToStaff => 'Hand cash to staff at the counter. Swipe below to record your payment.';
+  String get handCashToStaff =>
+      'Hand cash to staff at the counter. Swipe below to record your payment.';
 
   @override
-  String get staffWillConfirm => 'You will get a notification once staff confirms your payment.';
+  String get staffWillConfirm =>
+      'You will get a notification once staff confirms your payment.';
 
   @override
   String get pendingCashPayments => 'Pending cash payments to review.';
@@ -633,10 +638,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get couldNotOpenReceipt => 'Could not open receipt.';
 
   @override
-  String get registrationConfirmed => 'Your registration is confirmed. We sent a receipt to your email.';
+  String get registrationConfirmed =>
+      'Your registration is confirmed. We sent a receipt to your email.';
 
   @override
-  String get registerForProgram => 'Register for a program to see your payment history here.';
+  String get registerForProgram =>
+      'Register for a program to see your payment history here.';
 
   @override
   String get yourLast10Transactions => 'Your last 10 transactions.';
@@ -708,7 +715,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createFirstPlan => 'Tap + to create your first training plan.';
 
   @override
-  String get createFirstTemplate => 'Tap + to create your first workout template.';
+  String get createFirstTemplate =>
+      'Tap + to create your first workout template.';
 
   @override
   String get addExercise => 'Add at least one exercise.';
@@ -759,7 +767,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noDrillsAvailable => 'No drills available';
 
   @override
-  String get coachCanPublishDrills => 'Your coach can publish drills from the dashboard.';
+  String get coachCanPublishDrills =>
+      'Your coach can publish drills from the dashboard.';
 
   @override
   String get drillComplete => 'Drill complete';
@@ -807,7 +816,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tapAddEntry => 'Tap Add entry to log your first measurement.';
 
   @override
-  String get trackWeightHeight => 'Track weight, height, and composition over time.';
+  String get trackWeightHeight =>
+      'Track weight, height, and composition over time.';
 
   @override
   String get couldNotLoadEntries => 'Could not load entries.';
@@ -879,7 +889,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get couldNotAttachImage => 'Could not attach image. Try again.';
 
   @override
-  String get sphereAiDisclaimer => 'For general sporting guidance only. Not a substitute for professional advice.';
+  String get sphereAiDisclaimer =>
+      'For general sporting guidance only. Not a substitute for professional advice.';
 
   @override
   String get scoutProfile => 'Scout Profile';
@@ -930,7 +941,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get playerCardLive => 'Your card is live — clubs can find you';
 
   @override
-  String get getCardRated => 'Get rated by a coach to unlock your official card';
+  String get getCardRated =>
+      'Get rated by a coach to unlock your official card';
 
   @override
   String get selfRateSkills => 'Self-Rate Skills';
@@ -939,7 +951,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveCardToGallery => 'Save Card to Gallery';
 
   @override
-  String get coachesRatePerformance => 'Coaches rate your performance. Your card improves in real time.';
+  String get coachesRatePerformance =>
+      'Coaches rate your performance. Your card improves in real time.';
 
   @override
   String get cardSavedToGallery => 'Card saved to gallery!';
@@ -963,7 +976,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get manageAlerts => 'Manage alerts and push settings';
 
   @override
-  String get notificationsBlocked => 'Notifications are blocked. Go to device Settings to enable them.';
+  String get notificationsBlocked =>
+      'Notifications are blocked. Go to device Settings to enable them.';
 
   @override
   String get chooseWhatToNotify => 'Choose what you want to be notified about.';
@@ -996,10 +1010,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get spendPoints => 'Spend points on stuff your club has stocked.';
 
   @override
-  String get earnBadges => 'Earn badges as you train. The harder the tier, the rarer the unlock.';
+  String get earnBadges =>
+      'Earn badges as you train. The harder the tier, the rarer the unlock.';
 
   @override
-  String get coachCanPublishRewards => 'Your coach can publish rewards from the dashboard.';
+  String get coachCanPublishRewards =>
+      'Your coach can publish rewards from the dashboard.';
 
   @override
   String get achievements => 'Achievements';
@@ -1056,7 +1072,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yourPerformanceHub => 'Your performance hub.';
 
   @override
-  String get noActivityYet => 'No activity yet. Train today to start your streak.';
+  String get noActivityYet =>
+      'No activity yet. Train today to start your streak.';
 
   @override
   String get loadMore => 'Load more';
@@ -1102,4 +1119,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tryAgainLater => 'Try again later.';
+
+  @override
+  String get trackMeals => 'Track your meals and fuel your performance.';
+
+  @override
+  String get todaysMeals => 'Today\'s Meals';
+
+  @override
+  String get noMealsLoggedToday => 'No meals logged today';
+
+  @override
+  String get tapToLogMeal => 'Tap + to log your first meal';
+
+  @override
+  String get logMeal => 'Log Meal';
+
+  @override
+  String get analysePhoto => 'Analyse';
+
+  @override
+  String get retake => 'Retake';
+
+  @override
+  String get mealType => 'Meal type';
+
+  @override
+  String get breakfast => 'Breakfast';
+
+  @override
+  String get lunch => 'Lunch';
+
+  @override
+  String get dinner => 'Dinner';
+
+  @override
+  String get snack => 'Snack';
+
+  @override
+  String get photoAnalysisFailed => 'Photo analysis failed. Try again.';
+
+  @override
+  String get saveLog => 'Save';
+
+  @override
+  String get foodsDetected => 'Foods detected';
+
+  @override
+  String kcalTotal(int calories) => '$calories kcal total';
+
+  @override
+  String get deleteMealLog => 'Delete meal log';
+
+  @override
+  String get deleteMealLogConfirm => 'Remove this meal from today\'s log?';
+
+  @override
+  String get nutritionTracker => 'Nutrition';
 }

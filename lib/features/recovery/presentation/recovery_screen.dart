@@ -139,6 +139,8 @@ class _InsightSections extends StatelessWidget {
           accentColor: const Color(0xFF37F513),
           emptyMessage: 'Add your body composition data to get personalised nutrition tips.',
         ),
+        const SizedBox(height: SphereSpacing.x12),
+        _NutritionTrackerBanner(),
       ],
     );
   }
@@ -449,6 +451,59 @@ class _ScoreDisplay extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// ── Nutrition tracker banner ───────────────────────────────────────────────────
+
+class _NutritionTrackerBanner extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.push('/train/recovery/nutrition'),
+      child: Container(
+        padding: const EdgeInsets.all(SphereSpacing.x16),
+        decoration: BoxDecoration(
+          color: const Color(0xFF37F513).withValues(alpha: 0.08),
+          borderRadius: SphereRadius.cardRect,
+          border: Border.all(color: const Color(0xFF37F513).withValues(alpha: 0.2)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFF37F513).withValues(alpha: 0.15),
+                borderRadius: SphereRadius.cardRect,
+              ),
+              child: const Icon(LucideIcons.utensils, size: 18, color: Color(0xFF37F513)),
+            ),
+            const SizedBox(width: SphereSpacing.x12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Nutrition Tracker',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: const Color(0xFF37F513),
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  Text(
+                    'Log meals with AI photo analysis',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: context.sc.onSurfaceMuted,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(LucideIcons.chevronRight, size: 16, color: Color(0xFF37F513)),
+          ],
+        ),
+      ),
     );
   }
 }
