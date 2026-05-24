@@ -10,6 +10,7 @@ import '../../../app/theme/sphere_theme_ext.dart';
 import '../../auth/presentation/auth_providers.dart';
 import '../../home/presentation/_widgets/sphere_entrance.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
+import '../../player_card/presentation/player_card_providers.dart';
 import '../../role_pick/presentation/role_providers.dart';
 import '../data/photo_upload_repository.dart';
 import '_widgets/pro_photo_sheet.dart';
@@ -32,8 +33,13 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider).valueOrNull;
     final role = ref.watch(selectedRoleProvider);
-    final displayName = ref.watch(userDisplayNameProvider).valueOrNull
+    final authDisplayName = ref.watch(userDisplayNameProvider).valueOrNull
         ?? (role == AppRole.staff ? 'Coach' : 'Player');
+    final cardAsync = ref.watch(playerCardProvider);
+    final displayName = (role == AppRole.player
+            ? cardAsync.valueOrNull?.card.playerName
+            : null) ??
+        authDisplayName;
     final firstName = displayName.split(' ').first;
     final email = user?.email ?? '';
     final l = AppLocalizations.of(context)!;
