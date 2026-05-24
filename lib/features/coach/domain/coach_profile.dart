@@ -3,6 +3,7 @@ class CoachProfile {
     required this.id,
     required this.name,
     required this.role,
+    this.email,
     this.photoUrl,
     this.bio,
     this.yearsExperience,
@@ -19,6 +20,7 @@ class CoachProfile {
   final String id;
   final String name;
   final String role;
+  final String? email;
   final String? photoUrl;
   final String? bio;
   final int? yearsExperience;
@@ -41,6 +43,7 @@ class CoachProfile {
       id: json['id'] as String? ?? '',
       name: json['name'] as String? ?? '',
       role: json['role'] as String? ?? '',
+      email: json['email'] as String?,
       photoUrl: json['photoUrl'] as String?,
       bio: json['bio'] as String?,
       yearsExperience: (json['yearsExperience'] as num?)?.toInt(),

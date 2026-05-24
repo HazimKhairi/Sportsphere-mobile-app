@@ -51,6 +51,7 @@ class CoachRepository {
           id: coachUid,
           name: profile['displayName'] as String? ?? 'Coach',
           role: role,
+          email: profile['email'] as String?,
           photoUrl: profile['photoURL'] as String?,
           bio: profile['bio'] as String?,
           yearsExperience: (profile['yearsExperience'] as num?)?.toInt(),

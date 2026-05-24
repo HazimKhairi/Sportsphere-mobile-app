@@ -258,6 +258,8 @@ class _ExperienceRows extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final rows = <(String, String)>[
+      if (coach.email != null && coach.email!.isNotEmpty)
+        ('Email', coach.email!),
       if (coach.yearsExperience != null)
         ('Years Coaching', '${coach.yearsExperience} years'),
       ('Certifications', '${coach.certificationsCount} on file'),
