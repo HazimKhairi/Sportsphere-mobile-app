@@ -63,7 +63,7 @@ class StaffHomeScreen extends ConsumerWidget {
               SphereSpacing.x24,
               SphereSpacing.x16,
               SphereSpacing.x24,
-              90,
+              SphereSpacing.bottomNavSafe,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,6 +128,12 @@ class StaffHomeScreen extends ConsumerWidget {
                           icon: LucideIcons.scanLine,
                           label: 'Take attendance',
                           onTap: () => context.go('/schedule'),
+                        ),
+                        const SizedBox(width: 8),
+                        SphereQuickActionChip(
+                          icon: LucideIcons.dumbbell,
+                          label: 'Training',
+                          onTap: () => context.push('/staff/training'),
                         ),
                         const SizedBox(width: 8),
                       ],

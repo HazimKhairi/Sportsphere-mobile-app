@@ -44,6 +44,7 @@ import '../features/schedule/presentation/schedule_screen.dart';
 import '../features/schedule/presentation/session_detail_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
 import '../features/approvals/presentation/approvals_screen.dart';
+import '../features/staff_training/presentation/staff_training_hub_screen.dart';
 import '../features/roster/presentation/player_detail_screen.dart';
 import '../features/roster/presentation/roster_screen.dart';
 import '../features/player_card/presentation/player_card_screen.dart';
@@ -334,6 +335,32 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/staff/approvals',
             builder: (_, _) => const ApprovalsScreen(),
+          ),
+          GoRoute(
+            path: '/staff/training',
+            builder: (_, _) => const StaffTrainingHubScreen(),
+          ),
+          GoRoute(
+            path: '/staff/training/workouts',
+            builder: (_, _) => const SizedBox(), // placeholder — Task #16 will replace
+          ),
+          GoRoute(
+            path: '/staff/training/workouts/:id',
+            builder: (_, state) {
+              final id = state.pathParameters['id']!;
+              return SizedBox(key: ValueKey(id)); // placeholder — Task #16 will replace
+            },
+          ),
+          GoRoute(
+            path: '/staff/training/plans',
+            builder: (_, _) => const SizedBox(), // placeholder — Task #17 will replace
+          ),
+          GoRoute(
+            path: '/staff/training/plans/:id',
+            builder: (_, state) {
+              final id = state.pathParameters['id']!;
+              return SizedBox(key: ValueKey(id)); // placeholder — Task #17 will replace
+            },
           ),
           GoRoute(
             path: '/club',
