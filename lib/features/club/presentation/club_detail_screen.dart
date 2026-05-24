@@ -285,8 +285,6 @@ class _ContactSection extends StatelessWidget {
         _InfoRow(icon: LucideIcons.phone, text: club.phone!),
       if (club.email != null)
         _InfoRow(icon: LucideIcons.mail, text: club.email!),
-      if (club.website != null)
-        _InfoRow(icon: LucideIcons.globe, text: club.website!),
       _InfoRow(
         icon: LucideIcons.link,
         text: clubPageUrl,
