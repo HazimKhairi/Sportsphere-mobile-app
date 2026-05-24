@@ -257,11 +257,9 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                     ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(
-                SphereSpacing.x16,
-                SphereSpacing.x8,
-                SphereSpacing.x16,
-                30,
+              padding: const EdgeInsets.symmetric(
+                horizontal: SphereSpacing.x16,
+                vertical: SphereSpacing.x8,
               ),
               child: _Composer(
                 controller: _composer,
@@ -270,6 +268,7 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                 onAttach: _attachImage,
               ),
             ),
+            const SizedBox(height: 30),
           ],
         ),
       ),
