@@ -8,7 +8,6 @@ import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../auth/presentation/auth_providers.dart';
 import '../../home/presentation/_widgets/sphere_entrance.dart';
-import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../../role_pick/presentation/role_providers.dart';
 import '../data/photo_upload_repository.dart';
@@ -39,18 +38,15 @@ class ProfileScreen extends ConsumerWidget {
     final roleLabel = role == AppRole.staff ? 'Staff' : 'Player';
     final isPlayer = role == AppRole.player;
 
-    return Stack(
-      children: [
-        const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
-        SafeArea(
-          bottom: false,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              SphereSpacing.x24,
-              SphereSpacing.x16,
-              SphereSpacing.x24,
-              SphereSpacing.bottomNavSafe,
-            ),
+    return SafeArea(
+      bottom: false,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+          SphereSpacing.x24,
+          SphereSpacing.x16,
+          SphereSpacing.x24,
+          SphereSpacing.bottomNavSafe,
+        ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -230,9 +226,7 @@ class ProfileScreen extends ConsumerWidget {
               ],
             ),
           ),
-        ),
-      ],
-    );
+        );
   }
 
   Future<void> _confirmSignOut(BuildContext context, WidgetRef ref) async {
