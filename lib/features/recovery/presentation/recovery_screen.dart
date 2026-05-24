@@ -8,8 +8,8 @@ import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../home/presentation/_widgets/sphere_entrance.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
-import '../domain/recovery_content.dart';
 import '../domain/recovery_log.dart';
+import 'recovery_ai_providers.dart';
 import 'recovery_providers.dart';
 
 class RecoveryScreen extends ConsumerWidget {
@@ -18,8 +18,7 @@ class RecoveryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todayLog = ref.watch(todayRecoveryLogProvider);
-    final contentAsync = ref.watch(recoveryContentProvider);
-    final nutritionAsync = ref.watch(nutritionContentProvider);
+    final insightAsync = ref.watch(recoveryAiInsightProvider);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -36,6 +35,13 @@ class RecoveryScreen extends ConsumerWidget {
                 fontWeight: FontWeight.w700,
               ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(LucideIcons.refreshCw, size: 18, color: context.sc.onSurfaceMuted),
+            tooltip: 'Regenerate advice',
+            onPressed: () => ref.invalidate(recoveryAiInsightProvider),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -48,40 +54,27 @@ class RecoveryScreen extends ConsumerWidget {
             children: [
               const _Disclaimer(),
               const SizedBox(height: SphereSpacing.x16),
+
+              // Wellness card
               SphereEntrance(
                 delayMs: 0,
                 child: todayLog.when(
                   data: (log) => _WellnessCard(log: log),
                   loading: () => const _WellnessCard(log: null, loading: true),
-                  error: (_, _) => const _WellnessCard(log: null),
+                  error: (_, __) => const _WellnessCard(log: null),
                 ),
               ),
               const SizedBox(height: SphereSpacing.x32),
-              const SphereEntrance(
+
+              // AI insight sections
+              SphereEntrance(
                 delayMs: 80,
-                child: SphereSectionLabel('Recovery'),
-              ),
-              const SizedBox(height: SphereSpacing.x16),
-              SphereEntrance(
-                delayMs: 120,
-                child: contentAsync.when(
-                  data: (items) => _ContentList(items: items),
-                  loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                  error: (_, _) => const SizedBox.shrink(),
-                ),
-              ),
-              const SizedBox(height: SphereSpacing.x32),
-              const SphereEntrance(
-                delayMs: 160,
-                child: SphereSectionLabel('Nutrition'),
-              ),
-              const SizedBox(height: SphereSpacing.x16),
-              SphereEntrance(
-                delayMs: 200,
-                child: nutritionAsync.when(
-                  data: (items) => _ContentList(items: items),
-                  loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                  error: (_, _) => const SizedBox.shrink(),
+                child: insightAsync.when(
+                  data: (insight) => _InsightSections(insight: insight),
+                  loading: () => const _InsightLoading(),
+                  error: (e, _) => _InsightError(
+                    onRetry: () => ref.invalidate(recoveryAiInsightProvider),
+                  ),
                 ),
               ),
             ],
@@ -91,6 +84,265 @@ class RecoveryScreen extends ConsumerWidget {
     );
   }
 }
+
+// ── Insight sections ───────────────────────────────────────────────────────────
+
+class _InsightSections extends StatelessWidget {
+  const _InsightSections({required this.insight});
+  final AiInsight insight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // AI badge + context
+        Row(
+          children: [
+            Icon(LucideIcons.sparkles, size: 12, color: context.sc.primary),
+            const SizedBox(width: 4),
+            Text(
+              'AI-personalised',
+              style: TextStyle(
+                color: context.sc.primary,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            if (insight.context.isNotEmpty) ...[
+              Text(
+                ' · ${insight.context}',
+                style: TextStyle(
+                  color: context.sc.onSurfaceMuted,
+                  fontSize: 11,
+                ),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: SphereSpacing.x16),
+
+        const SphereSectionLabel('Recovery'),
+        const SizedBox(height: SphereSpacing.x12),
+        _TipsList(
+          tips: insight.recovery,
+          accentColor: const Color(0xFF8B5CF6),
+          emptyMessage: 'Log your wellness check-in to get personalised recovery tips.',
+        ),
+        const SizedBox(height: SphereSpacing.x32),
+
+        const SphereSectionLabel('Nutrition'),
+        const SizedBox(height: SphereSpacing.x12),
+        _TipsList(
+          tips: insight.nutrition,
+          accentColor: const Color(0xFF37F513),
+          emptyMessage: 'Add your body composition data to get personalised nutrition tips.',
+        ),
+      ],
+    );
+  }
+}
+
+class _TipsList extends StatelessWidget {
+  const _TipsList({
+    required this.tips,
+    required this.accentColor,
+    required this.emptyMessage,
+  });
+  final List<String> tips;
+  final Color accentColor;
+  final String emptyMessage;
+
+  @override
+  Widget build(BuildContext context) {
+    if (tips.isEmpty) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(SphereSpacing.x16),
+        decoration: BoxDecoration(
+          color: context.sc.surfaceElev1,
+          borderRadius: SphereRadius.cardRect,
+          border: Border.all(color: context.sc.borderSubtle),
+        ),
+        child: Text(
+          emptyMessage,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: context.sc.onSurfaceMuted,
+              ),
+        ),
+      );
+    }
+    return Column(
+      children: tips
+          .map((tip) => _TipRow(tip: tip, accentColor: accentColor))
+          .toList(),
+    );
+  }
+}
+
+class _TipRow extends StatelessWidget {
+  const _TipRow({required this.tip, required this.accentColor});
+  final String tip;
+  final Color accentColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: SphereSpacing.x8),
+      padding: const EdgeInsets.all(SphereSpacing.x16),
+      decoration: BoxDecoration(
+        color: context.sc.surfaceElev1,
+        borderRadius: SphereRadius.cardRect,
+        border: Border.all(color: context.sc.borderSubtle),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 3),
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: accentColor,
+            ),
+          ),
+          const SizedBox(width: SphereSpacing.x12),
+          Expanded(
+            child: Text(
+              tip,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: context.sc.onSurface,
+                    height: 1.4,
+                  ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Loading & error states ─────────────────────────────────────────────────────
+
+class _InsightLoading extends StatelessWidget {
+  const _InsightLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            SizedBox(
+              width: 12,
+              height: 12,
+              child: CircularProgressIndicator(
+                strokeWidth: 1.5,
+                valueColor: AlwaysStoppedAnimation(context.sc.primary),
+              ),
+            ),
+            const SizedBox(width: SphereSpacing.x8),
+            Text(
+              'Gemini is analysing your data…',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: context.sc.onSurfaceMuted,
+                  ),
+            ),
+          ],
+        ),
+        const SizedBox(height: SphereSpacing.x16),
+        const SphereSectionLabel('Recovery'),
+        const SizedBox(height: SphereSpacing.x12),
+        ..._skeletonRows(context, 3),
+        const SizedBox(height: SphereSpacing.x32),
+        const SphereSectionLabel('Nutrition'),
+        const SizedBox(height: SphereSpacing.x12),
+        ..._skeletonRows(context, 3),
+      ],
+    );
+  }
+
+  List<Widget> _skeletonRows(BuildContext context, int count) {
+    return List.generate(count, (i) {
+      return Container(
+        margin: const EdgeInsets.only(bottom: SphereSpacing.x8),
+        padding: const EdgeInsets.all(SphereSpacing.x16),
+        height: 56,
+        decoration: BoxDecoration(
+          color: context.sc.surfaceElev1,
+          borderRadius: SphereRadius.cardRect,
+          border: Border.all(color: context.sc.borderSubtle),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: context.sc.borderSubtle,
+              ),
+            ),
+            const SizedBox(width: SphereSpacing.x12),
+            Expanded(
+              child: Container(
+                height: 12,
+                decoration: BoxDecoration(
+                  color: context.sc.borderSubtle.withValues(alpha: 0.5),
+                  borderRadius: SphereRadius.pillRect,
+                ),
+              ),
+            ),
+            const SizedBox(width: SphereSpacing.x32),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class _InsightError extends StatelessWidget {
+  const _InsightError({required this.onRetry});
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(SphereSpacing.x24),
+      decoration: BoxDecoration(
+        color: context.sc.surfaceElev1,
+        borderRadius: SphereRadius.cardRect,
+        border: Border.all(color: context.sc.borderSubtle),
+      ),
+      child: Column(
+        children: [
+          Icon(LucideIcons.wifiOff, size: 28, color: context.sc.onSurfaceMuted),
+          const SizedBox(height: SphereSpacing.x12),
+          Text(
+            'Could not generate advice.',
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: context.sc.onSurfaceMuted,
+                ),
+          ),
+          const SizedBox(height: SphereSpacing.x12),
+          FilledButton(
+            onPressed: onRetry,
+            style: FilledButton.styleFrom(
+              backgroundColor: context.sc.primary,
+              shape: const RoundedRectangleBorder(borderRadius: SphereRadius.pillRect),
+            ),
+            child: const Text('Try again'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Wellness card ──────────────────────────────────────────────────────────────
 
 class _WellnessCard extends StatelessWidget {
   const _WellnessCard({this.log, this.loading = false});
@@ -200,70 +452,7 @@ class _ScoreDisplay extends StatelessWidget {
   }
 }
 
-class _ContentList extends StatelessWidget {
-  const _ContentList({required this.items});
-  final List<RecoveryContent> items;
-
-  @override
-  Widget build(BuildContext context) {
-    if (items.isEmpty) {
-      return Text(
-        'Content coming soon.',
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: context.sc.onSurfaceMuted,
-            ),
-      );
-    }
-    return Column(
-      children: items.map((item) => _ContentRow(item: item)).toList(),
-    );
-  }
-}
-
-class _ContentRow extends StatelessWidget {
-  const _ContentRow({required this.item});
-  final RecoveryContent item;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => context.push('/train/recovery/content/${item.id}'),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: SphereSpacing.x8),
-        padding: const EdgeInsets.all(SphereSpacing.x16),
-        decoration: BoxDecoration(
-          color: context.sc.surfaceElev1,
-          borderRadius: SphereRadius.cardRect,
-          border: Border.all(color: context.sc.borderSubtle),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.title,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                  Text(
-                    '${item.durationMinutes} min · ${item.evidenceLevel} evidence',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: context.sc.onSurfaceMuted,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            Icon(LucideIcons.chevronRight, size: 16, color: context.sc.onSurfaceMuted),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// ── Disclaimer ─────────────────────────────────────────────────────────────────
 
 class _Disclaimer extends StatelessWidget {
   const _Disclaimer();
@@ -281,7 +470,7 @@ class _Disclaimer extends StatelessWidget {
         border: Border.all(color: context.sc.borderSubtle),
       ),
       child: Text(
-        'For general sporting guidance only. Not a substitute for advice from a qualified sports dietitian or medical professional.',
+        'AI-generated guidance for general sporting use only. Not a substitute for advice from a qualified sports dietitian or medical professional.',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: context.sc.onSurfaceMuted,
               fontSize: 10,
