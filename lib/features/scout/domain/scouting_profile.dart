@@ -21,6 +21,8 @@ class ScoutingProfile {
     this.highlightVideoUrl,
     this.actionPhotoUrls = const [],
     this.parentEmail,
+    this.representativeHistory = const [],
+    this.tournamentHistory = const [],
   });
 
   factory ScoutingProfile.fromJson(Map<String, dynamic> json) {
@@ -56,6 +58,14 @@ class ScoutingProfile {
       reach: json['reach'] as String? ?? 'state',
       affiliation: ScoutingAffiliation.fromJson(aff),
       parentEmail: json['parentEmail'] as String?,
+      representativeHistory: (json['representativeHistory'] as List<dynamic>?)
+              ?.map((e) => RepresentativeEntry.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      tournamentHistory: (json['tournamentHistory'] as List<dynamic>?)
+              ?.map((e) => TournamentEntry.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 
@@ -80,6 +90,8 @@ class ScoutingProfile {
   final ScoutingAffiliation affiliation;
   final String? photoUrl;
   final String? parentEmail;
+  final List<RepresentativeEntry> representativeHistory;
+  final List<TournamentEntry> tournamentHistory;
 
   bool get isOpen => visibility == 'open';
   bool get isFreeAgent => affiliation.type == 'free_agent';
@@ -104,6 +116,10 @@ class ScoutingProfile {
         'visibility': visibility,
         'reach': reach,
         if (parentEmail != null) 'parentEmail': parentEmail,
+        if (representativeHistory.isNotEmpty)
+          'representativeHistory': representativeHistory.map((e) => e.toJson()).toList(),
+        if (tournamentHistory.isNotEmpty)
+          'tournamentHistory': tournamentHistory.map((e) => e.toJson()).toList(),
       };
 
   ScoutingProfile copyWith({
@@ -128,6 +144,8 @@ class ScoutingProfile {
     ScoutingAffiliation? affiliation,
     String? photoUrl,
     String? parentEmail,
+    List<RepresentativeEntry>? representativeHistory,
+    List<TournamentEntry>? tournamentHistory,
   }) =>
       ScoutingProfile(
         displayName: displayName ?? this.displayName,
@@ -151,6 +169,8 @@ class ScoutingProfile {
         affiliation: affiliation ?? this.affiliation,
         photoUrl: photoUrl ?? this.photoUrl,
         parentEmail: parentEmail ?? this.parentEmail,
+        representativeHistory: representativeHistory ?? this.representativeHistory,
+        tournamentHistory: tournamentHistory ?? this.tournamentHistory,
       );
 }
 
@@ -160,6 +180,8 @@ class PastClubEntry {
     required this.fromYear,
     this.toYear,
     this.notes,
+    this.role,
+    this.sport,
   });
 
   factory PastClubEntry.fromJson(Map<String, dynamic> json) => PastClubEntry(
@@ -167,18 +189,24 @@ class PastClubEntry {
         fromYear: (json['fromYear'] as num?)?.toInt() ?? 2000,
         toYear: (json['toYear'] as num?)?.toInt(),
         notes: json['notes'] as String?,
+        role: json['role'] as String?,
+        sport: json['sport'] as String?,
       );
 
   final String name;
   final int fromYear;
   final int? toYear;
   final String? notes;
+  final String? role;
+  final String? sport;
 
   Map<String, dynamic> toJson() => {
         'name': name,
         'fromYear': fromYear,
         if (toYear != null) 'toYear': toYear,
         if (notes != null) 'notes': notes,
+        if (role != null) 'role': role,
+        if (sport != null) 'sport': sport,
       };
 }
 
@@ -237,6 +265,78 @@ class ScoutingAffiliation {
   final String? transferStatus;
 }
 
+class RepresentativeEntry {
+  const RepresentativeEntry({
+    required this.level,
+    required this.teamName,
+    required this.sport,
+    required this.year,
+    this.achievement,
+    this.notes,
+  });
+
+  factory RepresentativeEntry.fromJson(Map<String, dynamic> json) => RepresentativeEntry(
+        level: json['level'] as String? ?? 'other',
+        teamName: json['teamName'] as String? ?? '',
+        sport: json['sport'] as String? ?? 'football',
+        year: (json['year'] as num?)?.toInt() ?? DateTime.now().year,
+        achievement: json['achievement'] as String?,
+        notes: json['notes'] as String?,
+      );
+
+  final String level;
+  final String teamName;
+  final String sport;
+  final int year;
+  final String? achievement;
+  final String? notes;
+
+  Map<String, dynamic> toJson() => {
+        'level': level,
+        'teamName': teamName,
+        'sport': sport,
+        'year': year,
+        if (achievement != null) 'achievement': achievement,
+        if (notes != null) 'notes': notes,
+      };
+}
+
+class TournamentEntry {
+  const TournamentEntry({
+    required this.name,
+    required this.year,
+    required this.sport,
+    this.organiser,
+    this.achievement,
+    this.notes,
+  });
+
+  factory TournamentEntry.fromJson(Map<String, dynamic> json) => TournamentEntry(
+        name: json['name'] as String? ?? '',
+        year: (json['year'] as num?)?.toInt() ?? DateTime.now().year,
+        sport: json['sport'] as String? ?? 'football',
+        organiser: json['organiser'] as String?,
+        achievement: json['achievement'] as String?,
+        notes: json['notes'] as String?,
+      );
+
+  final String name;
+  final int year;
+  final String sport;
+  final String? organiser;
+  final String? achievement;
+  final String? notes;
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'year': year,
+        'sport': sport,
+        if (organiser != null) 'organiser': organiser,
+        if (achievement != null) 'achievement': achievement,
+        if (notes != null) 'notes': notes,
+      };
+}
+
 const kScoutingLevelLabels = {
   'recreational': 'Recreational',
   'school': 'School Team',
@@ -273,3 +373,29 @@ const kFutsalPositions = ['GK', 'Defender', 'Winger', 'Pivot'];
 
 const kFootballSkills = ['pace', 'passing', 'shooting', 'dribbling', 'defense', 'physical'];
 const kFutsalSkills = ['control', 'passing', 'finishing', 'agility', 'defense', 'stamina'];
+
+const kRepresentativeLevelLabels = {
+  'mssd': 'MSSD (Daerah)',
+  'mssm': 'MSSM (Negeri)',
+  'state': 'Pasukan Negeri',
+  'national': 'Kebangsaan',
+  'other': 'Lain-lain',
+};
+
+const kAchievementLabels = {
+  'champion': 'Champion',
+  'runner_up': 'Runner-up',
+  'third': '3rd Place',
+  'participant': 'Participant',
+  'top_scorer': 'Top Scorer',
+  'best_player': 'Best Player',
+};
+
+const kAchievementIcons = {
+  'champion': '🥇',
+  'runner_up': '🥈',
+  'third': '🥉',
+  'participant': '',
+  'top_scorer': '⚽',
+  'best_player': '⭐',
+};
