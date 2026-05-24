@@ -1,3 +1,6 @@
+# Local dart-defines (contains secrets — never commit)
+dart_defines.env
+
 # Miscellaneous
 *.class
 *.log
