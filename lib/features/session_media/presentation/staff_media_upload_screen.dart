@@ -232,11 +232,11 @@ class _BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(
+      padding: const EdgeInsets.fromLTRB(
         SphereSpacing.x16,
         SphereSpacing.x12,
         SphereSpacing.x16,
-        SphereSpacing.x12 + MediaQuery.of(context).padding.bottom,
+        SphereSpacing.x12 + SphereSpacing.bottomNavSafe,
       ),
       decoration: BoxDecoration(
         color: context.sc.surface,
