@@ -41,6 +41,11 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
   bool _paidTrials = false;
   final Map<String, double> _skills = {};
 
+  // Career history
+  final List<PastClubEntry> _pastClubs = [];
+  final List<RepresentativeEntry> _repHistory = [];
+  final List<TournamentEntry> _tournamentHistory = [];
+
   @override
   void initState() {
     super.initState();
@@ -73,6 +78,9 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
       _skills
         ..clear()
         ..addAll(profile.skills);
+      _pastClubs..clear()..addAll(profile.pastClubs);
+      _repHistory..clear()..addAll(profile.representativeHistory);
+      _tournamentHistory..clear()..addAll(profile.tournamentHistory);
     });
   }
 
@@ -112,7 +120,9 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
       secondaryPositions: List.from(_secondaryPositions),
       foot: _foot,
       yearsPlaying: _yearsPlaying,
-      pastClubs: existing?.pastClubs ?? [],
+      pastClubs: List.from(_pastClubs),
+      representativeHistory: List.from(_repHistory),
+      tournamentHistory: List.from(_tournamentHistory),
       achievements: _achievementsCtrl.text.trim().isEmpty
           ? null
           : _achievementsCtrl.text.trim(),
@@ -145,6 +155,371 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
     } finally {
       if (mounted) setState(() => _saving = false);
     }
+  }
+
+  Future<void> _showAddClubSheet() async {
+    final nameCtrl = TextEditingController();
+    final fromYearCtrl = TextEditingController(text: '${DateTime.now().year}');
+    final toYearCtrl = TextEditingController();
+    final roleCtrl = TextEditingController();
+    String? sport;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheet) => Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 24,
+            bottom: MediaQuery.viewInsetsOf(ctx).bottom + 24,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Add Past Club',
+                  style: Theme.of(ctx).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      )),
+              const SizedBox(height: 16),
+              TextField(
+                controller: nameCtrl,
+                decoration: const InputDecoration(labelText: 'Club Name *'),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: fromYearCtrl,
+                      decoration: const InputDecoration(labelText: 'From Year *'),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: TextField(
+                      controller: toYearCtrl,
+                      decoration: const InputDecoration(labelText: 'To Year (optional)'),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: roleCtrl,
+                decoration: const InputDecoration(
+                  labelText: 'Role (optional)',
+                  hintText: 'e.g. Captain, Striker',
+                ),
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<String>(
+                value: sport,
+                decoration: const InputDecoration(labelText: 'Sport (optional)'),
+                items: const [
+                  DropdownMenuItem(value: null, child: Text('— Not specified —')),
+                  DropdownMenuItem(value: 'football', child: Text('Football')),
+                  DropdownMenuItem(value: 'futsal', child: Text('Futsal')),
+                  DropdownMenuItem(value: 'other', child: Text('Other')),
+                ],
+                onChanged: (v) => setSheet(() => sport = v),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(ctx),
+                    child: const Text('Cancel'),
+                  ),
+                  const SizedBox(width: 8),
+                  FilledButton(
+                    onPressed: () {
+                      final name = nameCtrl.text.trim();
+                      if (name.isEmpty) return;
+                      final fromYear = int.tryParse(fromYearCtrl.text.trim()) ??
+                          DateTime.now().year;
+                      final toYear = toYearCtrl.text.trim().isEmpty
+                          ? null
+                          : int.tryParse(toYearCtrl.text.trim());
+                      final role = roleCtrl.text.trim().isEmpty
+                          ? null
+                          : roleCtrl.text.trim();
+                      setState(() {
+                        _pastClubs.add(PastClubEntry(
+                          name: name,
+                          fromYear: fromYear,
+                          toYear: toYear,
+                          role: role,
+                          sport: sport,
+                        ));
+                      });
+                      Navigator.pop(ctx);
+                    },
+                    child: const Text('Add'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showAddRepSheet() async {
+    String level = kRepresentativeLevelLabels.keys.first;
+    final teamNameCtrl = TextEditingController();
+    String sport = 'football';
+    final yearCtrl = TextEditingController(text: '${DateTime.now().year}');
+    String? achievement;
+    final notesCtrl = TextEditingController();
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheet) => Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 24,
+            bottom: MediaQuery.viewInsetsOf(ctx).bottom + 24,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Add Representative History',
+                    style: Theme.of(ctx).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        )),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  value: level,
+                  decoration: const InputDecoration(labelText: 'Level *'),
+                  items: kRepresentativeLevelLabels.entries
+                      .map((e) => DropdownMenuItem(
+                            value: e.key,
+                            child: Text(e.value),
+                          ))
+                      .toList(),
+                  onChanged: (v) => setSheet(() => level = v!),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: teamNameCtrl,
+                  decoration: const InputDecoration(labelText: 'Team Name *'),
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String>(
+                  value: sport,
+                  decoration: const InputDecoration(labelText: 'Sport *'),
+                  items: const [
+                    DropdownMenuItem(value: 'football', child: Text('Football')),
+                    DropdownMenuItem(value: 'futsal', child: Text('Futsal')),
+                    DropdownMenuItem(value: 'other', child: Text('Other')),
+                  ],
+                  onChanged: (v) => setSheet(() => sport = v!),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: yearCtrl,
+                  decoration: const InputDecoration(labelText: 'Year *'),
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String?>(
+                  value: achievement,
+                  decoration: const InputDecoration(labelText: 'Achievement (optional)'),
+                  items: [
+                    const DropdownMenuItem(value: null, child: Text('None')),
+                    ...kAchievementLabels.entries.map((e) => DropdownMenuItem(
+                          value: e.key,
+                          child: Text(e.value),
+                        )),
+                  ],
+                  onChanged: (v) => setSheet(() => achievement = v),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: notesCtrl,
+                  decoration: const InputDecoration(labelText: 'Notes (optional)'),
+                  maxLines: 2,
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      child: const Text('Cancel'),
+                    ),
+                    const SizedBox(width: 8),
+                    FilledButton(
+                      onPressed: () {
+                        final teamName = teamNameCtrl.text.trim();
+                        if (teamName.isEmpty) return;
+                        final year = int.tryParse(yearCtrl.text.trim()) ??
+                            DateTime.now().year;
+                        final notes = notesCtrl.text.trim().isEmpty
+                            ? null
+                            : notesCtrl.text.trim();
+                        setState(() {
+                          _repHistory.add(RepresentativeEntry(
+                            level: level,
+                            teamName: teamName,
+                            sport: sport,
+                            year: year,
+                            achievement: achievement,
+                            notes: notes,
+                          ));
+                        });
+                        Navigator.pop(ctx);
+                      },
+                      child: const Text('Add'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showAddTournamentSheet() async {
+    final nameCtrl = TextEditingController();
+    final yearCtrl = TextEditingController(text: '${DateTime.now().year}');
+    String sport = 'football';
+    final organiserCtrl = TextEditingController();
+    String? achievement;
+    final notesCtrl = TextEditingController();
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheet) => Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 24,
+            bottom: MediaQuery.viewInsetsOf(ctx).bottom + 24,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Add Tournament',
+                    style: Theme.of(ctx).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        )),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: nameCtrl,
+                  decoration: const InputDecoration(labelText: 'Tournament Name *'),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: yearCtrl,
+                  decoration: const InputDecoration(labelText: 'Year *'),
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String>(
+                  value: sport,
+                  decoration: const InputDecoration(labelText: 'Sport *'),
+                  items: const [
+                    DropdownMenuItem(value: 'football', child: Text('Football')),
+                    DropdownMenuItem(value: 'futsal', child: Text('Futsal')),
+                    DropdownMenuItem(value: 'other', child: Text('Other')),
+                  ],
+                  onChanged: (v) => setSheet(() => sport = v!),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: organiserCtrl,
+                  decoration: const InputDecoration(labelText: 'Organiser (optional)'),
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String?>(
+                  value: achievement,
+                  decoration: const InputDecoration(labelText: 'Achievement (optional)'),
+                  items: [
+                    const DropdownMenuItem(value: null, child: Text('None')),
+                    ...kAchievementLabels.entries.map((e) => DropdownMenuItem(
+                          value: e.key,
+                          child: Text(e.value),
+                        )),
+                  ],
+                  onChanged: (v) => setSheet(() => achievement = v),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: notesCtrl,
+                  decoration: const InputDecoration(labelText: 'Notes (optional)'),
+                  maxLines: 2,
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      child: const Text('Cancel'),
+                    ),
+                    const SizedBox(width: 8),
+                    FilledButton(
+                      onPressed: () {
+                        final name = nameCtrl.text.trim();
+                        if (name.isEmpty) return;
+                        final year = int.tryParse(yearCtrl.text.trim()) ??
+                            DateTime.now().year;
+                        final organiser = organiserCtrl.text.trim().isEmpty
+                            ? null
+                            : organiserCtrl.text.trim();
+                        final notes = notesCtrl.text.trim().isEmpty
+                            ? null
+                            : notesCtrl.text.trim();
+                        setState(() {
+                          _tournamentHistory.add(TournamentEntry(
+                            name: name,
+                            year: year,
+                            sport: sport,
+                            organiser: organiser,
+                            achievement: achievement,
+                            notes: notes,
+                          ));
+                        });
+                        Navigator.pop(ctx);
+                      },
+                      child: const Text('Add'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -427,6 +802,48 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                 ],
               ),
             ),
+            const SizedBox(height: 20),
+            _SectionHeader(title: 'Past Clubs', icon: LucideIcons.building2),
+            const SizedBox(height: 12),
+            _card(
+              child: _CareerListSection<PastClubEntry>(
+                items: _pastClubs,
+                emptyLabel: 'No clubs added yet',
+                itemBuilder: (club) => Text(
+                  '${club.name} (${club.fromYear}${club.toYear != null ? '–${club.toYear}' : '–present'})${club.role != null ? ' · ${club.role}' : ''}',
+                ),
+                onDelete: (i) => setState(() => _pastClubs.removeAt(i)),
+                onAdd: () => _showAddClubSheet(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            _SectionHeader(title: 'Representative History', icon: LucideIcons.medal),
+            const SizedBox(height: 12),
+            _card(
+              child: _CareerListSection<RepresentativeEntry>(
+                items: _repHistory,
+                emptyLabel: 'No representative experience added',
+                itemBuilder: (e) => Text(
+                  '${kRepresentativeLevelLabels[e.level] ?? e.level} · ${e.teamName} (${e.year})',
+                ),
+                onDelete: (i) => setState(() => _repHistory.removeAt(i)),
+                onAdd: () => _showAddRepSheet(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            _SectionHeader(title: 'Tournament History', icon: LucideIcons.trophy),
+            const SizedBox(height: 12),
+            _card(
+              child: _CareerListSection<TournamentEntry>(
+                items: _tournamentHistory,
+                emptyLabel: 'No tournaments added',
+                itemBuilder: (e) => Text(
+                  '${e.name} (${e.year})${e.achievement != null ? ' · ${kAchievementLabels[e.achievement] ?? e.achievement}' : ''}',
+                ),
+                onDelete: (i) => setState(() => _tournamentHistory.removeAt(i)),
+                onAdd: () => _showAddTournamentSheet(),
+              ),
+            ),
             const SizedBox(height: 32),
             FilledButton(
               onPressed: _saving ? null : _save,
@@ -493,6 +910,60 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
       keyboardType: keyboardType,
       maxLines: maxLines ?? 1,
       maxLength: maxLength,
+    );
+  }
+}
+
+class _CareerListSection<T> extends StatelessWidget {
+  const _CareerListSection({
+    required this.items,
+    required this.emptyLabel,
+    required this.itemBuilder,
+    required this.onDelete,
+    required this.onAdd,
+  });
+  final List<T> items;
+  final String emptyLabel;
+  final Widget Function(T) itemBuilder;
+  final void Function(int) onDelete;
+  final VoidCallback onAdd;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (items.isEmpty)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(emptyLabel,
+                style: TextStyle(color: context.sc.onSurfaceMuted, fontSize: 13)),
+          ),
+        ...items.asMap().entries.map((entry) => Padding(
+          padding: const EdgeInsets.only(bottom: 6),
+          child: Row(
+            children: [
+              Expanded(child: itemBuilder(entry.value)),
+              IconButton(
+                icon: const Icon(LucideIcons.trash2, size: 16),
+                color: context.sc.onSurfaceMuted,
+                onPressed: () => onDelete(entry.key),
+                visualDensity: VisualDensity.compact,
+              ),
+            ],
+          ),
+        )),
+        const SizedBox(height: 4),
+        OutlinedButton.icon(
+          onPressed: onAdd,
+          icon: const Icon(LucideIcons.plus, size: 14),
+          label: const Text('Add'),
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            visualDensity: VisualDensity.compact,
+          ),
+        ),
+      ],
     );
   }
 }
