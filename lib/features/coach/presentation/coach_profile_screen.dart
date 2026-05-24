@@ -28,15 +28,6 @@ class CoachProfileScreen extends StatelessWidget {
       body: Stack(
         children: [
           _Header(coach: coach),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(SphereSpacing.x16),
-              child: _CircleIconButton(
-                icon: LucideIcons.chevronLeft,
-                onTap: () => _back(context),
-              ),
-            ),
-          ),
           SingleChildScrollView(
             padding: const EdgeInsets.only(top: 200),
             child: Padding(
@@ -91,6 +82,16 @@ class CoachProfileScreen extends StatelessWidget {
                   ],
                   const SizedBox(height: SphereSpacing.x32),
                 ],
+              ),
+            ),
+          ),
+          // Back button last so it sits above scroll view and receives taps
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(SphereSpacing.x16),
+              child: _CircleIconButton(
+                icon: LucideIcons.chevronLeft,
+                onTap: () => _back(context),
               ),
             ),
           ),
