@@ -42,13 +42,17 @@ class _NutritionLogSheetContent extends ConsumerStatefulWidget {
       _NutritionLogSheetContentState();
 }
 
+enum _LogMode { photo, text }
+
 class _NutritionLogSheetContentState
     extends ConsumerState<_NutritionLogSheetContent> {
+  _LogMode _mode = _LogMode.photo;
   MealType _mealType = MealType.breakfast;
   bool _analysing = false;
   NutritionLog? _result;
   String? _errorMsg;
   XFile? _pickedImage;
+  final _descCtrl = TextEditingController();
 
   @override
   void initState() {
@@ -61,6 +65,50 @@ class _NutritionLogSheetContentState
             : hour < 19
                 ? MealType.dinner
                 : MealType.snack;
+  }
+
+  @override
+  void dispose() {
+    _descCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _analyseText() async {
+    final desc = _descCtrl.text.trim();
+    if (desc.isEmpty) return;
+    setState(() {
+      _analysing = true;
+      _errorMsg = null;
+    });
+    try {
+      final token = await FirebaseAuth.instance.currentUser?.getIdToken();
+      if (token == null) {
+        setState(() {
+          _errorMsg = 'Not signed in. Please log in again.';
+          _analysing = false;
+        });
+        return;
+      }
+      final log = await ref.read(nutritionRepositoryProvider).logMeal(
+            description: desc,
+            mealType: _mealType,
+            authToken: token,
+          );
+      setState(() {
+        _result = log;
+        _analysing = false;
+      });
+    } on NutritionException catch (e) {
+      setState(() {
+        _errorMsg = e.message;
+        _analysing = false;
+      });
+    } catch (_) {
+      setState(() {
+        _errorMsg = 'Something went wrong. Please try again.';
+        _analysing = false;
+      });
+    }
   }
 
   Future<void> _analyse() async {
@@ -180,11 +228,42 @@ class _NutritionLogSheetContentState
   // ---------------------------------------------------------------------------
 
   Widget _buildStep1(BuildContext context) {
-    final canAnalyse = _pickedImage != null && !_analysing;
+    final canAnalyse = _mode == _LogMode.photo
+        ? _pickedImage != null && !_analysing
+        : _descCtrl.text.trim().isNotEmpty && !_analysing;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Mode toggle
+        Row(
+          children: [
+            Expanded(
+              child: _ModeTab(
+                label: 'Photo',
+                icon: LucideIcons.camera,
+                selected: _mode == _LogMode.photo,
+                onTap: () => setState(() {
+                  _mode = _LogMode.photo;
+                  _errorMsg = null;
+                }),
+              ),
+            ),
+            const SizedBox(width: SphereSpacing.x8),
+            Expanded(
+              child: _ModeTab(
+                label: 'Type it in',
+                icon: LucideIcons.pencilLine,
+                selected: _mode == _LogMode.text,
+                onTap: () => setState(() {
+                  _mode = _LogMode.text;
+                  _errorMsg = null;
+                }),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: SphereSpacing.x20),
         Text(
           'Meal type',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -196,21 +275,55 @@ class _NutritionLogSheetContentState
           selected: _mealType,
           onChanged: (t) => setState(() => _mealType = t),
         ),
-        const SizedBox(height: SphereSpacing.x24),
-        Text(
-          'Photo',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: context.sc.onSurfaceMuted,
-              ),
-        ),
-        const SizedBox(height: SphereSpacing.x8),
-        if (_pickedImage == null)
-          _PhotoPickerRow(onPick: _pickImage)
-        else
-          _ImagePreview(
-            file: File(_pickedImage!.path),
-            onRemove: () => setState(() => _pickedImage = null),
+        const SizedBox(height: SphereSpacing.x20),
+        if (_mode == _LogMode.photo) ...[
+          Text(
+            'Photo',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: context.sc.onSurfaceMuted,
+                ),
           ),
+          const SizedBox(height: SphereSpacing.x8),
+          if (_pickedImage == null)
+            _PhotoPickerRow(onPick: _pickImage)
+          else
+            _ImagePreview(
+              file: File(_pickedImage!.path),
+              onRemove: () => setState(() => _pickedImage = null),
+            ),
+        ] else ...[
+          Text(
+            'What did you eat?',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: context.sc.onSurfaceMuted,
+                ),
+          ),
+          const SizedBox(height: SphereSpacing.x8),
+          TextField(
+            controller: _descCtrl,
+            maxLines: 3,
+            maxLength: 500,
+            onChanged: (_) => setState(() {}),
+            decoration: InputDecoration(
+              hintText: 'e.g. nasi lemak dengan ayam goreng, teh tarik',
+              filled: true,
+              fillColor: context.sc.surface,
+              border: OutlineInputBorder(
+                borderRadius: SphereRadius.cardRect,
+                borderSide: BorderSide(color: context.sc.borderSubtle),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: SphereRadius.cardRect,
+                borderSide: BorderSide(color: context.sc.borderSubtle),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: SphereRadius.cardRect,
+                borderSide: BorderSide(color: context.sc.primary, width: 1.5),
+              ),
+              contentPadding: const EdgeInsets.all(SphereSpacing.x12),
+            ),
+          ),
+        ],
         if (_errorMsg != null) ...[
           const SizedBox(height: SphereSpacing.x8),
           Text(
@@ -220,12 +333,14 @@ class _NutritionLogSheetContentState
                 ),
           ),
         ],
-        const SizedBox(height: SphereSpacing.x24),
+        const SizedBox(height: SphereSpacing.x20),
         SizedBox(
           height: 52,
           width: double.infinity,
           child: FilledButton(
-            onPressed: canAnalyse ? _analyse : null,
+            onPressed: canAnalyse
+                ? (_mode == _LogMode.photo ? _analyse : _analyseText)
+                : null,
             style: FilledButton.styleFrom(
               backgroundColor: context.sc.primary,
               foregroundColor: context.sc.onPrimary,
@@ -284,6 +399,8 @@ class _NutritionLogSheetContentState
                     setState(() {
                       _result = null;
                       _pickedImage = null;
+                      _descCtrl.clear();
+                      _errorMsg = null;
                     });
                   },
                   style: OutlinedButton.styleFrom(
@@ -319,6 +436,59 @@ class _NutritionLogSheetContentState
           ],
         ),
       ],
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Mode Tab
+// ---------------------------------------------------------------------------
+
+class _ModeTab extends StatelessWidget {
+  const _ModeTab({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+  });
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: selected ? context.sc.primary : context.sc.surfaceElev1,
+          borderRadius: SphereRadius.cardRect,
+          border: Border.all(
+            color: selected ? context.sc.primary : context.sc.borderSubtle,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 14,
+              color: selected ? Colors.black : context.sc.onSurfaceMuted,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: selected ? Colors.black : context.sc.onSurfaceMuted,
+                  ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
