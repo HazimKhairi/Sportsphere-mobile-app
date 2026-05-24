@@ -10,13 +10,14 @@ class PaymentIntentRepository {
 
   Future<PaymentIntent> createPaymentIntent({
     required String programId,
+    required String clubId,
     required int amountCents,
     String currency = 'MYR',
   }) async {
     try {
       final res = await _dio.post<Map<String, dynamic>>(
         '/api/payments/mobile/payment-intent',
-        data: {'programId': programId},
+        data: {'programId': programId, 'clubId': clubId},
       );
       final data = res.data ?? const <String, dynamic>{};
       return PaymentIntent(

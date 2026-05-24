@@ -6,6 +6,7 @@ import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:go_router/go_router.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../home/presentation/staff_home_providers.dart';
 import '../../programs/domain/registration_status.dart';
 import '../../programs/presentation/registration_providers.dart';
 import '../domain/payment_intent.dart';
@@ -27,10 +28,21 @@ Future<bool> runStripeCheckout({
   required String currency,
 }) async {
   // 1. Create intent
+  final clubId = await ref.read(activeClubIdProvider.future);
+  if (clubId == null) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not determine club. Try again.')),
+      );
+    }
+    return false;
+  }
+
   PaymentIntent intent;
   try {
     intent = await ref.read(paymentIntentRepositoryProvider).createPaymentIntent(
           programId: programId,
+          clubId: clubId,
           amountCents: amountCents,
           currency: currency,
         );
