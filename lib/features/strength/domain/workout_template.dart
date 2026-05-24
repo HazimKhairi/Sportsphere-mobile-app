@@ -25,6 +25,15 @@ class TemplateExercise {
         restSeconds: (d['restSeconds'] as int?) ?? 90,
         notes: d['notes'] as String?,
       );
+
+  Map<String, dynamic> toMap() => {
+        'exerciseId': exerciseId,
+        'sets': sets,
+        'reps': reps,
+        if (weightKg != null) 'weightKg': weightKg,
+        'restSeconds': restSeconds,
+        if (notes != null) 'notes': notes,
+      };
 }
 
 class WorkoutTemplate {
