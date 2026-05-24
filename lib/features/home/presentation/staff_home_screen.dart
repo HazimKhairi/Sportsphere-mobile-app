@@ -127,7 +127,23 @@ class StaffHomeScreen extends ConsumerWidget {
                         SphereQuickActionChip(
                           icon: LucideIcons.scanLine,
                           label: 'Take attendance',
-                          onTap: () => context.go('/schedule'),
+                          onTap: () {
+                            final session = nextSession;
+                            if (session == null) {
+                              context.go('/schedule');
+                              return;
+                            }
+                            final clubIdVal = ref
+                                .read(activeClubIdProvider)
+                                .valueOrNull ?? '';
+                            context.push(
+                              '/staff/session/${session.id}/attendance',
+                              extra: {
+                                'clubId': clubIdVal,
+                                'name': session.name,
+                              },
+                            );
+                          },
                         ),
                         const SizedBox(width: 8),
                         SphereQuickActionChip(
@@ -154,7 +170,19 @@ class StaffHomeScreen extends ConsumerWidget {
                     loading: nextSessionLoading,
                     onCheckIn: nextSession == null
                         ? null
-                        : () => context.push('/qr-scan/${nextSession.id}'),
+                        : () {
+                            final clubIdVal = ref
+                                .read(activeClubIdProvider)
+                                .valueOrNull ?? '';
+                            context.push(
+                              '/staff/session/${nextSession.id}/qr',
+                              extra: {
+                                'name': nextSession.name,
+                                'location': nextSession.location,
+                                'clubId': clubIdVal,
+                              },
+                            );
+                          },
                   ),
                 ),
                 const SizedBox(height: SphereSpacing.x32),

@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../data/check_in_repository.dart';
@@ -21,7 +21,7 @@ class QrScanScreen extends ConsumerStatefulWidget {
   ConsumerState<QrScanScreen> createState() => _QrScanScreenState();
 }
 
-enum _ScanStatus { scanning, submitting, success, mismatch, failure }
+enum _ScanStatus { scanning, submitting, success, mismatch, failure, alreadyCheckedIn, notMember }
 
 class _QrScanScreenState extends ConsumerState<QrScanScreen>
     with SingleTickerProviderStateMixin {
@@ -76,7 +76,24 @@ class _QrScanScreenState extends ConsumerState<QrScanScreen>
             context.go('/schedule');
           }
         }
-      case CheckInResult.mismatch:
+      case CheckInResult.alreadyCheckedIn:
+        setState(() => _status = _ScanStatus.alreadyCheckedIn);
+        unawaited(HapticFeedback.mediumImpact());
+        await Future<void>.delayed(const Duration(seconds: 2));
+        if (mounted) {
+          _consumed = false;
+          setState(() => _status = _ScanStatus.scanning);
+        }
+      case CheckInResult.notMember:
+        setState(() => _status = _ScanStatus.notMember);
+        unawaited(HapticFeedback.heavyImpact());
+        unawaited(_shake.forward(from: 0));
+        await Future<void>.delayed(const Duration(seconds: 3));
+        if (mounted) {
+          _consumed = false;
+          setState(() => _status = _ScanStatus.scanning);
+        }
+      case CheckInResult.sessionNotFound:
         setState(() => _status = _ScanStatus.mismatch);
         unawaited(HapticFeedback.heavyImpact());
         unawaited(_shake.forward(from: 0));
@@ -226,6 +243,16 @@ class _StatusBanner extends StatelessWidget {
         'Wrong QR for this session.',
         context.sc.danger,
         LucideIcons.x,
+      ),
+      _ScanStatus.alreadyCheckedIn => (
+        'Already checked in to this session.',
+        context.sc.success,
+        LucideIcons.check,
+      ),
+      _ScanStatus.notMember => (
+        'Payment required to join this session.',
+        context.sc.danger,
+        LucideIcons.lockKeyhole,
       ),
       _ScanStatus.failure => (
         'Network hiccup. Try again.',

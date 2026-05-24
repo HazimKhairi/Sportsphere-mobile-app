@@ -10,6 +10,8 @@ import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_avatar_stack.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
+import '../../home/presentation/staff_home_providers.dart';
+import '../../role_pick/presentation/role_providers.dart';
 import '../domain/training_session.dart';
 import 'session_detail_providers.dart';
 
@@ -87,6 +89,9 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     final detailAsync = ref.watch(
       sessionDetailProvider(sessionId: widget.sessionId),
     );
+    final role = ref.watch(selectedRoleProvider);
+    final clubId = ref.watch(activeClubIdProvider).valueOrNull ?? '';
+    final isStaff = role == AppRole.staff;
 
     return Scaffold(
       backgroundColor: context.sc.surface,
@@ -97,13 +102,32 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             if (session == null) {
               return _NotFound(onBack: () => _back(context));
             }
+            final ended = _statusFor(session.startTime) == 'Ended';
             return _Content(
               session: session,
               countdown: _countdown(session.startTime),
               formattedDate: _formattedDate(session.startTime),
               status: _statusFor(session.startTime),
               onBack: () => _back(context),
+              isStaff: isStaff,
+              clubId: clubId,
+              sessionEnded: ended,
               onCheckIn: () => context.push('/qr-scan/${session.id}'),
+              onShowQr: () => context.push(
+                '/staff/session/${session.id}/qr',
+                extra: {
+                  'name': session.name,
+                  'location': session.location,
+                  'clubId': clubId,
+                },
+              ),
+              onAttendance: () => context.push(
+                '/staff/session/${session.id}/attendance',
+                extra: {'clubId': clubId, 'name': session.name},
+              ),
+              onMedia: () => isStaff
+                  ? context.push('/staff/session/${session.id}/media', extra: clubId)
+                  : context.push('/session/${session.id}/media', extra: clubId),
             );
           },
           loading: () => Center(
@@ -130,7 +154,13 @@ class _Content extends StatelessWidget {
     required this.formattedDate,
     required this.status,
     required this.onBack,
+    required this.isStaff,
+    required this.clubId,
+    required this.sessionEnded,
     required this.onCheckIn,
+    required this.onShowQr,
+    required this.onAttendance,
+    required this.onMedia,
   });
 
   final TrainingSession session;
@@ -138,7 +168,13 @@ class _Content extends StatelessWidget {
   final String formattedDate;
   final String status;
   final VoidCallback onBack;
+  final bool isStaff;
+  final String clubId;
+  final bool sessionEnded;
   final VoidCallback onCheckIn;
+  final VoidCallback onShowQr;
+  final VoidCallback onAttendance;
+  final VoidCallback onMedia;
 
   @override
   Widget build(BuildContext context) {
@@ -278,22 +314,102 @@ class _Content extends StatelessWidget {
         Positioned(
           left: SphereSpacing.x16,
           right: SphereSpacing.x16,
-          bottom: 110, // sits above the floating navbar (which lives ~20px from screen bottom, ~70px tall)
-          child: SizedBox(
-            height: 52,
-            child: ElevatedButton.icon(
-              onPressed: onCheckIn,
-              icon: const Icon(LucideIcons.qrCode, size: 18),
-              label: const Text('QR Check-in'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: context.sc.primary,
-                foregroundColor: context.sc.onPrimary,
-                shape: const RoundedRectangleBorder(borderRadius: SphereRadius.pillRect),
-                elevation: 0,
-                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
+          bottom: 110,
+          child: isStaff
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 48,
+                            child: ElevatedButton.icon(
+                              onPressed: onShowQr,
+                              icon: const Icon(LucideIcons.qrCode, size: 16),
+                              label: const Text('Show QR'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: context.sc.primary,
+                                foregroundColor: context.sc.onPrimary,
+                                shape: const RoundedRectangleBorder(borderRadius: SphereRadius.pillRect),
+                                elevation: 0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: SizedBox(
+                            height: 48,
+                            child: OutlinedButton.icon(
+                              onPressed: onAttendance,
+                              icon: const Icon(LucideIcons.clipboardList, size: 16),
+                              label: const Text('Attendance'),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: context.sc.onSurface,
+                                side: BorderSide(color: context.sc.borderSubtle),
+                                shape: const RoundedRectangleBorder(borderRadius: SphereRadius.pillRect),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 44,
+                      child: OutlinedButton.icon(
+                        onPressed: onMedia,
+                        icon: const Icon(LucideIcons.image, size: 16),
+                        label: Text(sessionEnded ? 'View / Upload Media' : 'Upload Media'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: context.sc.onSurface,
+                          side: BorderSide(color: context.sc.borderSubtle),
+                          shape: const RoundedRectangleBorder(borderRadius: SphereRadius.pillRect),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: ElevatedButton.icon(
+                        onPressed: onCheckIn,
+                        icon: const Icon(LucideIcons.qrCode, size: 18),
+                        label: const Text('Scan to Check In'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: context.sc.primary,
+                          foregroundColor: context.sc.onPrimary,
+                          shape: const RoundedRectangleBorder(borderRadius: SphereRadius.pillRect),
+                          elevation: 0,
+                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ),
+                    if (sessionEnded) ...[
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 44,
+                        child: OutlinedButton.icon(
+                          onPressed: onMedia,
+                          icon: const Icon(LucideIcons.images, size: 16),
+                          label: const Text('View Session Media'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: context.sc.onSurface,
+                            side: BorderSide(color: context.sc.borderSubtle),
+                            shape: const RoundedRectangleBorder(borderRadius: SphereRadius.pillRect),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
         ),
       ],
     );

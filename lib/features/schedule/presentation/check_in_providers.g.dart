@@ -6,7 +6,7 @@ part of 'check_in_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$checkInRepositoryHash() => r'be972d6e24ae2a753f9af5246e863445fd8c8a00';
+String _$checkInRepositoryHash() => r'89eccf61099cf50f5dbe6029f03000582ba99e93';
 
 /// See also [checkInRepository].
 @ProviderFor(checkInRepository)

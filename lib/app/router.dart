@@ -42,6 +42,10 @@ import '../features/role_pick/presentation/role_providers.dart';
 import '../features/schedule/presentation/qr_scan_screen.dart';
 import '../features/schedule/presentation/schedule_screen.dart';
 import '../features/schedule/presentation/session_detail_screen.dart';
+import '../features/schedule/presentation/staff_attendance_screen.dart';
+import '../features/schedule/presentation/staff_qr_display_screen.dart';
+import '../features/session_media/presentation/session_media_gallery_screen.dart';
+import '../features/session_media/presentation/staff_media_upload_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
 import '../features/approvals/presentation/approvals_screen.dart';
 import '../features/staff_training/presentation/create_training_plan_screen.dart';
@@ -243,6 +247,47 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, state) {
               final id = state.pathParameters['id']!;
               return SessionDetailScreen(sessionId: id);
+            },
+          ),
+          GoRoute(
+            path: '/staff/session/:id/qr',
+            builder: (_, state) {
+              final id = state.pathParameters['id']!;
+              final extra = state.extra as Map<String, String>? ?? {};
+              return StaffQrDisplayScreen(
+                sessionId: id,
+                sessionName: extra['name'] ?? 'Session',
+                location: extra['location'] ?? '',
+                clubId: extra['clubId'] ?? '',
+              );
+            },
+          ),
+          GoRoute(
+            path: '/staff/session/:id/attendance',
+            builder: (_, state) {
+              final id = state.pathParameters['id']!;
+              final extra = state.extra as Map<String, String>? ?? {};
+              return StaffAttendanceScreen(
+                sessionId: id,
+                clubId: extra['clubId'] ?? '',
+                sessionName: extra['name'] ?? 'Session',
+              );
+            },
+          ),
+          GoRoute(
+            path: '/staff/session/:id/media',
+            builder: (_, state) {
+              final id = state.pathParameters['id']!;
+              final clubId = state.extra as String? ?? '';
+              return StaffMediaUploadScreen(sessionId: id, clubId: clubId);
+            },
+          ),
+          GoRoute(
+            path: '/session/:id/media',
+            builder: (_, state) {
+              final id = state.pathParameters['id']!;
+              final clubId = state.extra as String? ?? '';
+              return SessionMediaGalleryScreen(sessionId: id, clubId: clubId);
             },
           ),
           GoRoute(

@@ -6,7 +6,7 @@ part of 'recovery_ai_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$recoveryAiInsightHash() => r'93d951ea52de23cbcc847a45104ce3fed620cc65';
+String _$recoveryAiInsightHash() => r'd251f61f76fc0a558f626489d81389137e3e768f';
 
 /// See also [recoveryAiInsight].
 @ProviderFor(recoveryAiInsight)
