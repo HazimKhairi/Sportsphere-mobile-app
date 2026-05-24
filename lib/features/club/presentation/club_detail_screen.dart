@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
@@ -266,8 +267,17 @@ class _ContactSection extends StatelessWidget {
 
   final ClubInfo club;
 
+  static String _toSlug(String name) => name
+      .toLowerCase()
+      .replaceAll(RegExp(r'[^a-z0-9\s]'), '')
+      .trim()
+      .replaceAll(RegExp(r'\s+'), '-');
+
   @override
   Widget build(BuildContext context) {
+    final slug = _toSlug(club.name);
+    final clubPageUrl = 'https://sprtsphr.app/clubs/$slug';
+
     final rows = <_InfoRow>[
       if (club.address != null)
         _InfoRow(icon: LucideIcons.mapPin, text: club.address!),
@@ -277,6 +287,15 @@ class _ContactSection extends StatelessWidget {
         _InfoRow(icon: LucideIcons.mail, text: club.email!),
       if (club.website != null)
         _InfoRow(icon: LucideIcons.globe, text: club.website!),
+      _InfoRow(
+        icon: LucideIcons.link,
+        text: clubPageUrl,
+        highlight: true,
+        onTap: () => launchUrl(
+          Uri.parse(clubPageUrl),
+          mode: LaunchMode.externalApplication,
+        ),
+      ),
     ];
 
     if (rows.isEmpty) return const SizedBox.shrink();
@@ -293,10 +312,12 @@ class _ContactSection extends StatelessWidget {
 }
 
 class _InfoRow {
-  const _InfoRow({required this.icon, required this.text});
+  const _InfoRow({required this.icon, required this.text, this.onTap, this.highlight = false});
 
   final IconData icon;
   final String text;
+  final VoidCallback? onTap;
+  final bool highlight;
 }
 
 class _InfoCard extends StatelessWidget {
@@ -307,31 +328,43 @@ class _InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x16, vertical: 8),
       decoration: BoxDecoration(
         color: context.sc.surfaceElev1,
         borderRadius: SphereRadius.cardRect,
         border: Border.all(color: context.sc.borderSubtle),
       ),
+      clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
           for (var i = 0; i < rows.length; i++) ...[
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Icon(rows[i].icon,
-                      size: 20, color: context.sc.onSurfaceMuted),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      rows[i].text,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: context.sc.onSurface,
-                          ),
+            InkWell(
+              onTap: rows[i].onTap,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: SphereSpacing.x16, vertical: 10),
+                child: Row(
+                  children: [
+                    Icon(rows[i].icon,
+                        size: 20,
+                        color: rows[i].highlight
+                            ? context.sc.primary
+                            : context.sc.onSurfaceMuted),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        rows[i].text,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: rows[i].highlight
+                                  ? context.sc.primary
+                                  : context.sc.onSurface,
+                            ),
+                      ),
                     ),
-                  ),
-                ],
+                    if (rows[i].onTap != null)
+                      Icon(LucideIcons.externalLink,
+                          size: 14, color: context.sc.onSurfaceMuted),
+                  ],
+                ),
               ),
             ),
             if (i < rows.length - 1)
