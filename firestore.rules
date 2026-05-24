@@ -13,17 +13,31 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == uid;
     }
 
-    // Check role from users doc — accepts both mobile convention ('staff')
-    // and backend club role values ('OWNER', 'ADMIN', 'COACH').
-    function isStaff() {
+    // Membership lives in club_users/{uid}_{clubId} — doc ID is uid + '_' + clubId.
+    // Returns true if the document exists (any role = member of that club).
+    function isClubMember(clubId) {
       return isSignedIn() &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role
-          in ['staff', 'OWNER', 'ADMIN', 'COACH'];
+        exists(/databases/$(database)/documents/club_users/$(request.auth.uid + '_' + clubId));
     }
 
-    function isMemberOfClub(clubId) {
+    // Returns true if the user has a staff-level role in the given club.
+    // One get() — safe fallback to '' when doc is missing.
+    function isClubStaff(clubId) {
       return isSignedIn() &&
-        exists(/databases/$(database)/documents/clubs/$(clubId)/members/$(request.auth.uid));
+        get(/databases/$(database)/documents/club_users/$(request.auth.uid + '_' + clubId))
+          .data.get('role', '')
+          in ['STAFF', 'COACH', 'ADMIN', 'OWNER'];
+    }
+
+    // Global staff check for rules outside a /clubs/{clubId} match.
+    // Reads users/{uid}.activeClubId then delegates to isClubStaff().
+    // Cost: 2 external reads (users + club_users).
+    function isStaff() {
+      return isSignedIn() &&
+        isClubStaff(
+          get(/databases/$(database)/documents/users/$(request.auth.uid))
+            .data.get('activeClubId', '')
+        );
     }
 
     // ─── Users ────────────────────────────────────────────────────────────────
@@ -31,6 +45,20 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if isOwner(userId);
       allow read: if isStaff();
+
+      // Recovery logs — player owns, staff cannot see (personal wellness data).
+      match /recovery_logs/{logId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // ─── Club memberships (club_users collection) ─────────────────────────────
+    // Backend-managed — mobile can only read its own membership doc.
+
+    match /club_users/{membershipId} {
+      allow read: if isSignedIn() &&
+        membershipId.matches(request.auth.uid + '_.*');
+      allow write: if false;
     }
 
     // ─── Players ─────────────────────────────────────────────────────────────
@@ -39,13 +67,11 @@ service cloud.firestore {
       allow read, update: if isOwner(playerId);
       allow read: if isStaff();
 
-      // Body composition — player owns, staff can view.
       match /body_composition/{entryId} {
         allow read, write: if isOwner(playerId);
         allow read: if isStaff();
       }
 
-      // Achievements unlocked by this player.
       match /unlocked_achievements/{aId} {
         allow read: if isOwner(playerId);
         allow read, write: if isStaff();
@@ -69,34 +95,36 @@ service cloud.firestore {
     }
 
     // ─── Clubs ───────────────────────────────────────────────────────────────
+    // Use isClubMember/isClubStaff (clubId in scope) — avoids the extra
+    // users-doc read that isStaff() requires.
 
     match /clubs/{clubId} {
-      allow read: if isMemberOfClub(clubId) || isStaff();
-      allow write: if isStaff();
+      allow read: if isClubMember(clubId) || isClubStaff(clubId);
+      allow write: if isClubStaff(clubId);
 
       match /rewards/{rewardId} {
-        allow read: if isMemberOfClub(clubId) || isStaff();
-        allow write: if isStaff();
+        allow read: if isClubMember(clubId) || isClubStaff(clubId);
+        allow write: if isClubStaff(clubId);
       }
 
       match /sessions/{sessionId} {
-        allow read: if isMemberOfClub(clubId) || isStaff();
-        allow write: if isStaff();
+        allow read: if isClubMember(clubId) || isClubStaff(clubId);
+        allow write: if isClubStaff(clubId);
       }
 
       match /members/{memberId} {
-        allow read: if isMemberOfClub(clubId) || isOwner(memberId) || isStaff();
-        allow write: if isStaff();
+        allow read: if isClubMember(clubId) || isOwner(memberId) || isClubStaff(clubId);
+        allow write: if isClubStaff(clubId);
       }
 
       match /workoutTemplates/{templateId} {
-        allow read: if isMemberOfClub(clubId) || isStaff();
-        allow write: if isStaff();
+        allow read: if isClubMember(clubId) || isClubStaff(clubId);
+        allow write: if isClubStaff(clubId);
       }
 
       match /training_plans/{planId} {
-        allow read: if isMemberOfClub(clubId) || isStaff();
-        allow write: if isStaff();
+        allow read: if isClubMember(clubId) || isClubStaff(clubId);
+        allow write: if isClubStaff(clubId);
       }
     }
 
@@ -112,12 +140,6 @@ service cloud.firestore {
     match /activity/{userId}/{entryId} {
       allow read: if isOwner(userId);
       allow write: if isOwner(userId) || isStaff();
-    }
-
-    // ─── Recovery logs ────────────────────────────────────────────────────────
-
-    match /users/{userId}/recovery_logs/{logId} {
-      allow read, write: if isOwner(userId);
     }
 
     // ─── Recovery content (coach-curated) ────────────────────────────────────
