@@ -635,8 +635,9 @@ class _CoachCard extends StatelessWidget {
               backgroundImage: coach.photoUrl != null && coach.photoUrl!.isNotEmpty
                   ? NetworkImage(coach.photoUrl!)
                   : null,
-              onBackgroundImageError:
-                  coach.photoUrl != null ? (_, _) {} : null,
+              onBackgroundImageError: coach.photoUrl != null && coach.photoUrl!.isNotEmpty
+                  ? (_, _) {}
+                  : null,
               child: coach.photoUrl == null || coach.photoUrl!.isEmpty
                   ? Text(
                       _initials,
