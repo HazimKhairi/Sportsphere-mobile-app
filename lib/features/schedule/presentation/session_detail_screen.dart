@@ -179,11 +179,9 @@ class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final attendees = session.attendees;
-    return Stack(
+    return Column(
       children: [
-        Padding(
-          // Reserve space for nav bar (90) + sticky CTA (~72)
-          padding: const EdgeInsets.only(bottom: 170),
+        Expanded(
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(
               SphereSpacing.x16,
@@ -311,10 +309,13 @@ class _Content extends StatelessWidget {
           ),
         ),
 
-        Positioned(
-          left: SphereSpacing.x16,
-          right: SphereSpacing.x16,
-          bottom: 110,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            SphereSpacing.x16,
+            SphereSpacing.x8,
+            SphereSpacing.x16,
+            SphereSpacing.bottomNavSafe,
+          ),
           child: isStaff
               ? Column(
                   mainAxisSize: MainAxisSize.min,
