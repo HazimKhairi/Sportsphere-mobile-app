@@ -4,7 +4,7 @@
 abstract final class SphereConfig {
   static const stripePublishableKey = String.fromEnvironment(
     'STRIPE_PUBLISHABLE_KEY',
-    defaultValue: '',
+    defaultValue: 'pk_live_51SxHecI59cICIUzFKYgLuV42pifnqLwmB0kHz6IDeBAf3otF2HK78XecLFB85QhjYpQkcQxuNlIMfC01UyO8zQnS00i7W60083',
   );
 
   static const apiBaseUrl = String.fromEnvironment(
