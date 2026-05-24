@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../../coach/domain/coach_profile.dart';
+import '../../coach/presentation/coach_providers.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../domain/club_info.dart';
@@ -91,6 +94,8 @@ class _ClubContent extends StatelessWidget {
                   const SizedBox(height: SphereSpacing.x24),
                   _SocialSection(storefront: club.storefront!),
                 ],
+                const SizedBox(height: SphereSpacing.x24),
+                const _CoachingStaffSection(),
               ],
             ),
           ),
@@ -554,9 +559,117 @@ class _CircleIconButton extends StatelessWidget {
         onTap: onTap,
         customBorder: const CircleBorder(),
         child: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Icon(LucideIcons.chevronLeft,
               size: 20, color: context.sc.onSurface),
+        ),
+      ),
+    );
+  }
+}
+
+class _CoachingStaffSection extends ConsumerWidget {
+  const _CoachingStaffSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final coachesAsync = ref.watch(myCoachesProvider);
+    return coachesAsync.when(
+      data: (coaches) {
+        if (coaches.isEmpty) return const SizedBox.shrink();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SphereSectionLabel('Coaching Staff'),
+            const SizedBox(height: SphereSpacing.x12),
+            SizedBox(
+              height: 132,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: coaches.length,
+                separatorBuilder: (_, _) =>
+                    const SizedBox(width: SphereSpacing.x12),
+                itemBuilder: (context, i) =>
+                    _CoachCard(coach: coaches[i]),
+              ),
+            ),
+          ],
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _CoachCard extends StatelessWidget {
+  const _CoachCard({required this.coach});
+
+  final CoachProfile coach;
+
+  String get _initials {
+    final parts = coach.name.trim().split(' ');
+    if (parts.length == 1) return parts[0].substring(0, 1).toUpperCase();
+    return '${parts[0][0]}${parts[parts.length - 1][0]}'.toUpperCase();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final sc = context.sc;
+    return GestureDetector(
+      onTap: () => context.push('/coach/${coach.id}', extra: coach),
+      child: Container(
+        width: 100,
+        padding: const EdgeInsets.all(SphereSpacing.x12),
+        decoration: BoxDecoration(
+          color: sc.surfaceElev1,
+          borderRadius: SphereRadius.cardRect,
+          border: Border.all(color: sc.borderSubtle),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 26,
+              backgroundColor: sc.primary,
+              backgroundImage: coach.photoUrl != null && coach.photoUrl!.isNotEmpty
+                  ? NetworkImage(coach.photoUrl!)
+                  : null,
+              onBackgroundImageError:
+                  coach.photoUrl != null ? (_, _) {} : null,
+              child: coach.photoUrl == null || coach.photoUrl!.isEmpty
+                  ? Text(
+                      _initials,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: sc.onPrimary,
+                      ),
+                    )
+                  : null,
+            ),
+            const SizedBox(height: SphereSpacing.x8),
+            Text(
+              coach.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: sc.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              coach.role,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: sc.onSurfaceMuted,
+                  ),
+            ),
+          ],
         ),
       ),
     );
