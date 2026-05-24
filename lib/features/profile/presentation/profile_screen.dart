@@ -72,7 +72,7 @@ class ProfileScreen extends ConsumerWidget {
                 // ── Avatar hero (centered) ────────────────────────────────────
                 SphereEntrance(
                   delayMs: 60,
-                  child: _AvatarHero(
+                  child: Center(child: _AvatarHero(
                     displayName: displayName,
                     firstName: firstName,
                     email: email,
@@ -80,7 +80,7 @@ class ProfileScreen extends ConsumerWidget {
                     roleLabel: roleLabel,
                     photoUrl: user?.photoUrl,
                     isPlayer: isPlayer,
-                  ),
+                  )),
                 ),
                 const SizedBox(height: SphereSpacing.x32),
 
