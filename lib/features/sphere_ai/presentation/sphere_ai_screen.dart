@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../data/chat_persistence_repository.dart';
@@ -247,7 +247,7 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                         SphereSpacing.x16,
                         SphereSpacing.x8,
                         SphereSpacing.x16,
-                        SphereSpacing.x8,
+                        SphereSpacing.x16,
                       ),
                       itemCount: _messages.length,
                       itemBuilder: (context, i) {
@@ -256,16 +256,12 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                       },
                     ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: context.sc.surface,
-                border: Border(top: BorderSide(color: context.sc.borderSubtle)),
-              ),
+            Padding(
               padding: const EdgeInsets.fromLTRB(
                 SphereSpacing.x16,
                 SphereSpacing.x8,
                 SphereSpacing.x16,
-                SphereSpacing.x12,
+                SphereSpacing.bottomNavSafe,
               ),
               child: _Composer(
                 controller: _composer,
@@ -475,7 +471,7 @@ class _ChatBubble extends StatelessWidget {
       code: TextStyle(
         color: context.sc.primary,
         fontFamily: 'Geist',
-        backgroundColor: Color(0xFF0A0A0A),
+        backgroundColor: const Color(0xFF0A0A0A),
         fontSize: 13,
       ),
       blockSpacing: 8,
@@ -600,8 +596,12 @@ class _Composer extends StatelessWidget {
                 hintText: 'Ask Sphere AI...',
                 hintStyle: TextStyle(color: context.sc.onSurfaceMuted),
                 border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                filled: true,
+                fillColor: Colors.transparent,
                 isCollapsed: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 14),
+                contentPadding: const EdgeInsets.symmetric(vertical: 14),
               ),
             ),
           ),
@@ -615,7 +615,7 @@ class _Composer extends StatelessWidget {
               onTap: busy ? null : () => onSubmit(controller.text),
               customBorder: const CircleBorder(),
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Icon(
                   LucideIcons.arrowUp,
                   color: context.sc.onPrimary,
