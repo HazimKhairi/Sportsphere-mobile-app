@@ -11,7 +11,7 @@ Future<Program?> programDetail(
   ProgramDetailRef ref, {
   required String programId,
 }) async {
-  final clubId = ref.watch(activeClubIdProvider).valueOrNull;
+  final clubId = await ref.watch(activeClubIdProvider.future);
   if (clubId == null) return null;
   return ref.read(programsRepositoryProvider).programById(
         clubId: clubId,
