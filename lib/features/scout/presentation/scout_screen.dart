@@ -147,6 +147,22 @@ class _ProfileView extends ConsumerWidget {
                 child: _PastClubsList(clubs: profile.pastClubs),
               ),
             ),
+          if (profile.representativeHistory.isNotEmpty)
+            SliverToBoxAdapter(
+              child: _SectionCard(
+                title: 'Representative History',
+                icon: LucideIcons.medal,
+                child: _RepresentativeSection(entries: profile.representativeHistory),
+              ),
+            ),
+          if (profile.tournamentHistory.isNotEmpty)
+            SliverToBoxAdapter(
+              child: _SectionCard(
+                title: 'Tournament History',
+                icon: LucideIcons.trophy,
+                child: _TournamentSection(entries: profile.tournamentHistory),
+              ),
+            ),
           if ((profile.achievements ?? '').isNotEmpty)
             SliverToBoxAdapter(
               child: _SectionCard(
@@ -539,7 +555,127 @@ class _PastClubsList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(club.name, style: tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
-                    Text(yearStr, style: tt.bodySmall),
+                    Text(
+                      [
+                        yearStr,
+                        if (club.role != null) club.role!,
+                        if (club.sport != null) club.sport!,
+                      ].join(' · '),
+                      style: tt.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class _RepresentativeSection extends StatelessWidget {
+  const _RepresentativeSection({required this.entries});
+  final List<RepresentativeEntry> entries;
+
+  @override
+  Widget build(BuildContext context) {
+    final tt = Theme.of(context).textTheme;
+    return Column(
+      children: entries.map((entry) {
+        final levelLabel = kRepresentativeLevelLabels[entry.level] ?? entry.level;
+        final achievementLabel = entry.achievement != null
+            ? kAchievementLabels[entry.achievement] ?? entry.achievement!
+            : null;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(LucideIcons.medal, size: 16, color: context.sc.accentAmber),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(entry.teamName,
+                              style: tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+                        ),
+                        Text('${entry.year}',
+                            style: tt.bodySmall?.copyWith(color: context.sc.onSurfaceMuted)),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(levelLabel,
+                        style: tt.bodySmall?.copyWith(color: context.sc.onSurfaceMuted)),
+                    if (achievementLabel != null) ...[
+                      const SizedBox(height: 4),
+                      _Chip(
+                        label: achievementLabel,
+                        color: context.sc.accentAmberPastel,
+                        textColor: context.sc.accentAmber,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class _TournamentSection extends StatelessWidget {
+  const _TournamentSection({required this.entries});
+  final List<TournamentEntry> entries;
+
+  @override
+  Widget build(BuildContext context) {
+    final tt = Theme.of(context).textTheme;
+    return Column(
+      children: entries.map((entry) {
+        final achievementLabel = entry.achievement != null
+            ? kAchievementLabels[entry.achievement] ?? entry.achievement!
+            : null;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(LucideIcons.trophy, size: 16, color: context.sc.accentBlue),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(entry.name,
+                              style: tt.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+                        ),
+                        Text('${entry.year}',
+                            style: tt.bodySmall?.copyWith(color: context.sc.onSurfaceMuted)),
+                      ],
+                    ),
+                    if (entry.organiser != null) ...[
+                      const SizedBox(height: 2),
+                      Text(entry.organiser!,
+                          style: tt.bodySmall?.copyWith(color: context.sc.onSurfaceMuted)),
+                    ],
+                    if (achievementLabel != null) ...[
+                      const SizedBox(height: 4),
+                      _Chip(
+                        label: achievementLabel,
+                        color: context.sc.accentBluePastel,
+                        textColor: context.sc.accentBlue,
+                      ),
+                    ],
                   ],
                 ),
               ),
