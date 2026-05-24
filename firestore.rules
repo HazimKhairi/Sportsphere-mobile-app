@@ -88,6 +88,16 @@ service cloud.firestore {
         allow read: if isMemberOfClub(clubId) || isOwner(memberId);
         allow write: if isStaff();
       }
+
+      match /workoutTemplates/{templateId} {
+        allow read: if isMemberOfClub(clubId);
+        allow write: if isStaff();
+      }
+
+      match /training_plans/{planId} {
+        allow read: if isMemberOfClub(clubId);
+        allow write: if isStaff();
+      }
     }
 
     // ─── Drills ──────────────────────────────────────────────────────────────
@@ -102,6 +112,19 @@ service cloud.firestore {
     match /activity/{userId}/{entryId} {
       allow read: if isOwner(userId);
       allow write: if isOwner(userId) || isStaff();
+    }
+
+    // ─── Recovery logs ────────────────────────────────────────────────────────
+
+    match /users/{userId}/recovery_logs/{logId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // ─── Recovery content (coach-curated) ────────────────────────────────────
+
+    match /recovery_content/{contentId} {
+      allow read: if isSignedIn();
+      allow write: if isStaff();
     }
   }
 }
