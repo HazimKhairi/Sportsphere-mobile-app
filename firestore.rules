@@ -71,31 +71,31 @@ service cloud.firestore {
     // ─── Clubs ───────────────────────────────────────────────────────────────
 
     match /clubs/{clubId} {
-      allow read: if isMemberOfClub(clubId);
+      allow read: if isMemberOfClub(clubId) || isStaff();
       allow write: if isStaff();
 
       match /rewards/{rewardId} {
-        allow read: if isMemberOfClub(clubId);
+        allow read: if isMemberOfClub(clubId) || isStaff();
         allow write: if isStaff();
       }
 
       match /sessions/{sessionId} {
-        allow read: if isMemberOfClub(clubId);
+        allow read: if isMemberOfClub(clubId) || isStaff();
         allow write: if isStaff();
       }
 
       match /members/{memberId} {
-        allow read: if isMemberOfClub(clubId) || isOwner(memberId);
+        allow read: if isMemberOfClub(clubId) || isOwner(memberId) || isStaff();
         allow write: if isStaff();
       }
 
       match /workoutTemplates/{templateId} {
-        allow read: if isMemberOfClub(clubId);
+        allow read: if isMemberOfClub(clubId) || isStaff();
         allow write: if isStaff();
       }
 
       match /training_plans/{planId} {
-        allow read: if isMemberOfClub(clubId);
+        allow read: if isMemberOfClub(clubId) || isStaff();
         allow write: if isStaff();
       }
     }
