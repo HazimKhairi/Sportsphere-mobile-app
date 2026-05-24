@@ -247,7 +247,7 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                         SphereSpacing.x16,
                         SphereSpacing.x8,
                         SphereSpacing.x16,
-                        SphereSpacing.x16,
+                        SphereSpacing.x8,
                       ),
                       itemCount: _messages.length,
                       itemBuilder: (context, i) {
@@ -256,12 +256,16 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                       },
                     ),
             ),
-            Padding(
+            Container(
+              decoration: BoxDecoration(
+                color: context.sc.surface,
+                border: Border(top: BorderSide(color: context.sc.borderSubtle)),
+              ),
               padding: const EdgeInsets.fromLTRB(
                 SphereSpacing.x16,
                 SphereSpacing.x8,
                 SphereSpacing.x16,
-                SphereSpacing.bottomNavSafe,
+                SphereSpacing.x12,
               ),
               child: _Composer(
                 controller: _composer,
