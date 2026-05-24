@@ -60,10 +60,10 @@ NUTRITION:
   final repo = ref.watch(aiChatRepositoryProvider);
   final stream = repo.streamMessage(
     messages: [
-      {'role': 'user', 'content': prompt}
+      {'role': 'user', 'text': prompt}
     ],
     threadId: 'recovery-${DateTime.now().millisecondsSinceEpoch}',
-    surface: 'player-recovery',
+    surface: 'club',
   );
 
   final buffer = StringBuffer();
