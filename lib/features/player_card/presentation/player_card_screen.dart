@@ -83,6 +83,14 @@ class _CardBodyState extends State<_CardBody> {
     if (_downloading) return;
     setState(() => _downloading = true);
     try {
+      final hasAccess = await Gal.requestAccess();
+      if (!hasAccess) {
+        if (!mounted) return;
+        final l = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l.failedToSaveCard)));
+        return;
+      }
       final boundary =
           _cardKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
       if (boundary == null) return;
@@ -118,23 +126,50 @@ class _CardBodyState extends State<_CardBody> {
 
   @override
   Widget build(BuildContext context) {
+    final top = MediaQuery.of(context).padding.top;
     final bottom = MediaQuery.of(context).padding.bottom;
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(20, 20, 20, bottom + 32),
-      child: Column(
-        children: [
-          // ── Downloadable FIFA card ─────────────────────────────────────
-          RepaintBoundary(
-            key: _cardKey,
-            child: SphereFifaCard(card: widget.card),
-          ),
-          const SizedBox(height: 16),
+    return Stack(
+      children: [
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(20, top + 56, 20, bottom + 32),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight - top - 56 - bottom - 32,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RepaintBoundary(
+                      key: _cardKey,
+                      child: SphereFifaCard(card: widget.card),
+                    ),
+                    const SizedBox(height: 16),
+                    _DownloadButton(loading: _downloading, onTap: _downloadCard),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
 
-          // ── Download button ────────────────────────────────────────────
-          _DownloadButton(loading: _downloading, onTap: _downloadCard),
-        ],
-      ),
+        // Back button
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: IconButton(
+              icon: const Icon(LucideIcons.arrowLeft, color: Colors.white),
+              onPressed: () {
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
