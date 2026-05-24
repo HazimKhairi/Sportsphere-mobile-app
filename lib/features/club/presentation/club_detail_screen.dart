@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../coach/domain/coach_profile.dart';
 import '../../coach/presentation/coach_providers.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
@@ -381,10 +382,11 @@ class _SportsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SphereSectionLabel('Sports Offered'),
+        SphereSectionLabel(l.sportsOffered),
         const SizedBox(height: SphereSpacing.x12),
         Wrap(
           spacing: SphereSpacing.x8,
@@ -610,10 +612,11 @@ class _CoachingStaffSection extends ConsumerWidget {
     return coachesAsync.when(
       data: (coaches) {
         if (coaches.isEmpty) return const SizedBox.shrink();
+        final l = AppLocalizations.of(context)!;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SphereSectionLabel('Coaching Staff'),
+            SphereSectionLabel(l.coachingStaff),
             const SizedBox(height: SphereSpacing.x12),
             SizedBox(
               height: 132,
@@ -717,6 +720,7 @@ class _ErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(SphereSpacing.x32),
@@ -724,7 +728,7 @@ class _ErrorView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Could not load club info',
+              l.couldNotLoadClubInfo,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: context.sc.onSurface,
                   ),
@@ -732,7 +736,7 @@ class _ErrorView extends StatelessWidget {
             const SizedBox(height: SphereSpacing.x16),
             OutlinedButton(
               onPressed: onRetry,
-              child: const Text('Retry'),
+              child: Text(l.retry),
             ),
           ],
         ),

@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/_widgets/sphere_entrance.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../../home/presentation/staff_home_providers.dart';
@@ -38,17 +39,17 @@ class TrainingPlanDetailScreen extends ConsumerWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete plan?'),
+        title: Text(AppLocalizations.of(context)!.deletePlan),
         content: const Text(
             'This action cannot be undone. The plan will be permanently deleted.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Delete'),
+            child: Text(AppLocalizations.of(context)!.delete),
           ),
         ],
       ),
@@ -114,9 +115,10 @@ class TrainingPlanDetailScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SphereEntrance(
+              SphereEntrance(
                 delayMs: 0,
-                child: SphereSectionLabel('Details'),
+                child: SphereSectionLabel(
+                    AppLocalizations.of(context)!.planDetails),
               ),
               const SizedBox(height: SphereSpacing.x12),
               SphereEntrance(
@@ -272,7 +274,7 @@ class _AssignmentSectionState extends ConsumerState<_AssignmentSection> {
 
     if (widget.rosterAsync.hasError) {
       return Text(
-        'Could not load players.',
+        AppLocalizations.of(context)!.couldNotLoadPlayers,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: context.sc.onSurfaceMuted,
             ),
@@ -284,7 +286,7 @@ class _AssignmentSectionState extends ConsumerState<_AssignmentSection> {
 
     if (players.isEmpty) {
       return Text(
-        'No players in roster.',
+        AppLocalizations.of(context)!.noPlayers,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: context.sc.onSurfaceMuted,
             ),

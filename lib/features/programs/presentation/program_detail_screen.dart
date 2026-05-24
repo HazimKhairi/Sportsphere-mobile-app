@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../coach/domain/coach_profile.dart';
@@ -126,6 +127,7 @@ class _Content extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final coachesAsync = ref.watch(myCoachesProvider);
     final hasCover =
         program.coverImageUrl != null && program.coverImageUrl!.isNotEmpty;
@@ -240,23 +242,23 @@ class _Content extends ConsumerWidget {
                   ),
 
                   const SizedBox(height: SphereSpacing.x24),
-                  const SphereSectionLabel('Details'),
+                  SphereSectionLabel(l.details),
                   const SizedBox(height: SphereSpacing.x12),
                   _DetailRows(
                     rows: [
                       if (program.capacity != null)
                         (
-                          'Capacity',
+                          l.capacity,
                           '${program.currentRegistrants}/${program.capacity}',
                         ),
                       if (program.registrationStart != null)
                         (
-                          'Registration opens',
+                          l.registrationOpens,
                           formatDate(program.registrationStart!),
                         ),
                       if (program.registrationEnd != null)
                         (
-                          'Registration closes',
+                          l.registrationCloses,
                           formatDate(program.registrationEnd!),
                         ),
                       ('Currency', program.currency),
@@ -271,7 +273,7 @@ class _Content extends ConsumerWidget {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SphereSectionLabel('Meet the Coaches'),
+                          SphereSectionLabel(l.meetTheCoaches),
                           const SizedBox(height: SphereSpacing.x12),
                           ...coaches.map(
                             (coach) => Padding(
@@ -351,7 +353,7 @@ class _Content extends ConsumerWidget {
                             ),
                           )
                         : const Icon(LucideIcons.userPlus, size: 18),
-                    label: Text(busy ? 'Starting...' : 'Register'),
+                    label: Text(busy ? l.starting : l.register),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: context.sc.primary,
                       foregroundColor: context.sc.onPrimary,
@@ -580,6 +582,7 @@ class _AboutClubBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -606,7 +609,7 @@ class _AboutClubBanner extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'About the Club',
+                    l.aboutClub,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: context.sc.onSurface,
                           fontWeight: FontWeight.w600,
@@ -639,6 +642,7 @@ class _NotFound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(SphereSpacing.x24),
@@ -648,7 +652,7 @@ class _NotFound extends StatelessWidget {
             _CircleIconButton(icon: LucideIcons.chevronLeft, onTap: onBack),
             const SizedBox(height: SphereSpacing.x32),
             Text(
-              'Program not found',
+              l.programNotFound,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: SphereSpacing.x8),

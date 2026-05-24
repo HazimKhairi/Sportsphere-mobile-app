@@ -14,6 +14,7 @@ import 'package:video_player/video_player.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../data/session_media_repository.dart';
 import '../domain/session_media_item.dart';
 
@@ -128,7 +129,7 @@ class _SessionMediaGalleryScreenState
         return Scaffold(
           appBar: AppBar(
             leading: BackButton(onPressed: () => context.pop()),
-            title: const Text('Session Media'),
+            title: Text(AppLocalizations.of(context)!.sessionMedia),
             actions: [
               if (_selectedIds.isNotEmpty)
                 TextButton.icon(
@@ -159,7 +160,7 @@ class _SessionMediaGalleryScreenState
                         size: 48, color: context.sc.onSurfaceMuted),
                     const SizedBox(height: SphereSpacing.x12),
                     Text(
-                      'No media for this session.',
+                      AppLocalizations.of(context)!.noMediaForSession,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: context.sc.onSurfaceMuted,
                           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../l10n/app_localizations.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
@@ -53,7 +54,7 @@ class ThemePickerScreen extends ConsumerWidget {
                       ),
                       const SizedBox(width: SphereSpacing.x12),
                       Text(
-                        'Theme',
+                        AppLocalizations.of(context)!.theme,
                         style: Theme.of(context).textTheme.displayLarge,
                       ),
                     ],
@@ -66,7 +67,7 @@ class ThemePickerScreen extends ConsumerWidget {
                         ),
                   ),
                   const SizedBox(height: SphereSpacing.x32),
-                  const SphereSectionLabel('Appearance'),
+                  SphereSectionLabel(AppLocalizations.of(context)!.appearance),
                   const SizedBox(height: SphereSpacing.x12),
                   Container(
                     decoration: BoxDecoration(

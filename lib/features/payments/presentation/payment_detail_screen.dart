@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
@@ -121,7 +122,7 @@ class PaymentDetailScreen extends ConsumerWidget {
     final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!ok && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not open receipt.')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.couldNotOpenReceipt)),
       );
     }
   }
@@ -146,6 +147,7 @@ class _Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
         SphereSpacing.x16,
@@ -244,7 +246,7 @@ class _Content extends StatelessWidget {
           ),
 
           const SizedBox(height: SphereSpacing.x24),
-          const SphereSectionLabel('Details'),
+          SphereSectionLabel(l.details),
           const SizedBox(height: SphereSpacing.x12),
           _DetailRows(
             rows: [
@@ -264,7 +266,7 @@ class _Content extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: onOpenReceipt,
                 icon: const Icon(LucideIcons.externalLink, size: 18),
-                label: const Text('Open receipt'),
+                label: Text(l.openReceipt),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: context.sc.primary,
                   foregroundColor: context.sc.onPrimary,

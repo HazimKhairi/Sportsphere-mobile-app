@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../../../l10n/app_localizations.dart';
 import '_widgets/sphere_drill_of_day_card.dart';
 import '_widgets/sphere_entrance.dart';
 import '_widgets/sphere_feature_grid_card.dart';
@@ -22,6 +23,7 @@ class TrainHubScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final allAsync = ref.watch(allDrillsProvider);
     final todayAsync = ref.watch(todayDrillProvider);
     final drillCount = allAsync.valueOrNull?.length ?? 0;
@@ -62,7 +64,7 @@ class TrainHubScreen extends ConsumerWidget {
                 SphereEntrance(
                   delayMs: 40,
                   child: Text(
-                    'Your performance hub.',
+                    l.yourPerformanceHub,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: context.sc.onSurfaceMuted,
                         ),

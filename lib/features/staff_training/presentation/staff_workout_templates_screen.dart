@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/_widgets/sphere_entrance.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../../strength/domain/workout_template.dart';
@@ -21,7 +22,7 @@ class StaffWorkoutTemplatesScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(onPressed: () => context.pop()),
-        title: const Text('Workout Templates'),
+        title: Text(AppLocalizations.of(context)!.workoutTemplates),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: SphereSpacing.x16),
@@ -73,7 +74,7 @@ class StaffWorkoutTemplatesScreen extends ConsumerWidget {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   ),
                   error: (e, st) => Text(
-                    'Could not load templates.',
+                    AppLocalizations.of(context)!.couldNotLoadTemplates,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: context.sc.onSurfaceMuted,
                         ),
@@ -158,7 +159,7 @@ class _EmptyState extends StatelessWidget {
           Icon(LucideIcons.dumbbell, size: 32, color: context.sc.onSurfaceMuted),
           const SizedBox(height: SphereSpacing.x12),
           Text(
-            'No templates yet.',
+            AppLocalizations.of(context)!.noTemplates,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   color: context.sc.onSurface,
                   fontWeight: FontWeight.w600,
@@ -166,7 +167,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: SphereSpacing.x4),
           Text(
-            'Tap + to create your first workout template.',
+            AppLocalizations.of(context)!.createFirstTemplate,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: context.sc.onSurfaceMuted,
                 ),

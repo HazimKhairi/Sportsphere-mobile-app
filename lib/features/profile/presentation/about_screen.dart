@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
@@ -61,7 +62,7 @@ class AboutScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: SphereSpacing.x12),
                       Text(
-                        'About',
+                        AppLocalizations.of(context)!.about,
                         style: Theme.of(context).textTheme.displayLarge,
                       ),
                     ],
@@ -134,7 +135,7 @@ class AboutScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: SphereSpacing.x24),
-                  const SphereSectionLabel('Legal'),
+                  SphereSectionLabel(AppLocalizations.of(context)!.legal),
                   const SizedBox(height: SphereSpacing.x12),
                   Container(
                     decoration: BoxDecoration(
@@ -146,14 +147,14 @@ class AboutScreen extends StatelessWidget {
                       children: [
                         _LinkRow(
                           icon: LucideIcons.fileText,
-                          label: 'Terms of Service',
+                          label: AppLocalizations.of(context)!.termsOfService,
                           onTap: () => _launch(
                               context, 'https://sprtsphr.app/terms'),
                         ),
                         Divider(color: context.sc.borderSubtle, height: 1),
                         _LinkRow(
                           icon: LucideIcons.shield,
-                          label: 'Privacy Policy',
+                          label: AppLocalizations.of(context)!.privacyPolicy,
                           onTap: () => _launch(
                               context, 'https://sprtsphr.app/privacy'),
                         ),

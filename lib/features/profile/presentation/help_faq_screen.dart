@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../l10n/app_localizations.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
@@ -92,7 +93,7 @@ class HelpFaqScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: SphereSpacing.x12),
                       Text(
-                        'Help & FAQ',
+                        AppLocalizations.of(context)!.help,
                         style: Theme.of(context).textTheme.displayLarge,
                       ),
                     ],

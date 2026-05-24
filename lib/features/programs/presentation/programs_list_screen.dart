@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_entrance.dart';
@@ -17,6 +18,7 @@ class ProgramsListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final programsAsync = ref.watch(publishedProgramsProvider);
 
     return Stack(
@@ -51,7 +53,7 @@ class ProgramsListScreen extends ConsumerWidget {
                       const SizedBox(width: SphereSpacing.x12),
                       Expanded(
                         child: Text(
-                          'Programs',
+                          l.programs,
                           style: Theme.of(context).textTheme.displayLarge?.copyWith(
                                 color: context.sc.onSurface,
                                 height: 1.1,
@@ -65,7 +67,7 @@ class ProgramsListScreen extends ConsumerWidget {
                 SphereEntrance(
                   delayMs: 80,
                   child: Text(
-                    'Find a session you want to join.',
+                    l.findSession,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: context.sc.onSurfaceMuted,
                         ),
@@ -73,9 +75,9 @@ class ProgramsListScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: SphereSpacing.x32),
 
-                const SphereEntrance(
+                SphereEntrance(
                   delayMs: 140,
-                  child: SphereSectionLabel('Open for registration'),
+                  child: SphereSectionLabel(l.openForRegistration),
                 ),
                 const SizedBox(height: SphereSpacing.x16),
 
@@ -101,7 +103,7 @@ class ProgramsListScreen extends ConsumerWidget {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              'Check back later or ask your coach to publish a new program.',
+                              l.checkBackLater,
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: context.sc.onSurfaceMuted,
                                   ),
@@ -137,7 +139,7 @@ class ProgramsListScreen extends ConsumerWidget {
                     ),
                   ),
                   error: (_, _) => Text(
-                    'Couldn’t load programs.',
+                    l.noPrograms,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: context.sc.onSurfaceMuted,
                         ),

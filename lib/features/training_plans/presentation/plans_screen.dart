@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/_widgets/sphere_entrance.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../domain/training_plan.dart';
@@ -28,7 +29,7 @@ class PlansScreen extends ConsumerWidget {
           onPressed: () => context.pop(),
         ),
         title: Text(
-          'Training Plans',
+          AppLocalizations.of(context)!.trainingPlans,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -229,7 +230,7 @@ class _EmptyState extends StatelessWidget {
           Icon(LucideIcons.clipboardList, size: 32, color: context.sc.onSurfaceMuted),
           const SizedBox(height: SphereSpacing.x12),
           Text(
-            'No plans assigned yet.',
+            AppLocalizations.of(context)!.noPlansAssigned,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   color: context.sc.onSurfaceMuted,
                 ),

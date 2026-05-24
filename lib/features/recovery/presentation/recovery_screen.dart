@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/_widgets/sphere_entrance.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../domain/recovery_log.dart';
@@ -30,7 +31,7 @@ class RecoveryScreen extends ConsumerWidget {
           onPressed: () => context.pop(),
         ),
         title: Text(
-          'Recovery & Nutrition',
+          AppLocalizations.of(context)!.recoveryAndNutrition,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -38,7 +39,7 @@ class RecoveryScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: Icon(LucideIcons.refreshCw, size: 18, color: context.sc.onSurfaceMuted),
-            tooltip: 'Regenerate advice',
+            tooltip: AppLocalizations.of(context)!.regenerateAdvice,
             onPressed: () => ref.invalidate(recoveryAiInsightProvider),
           ),
         ],
@@ -122,7 +123,7 @@ class _InsightSections extends StatelessWidget {
         ),
         const SizedBox(height: SphereSpacing.x16),
 
-        const SphereSectionLabel('Recovery'),
+        SphereSectionLabel(AppLocalizations.of(context)!.recovery),
         const SizedBox(height: SphereSpacing.x12),
         _TipsList(
           tips: insight.recovery,
@@ -131,7 +132,7 @@ class _InsightSections extends StatelessWidget {
         ),
         const SizedBox(height: SphereSpacing.x32),
 
-        const SphereSectionLabel('Nutrition'),
+        SphereSectionLabel(AppLocalizations.of(context)!.nutrition),
         const SizedBox(height: SphereSpacing.x12),
         _TipsList(
           tips: insight.nutrition,
@@ -253,11 +254,11 @@ class _InsightLoading extends StatelessWidget {
           ],
         ),
         const SizedBox(height: SphereSpacing.x16),
-        const SphereSectionLabel('Recovery'),
+        SphereSectionLabel(AppLocalizations.of(context)!.recovery),
         const SizedBox(height: SphereSpacing.x12),
         ..._skeletonRows(context, 3),
         const SizedBox(height: SphereSpacing.x32),
-        const SphereSectionLabel('Nutrition'),
+        SphereSectionLabel(AppLocalizations.of(context)!.nutrition),
         const SizedBox(height: SphereSpacing.x12),
         ..._skeletonRows(context, 3),
       ],
@@ -334,7 +335,7 @@ class _InsightError extends StatelessWidget {
               backgroundColor: context.sc.primary,
               shape: const RoundedRectangleBorder(borderRadius: SphereRadius.pillRect),
             ),
-            child: const Text('Try again'),
+            child: Text(AppLocalizations.of(context)!.tryAgain),
           ),
         ],
       ),
@@ -382,13 +383,13 @@ class _LogCta extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'How are you feeling today?',
+                AppLocalizations.of(context)!.howAreYouFeeling,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
               ),
               Text(
-                'Log your daily wellness',
+                AppLocalizations.of(context)!.logWellness,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: context.sc.onSurfaceMuted,
                     ),
@@ -433,13 +434,13 @@ class _ScoreDisplay extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Wellness score',
+                AppLocalizations.of(context)!.wellnessScore,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
               ),
               Text(
-                'Logged today',
+                AppLocalizations.of(context)!.loggedToday,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: context.sc.onSurfaceMuted,
                     ),

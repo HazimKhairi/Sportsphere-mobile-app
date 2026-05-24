@@ -5,6 +5,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../../../l10n/app_localizations.dart';
 
 class StaffQrDisplayScreen extends StatelessWidget {
   const StaffQrDisplayScreen({
@@ -48,7 +49,7 @@ class StaffQrDisplayScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: SphereSpacing.x8),
                   Text(
-                    'Session QR',
+                    AppLocalizations.of(context)!.sessionQr,
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
@@ -139,7 +140,7 @@ class StaffQrDisplayScreen extends StatelessWidget {
                       '/staff/session/$sessionId/attendance',
                       extra: {'clubId': clubId, 'name': sessionName},
                     ),
-                    child: const Text('Take Attendance Manually'),
+                    child: Text(AppLocalizations.of(context)!.takeAttendance),
                   ),
                 ),
               ),

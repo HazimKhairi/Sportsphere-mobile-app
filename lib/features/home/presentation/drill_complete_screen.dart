@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 
@@ -120,7 +121,7 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
                 child: Column(
                   children: [
                     Text(
-                      'Drill complete',
+                      AppLocalizations.of(context)!.drillComplete,
                       style: Theme.of(context).textTheme.displayLarge?.copyWith(
                             color: context.sc.onSurface,
                           ),
@@ -185,7 +186,7 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
                       child: ElevatedButton.icon(
                         onPressed: () => context.go('/train'),
                         icon: const Icon(LucideIcons.dumbbell, size: 18),
-                        label: const Text('Back to drills'),
+                        label: Text(AppLocalizations.of(context)!.backToDrills),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: context.sc.primary,
                           foregroundColor: context.sc.onPrimary,
@@ -215,9 +216,9 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
                             borderRadius: SphereRadius.pillRect,
                           ),
                         ),
-                        child: const Text(
-                          'Go home',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        child: Text(
+                          AppLocalizations.of(context)!.goHome,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),

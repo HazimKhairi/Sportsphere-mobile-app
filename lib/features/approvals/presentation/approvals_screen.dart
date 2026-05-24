@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/pending_payment.dart';
@@ -13,6 +14,7 @@ class ApprovalsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: context.sc.surface,
       body: Column(
@@ -25,14 +27,14 @@ class ApprovalsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Approvals',
+                    l.approvals,
                     style: Theme.of(context).textTheme.displayLarge?.copyWith(
                           color: context.sc.onSurface,
                         ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Pending cash payments to review.',
+                    l.pendingCashPayments,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: context.sc.onSurfaceMuted,
                         ),
@@ -67,7 +69,7 @@ class _ApprovalsList extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Failed to load approvals.',
+              AppLocalizations.of(context)!.failedToLoadApprovals,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: context.sc.onSurfaceMuted,
                   ),
@@ -76,7 +78,7 @@ class _ApprovalsList extends ConsumerWidget {
             TextButton(
               onPressed: () => ref.invalidate(approvalsNotifierProvider),
               child: Text(
-                'Retry',
+                AppLocalizations.of(context)!.retry,
                 style: TextStyle(color: context.sc.primary),
               ),
             ),
@@ -96,7 +98,7 @@ class _ApprovalsList extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'All caught up!',
+                  AppLocalizations.of(context)!.allCaughtUp,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: context.sc.onSurface,
                         fontWeight: FontWeight.w700,
@@ -104,7 +106,7 @@ class _ApprovalsList extends ConsumerWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'No pending approvals.',
+                  AppLocalizations.of(context)!.noPendingApprovals,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: context.sc.onSurfaceMuted,
                       ),
@@ -153,14 +155,14 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
           .approve(widget.payment.id);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Payment approved.')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.paymentApproved)),
         );
       }
     } catch (_) {
       setState(() => _busy = false);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Approve failed. Try again.')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.approveFailed)),
         );
       }
     }
@@ -179,7 +181,7 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
         onRejected: () {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Payment rejected.')),
+              SnackBar(content: Text(AppLocalizations.of(context)!.paymentRejected)),
             );
           }
         },
@@ -263,7 +265,7 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                     shape: const RoundedRectangleBorder(
                         borderRadius: SphereRadius.pillRect),
                   ),
-                  child: const Text('Reject'),
+                  child: Text(AppLocalizations.of(context)!.reject),
                 ),
               ),
               const SizedBox(width: 12),
@@ -278,7 +280,7 @@ class _PaymentCardState extends ConsumerState<_PaymentCard> {
                         borderRadius: SphereRadius.pillRect),
                     elevation: 0,
                   ),
-                  child: const Text('Approve'),
+                  child: Text(AppLocalizations.of(context)!.approve),
                 ),
               ),
             ],
@@ -333,7 +335,7 @@ class _RejectSheetState extends ConsumerState<_RejectSheet> {
           ),
           const SizedBox(height: 20),
           Text(
-            'Reject payment',
+            AppLocalizations.of(context)!.rejectPayment,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   color: context.sc.onSurface,
                 ),
@@ -347,7 +349,7 @@ class _RejectSheetState extends ConsumerState<_RejectSheet> {
           ),
           const SizedBox(height: 20),
           Text(
-            'Reason',
+            AppLocalizations.of(context)!.reason,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: context.sc.onSurfaceMuted,
                   fontWeight: FontWeight.w600,
@@ -381,8 +383,8 @@ class _RejectSheetState extends ConsumerState<_RejectSheet> {
                         if (mounted) {
                           setState(() => _busy = false);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Reject failed. Try again.')),
+                            SnackBar(
+                                content: Text(AppLocalizations.of(context)!.rejectFailed)),
                           );
                         }
                       }
@@ -403,9 +405,9 @@ class _RejectSheetState extends ConsumerState<_RejectSheet> {
                         valueColor: AlwaysStoppedAnimation(Colors.white),
                       ),
                     )
-                  : const Text(
-                      'Reject payment',
-                      style: TextStyle(fontWeight: FontWeight.w700),
+                  : Text(
+                      AppLocalizations.of(context)!.rejectPayment,
+                      style: const TextStyle(fontWeight: FontWeight.w700),
                     ),
             ),
           ),

@@ -7,6 +7,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/staff_home_providers.dart';
 import '../../strength/domain/workout_template.dart';
 import 'staff_training_providers.dart';
@@ -136,10 +137,11 @@ class _CreateWorkoutTemplateScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(onPressed: () => context.pop()),
-        title: const Text('New Workout Template'),
+        title: Text(l.newWorkoutTemplate),
         actions: [
           TextButton(
             onPressed: _saving ? null : _save,
@@ -149,7 +151,7 @@ class _CreateWorkoutTemplateScreenState
                     height: 16,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('Save'),
+                : Text(l.save),
           ),
         ],
       ),
@@ -162,21 +164,20 @@ class _CreateWorkoutTemplateScreenState
               TextField(
                 controller: _titleCtrl,
                 autofocus: true,
-                decoration: const InputDecoration(labelText: 'Template title'),
+                decoration: InputDecoration(labelText: l.templateTitle),
               ),
               const SizedBox(height: SphereSpacing.x16),
               TextField(
                 controller: _minutesCtrl,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration:
-                    const InputDecoration(labelText: 'Est. duration (min)'),
+                decoration: InputDecoration(labelText: l.estDurationMin),
               ),
               const SizedBox(height: SphereSpacing.x32),
               Row(
                 children: [
                   Text(
-                    'Exercises',
+                    l.exercises,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: context.sc.onSurface,
                           fontWeight: FontWeight.w700,
@@ -186,7 +187,7 @@ class _CreateWorkoutTemplateScreenState
                   TextButton.icon(
                     onPressed: _addExercise,
                     icon: const Icon(LucideIcons.plus, size: 16),
-                    label: const Text('Add'),
+                    label: Text(l.add),
                   ),
                 ],
               ),
@@ -194,7 +195,7 @@ class _CreateWorkoutTemplateScreenState
               if (_exercises.isEmpty)
                 Center(
                   child: Text(
-                    'No exercises added yet.',
+                    l.noExercisesAdded,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: context.sc.onSurfaceMuted,
                         ),
@@ -241,8 +242,8 @@ class _ExerciseRow extends StatelessWidget {
               Expanded(
                 child: TextField(
                   controller: entry.nameCtrl,
-                  decoration:
-                      const InputDecoration(labelText: 'Exercise name'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.exerciseName),
                 ),
               ),
               const SizedBox(width: SphereSpacing.x8),
@@ -261,7 +262,8 @@ class _ExerciseRow extends StatelessWidget {
                   controller: entry.setsCtrl,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  decoration: const InputDecoration(labelText: 'Sets'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.sets),
                 ),
               ),
               const SizedBox(width: SphereSpacing.x8),
@@ -270,7 +272,8 @@ class _ExerciseRow extends StatelessWidget {
                   controller: entry.repsCtrl,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  decoration: const InputDecoration(labelText: 'Reps'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.reps),
                 ),
               ),
             ],

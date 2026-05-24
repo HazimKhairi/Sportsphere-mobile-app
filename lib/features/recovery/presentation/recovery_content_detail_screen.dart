@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../data/recovery_repository.dart';
 import '../domain/recovery_content.dart';
 
@@ -111,7 +112,7 @@ class RecoveryContentDetailScreen extends StatelessWidget {
                         if (await canLaunchUrl(uri)) await launchUrl(uri);
                       },
                       icon: const Icon(LucideIcons.play, size: 16),
-                      label: const Text('Watch Video Guide'),
+                      label: Text(AppLocalizations.of(context)!.watchVideoGuide),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: const Color(0xFF8B5CF6),
                         side: const BorderSide(color: Color(0xFF8B5CF6)),

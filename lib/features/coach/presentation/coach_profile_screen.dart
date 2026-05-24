@@ -7,6 +7,7 @@ import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../domain/coach_profile.dart';
+import '../../../l10n/app_localizations.dart';
 
 class CoachProfileScreen extends StatelessWidget {
   const CoachProfileScreen({super.key, required this.coach});
@@ -23,6 +24,7 @@ class CoachProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: context.sc.surface,
       body: Stack(
@@ -52,7 +54,7 @@ class CoachProfileScreen extends StatelessWidget {
                   ],
                   if (coach.ageGroups.isNotEmpty) ...[
                     const SizedBox(height: SphereSpacing.x24),
-                    const SphereSectionLabel('Age Groups'),
+                    SphereSectionLabel(l.ageGroups),
                     const SizedBox(height: SphereSpacing.x12),
                     _ChipWrap(items: coach.ageGroups),
                   ],

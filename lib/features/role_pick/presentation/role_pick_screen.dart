@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import 'role_providers.dart';
@@ -46,7 +47,7 @@ class RolePickScreen extends ConsumerWidget {
               ),
               const SizedBox(height: SphereSpacing.x32),
               Text(
-                'Pick your role',
+                AppLocalizations.of(context)!.pickYourRole,
                 style: Theme.of(context).textTheme.displayLarge?.copyWith(
                       color: context.sc.onSurface,
                     ),
@@ -61,8 +62,8 @@ class RolePickScreen extends ConsumerWidget {
               const SizedBox(height: SphereSpacing.x32),
               _RoleHeroCard(
                 icon: LucideIcons.user,
-                title: 'Player',
-                subtitle: 'Training, drills, schedule, AI coach.',
+                title: AppLocalizations.of(context)!.player,
+                subtitle: AppLocalizations.of(context)!.playerDescription,
                 onTap: () async {
                   await ref
                       .read(selectedRoleProvider.notifier)
@@ -73,8 +74,8 @@ class RolePickScreen extends ConsumerWidget {
               const SizedBox(height: SphereSpacing.x16),
               _RoleHeroCard(
                 icon: LucideIcons.userCog,
-                title: 'Staff',
-                subtitle: 'Attendance, roster, approvals.',
+                title: AppLocalizations.of(context)!.staff,
+                subtitle: AppLocalizations.of(context)!.staffDescription,
                 onTap: () async {
                   await ref
                       .read(selectedRoleProvider.notifier)

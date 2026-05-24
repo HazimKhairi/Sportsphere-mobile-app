@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../core/widgets/sphere_swipe_to_confirm.dart';
@@ -52,6 +53,7 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
       programDetailProvider(programId: widget.programId),
     );
 
+    final l = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: context.sc.surface,
       body: SafeArea(
@@ -76,14 +78,14 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
               ),
               const SizedBox(height: SphereSpacing.x24),
               Text(
-                _submitted ? 'Waiting for staff' : 'Pay with cash',
+                _submitted ? l.waitingForStaff : l.payWithCash,
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(height: SphereSpacing.x8),
               Text(
                 _submitted
-                    ? 'You will get a notification once staff confirms your payment.'
-                    : 'Hand cash to staff at the counter. Swipe below to record your payment.',
+                    ? l.staffWillConfirm
+                    : l.handCashToStaff,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: context.sc.onSurfaceMuted,
                       height: 1.4,
@@ -123,7 +125,7 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          'Amount due',
+                          l.amountDue,
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
@@ -171,9 +173,9 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
                       ),
                       elevation: 0,
                     ),
-                    child: const Text(
-                      'Done',
-                      style: TextStyle(
+                    child: Text(
+                      l.done,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),
@@ -182,7 +184,7 @@ class _CashPayScreenState extends ConsumerState<CashPayScreen> {
                 )
               else
                 SphereSwipeToConfirm(
-                  label: 'Swipe to confirm payment',
+                  label: l.swipeToConfirmPayment,
                   confirmedLabel: 'Recorded',
                   onConfirm: _confirm,
                 ),

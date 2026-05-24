@@ -8,6 +8,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../auth/presentation/auth_providers.dart';
 import '../data/session_media_repository.dart';
 import '../domain/session_media_item.dart';
@@ -76,7 +77,7 @@ class _StaffMediaUploadScreenState
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete media?'),
+        title: Text(AppLocalizations.of(context)!.deleteMedia),
         content:
             const Text('This will permanently remove the item from the session.'),
         actions: [
@@ -141,7 +142,7 @@ class _StaffMediaUploadScreenState
                           size: 48, color: context.sc.onSurfaceMuted),
                       const SizedBox(height: SphereSpacing.x12),
                       Text(
-                        'No media yet. Add photos or videos from this session.',
+                        AppLocalizations.of(context)!.noMediaYet,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: context.sc.onSurfaceMuted,

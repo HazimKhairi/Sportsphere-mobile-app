@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../l10n/app_localizations.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
@@ -108,14 +109,14 @@ class _NotificationSettingsScreenState
                       ),
                       const SizedBox(width: SphereSpacing.x12),
                       Text(
-                        'Notifications',
+                        AppLocalizations.of(context)!.notifications,
                         style: Theme.of(context).textTheme.displayLarge,
                       ),
                     ],
                   ),
                   const SizedBox(height: SphereSpacing.x8),
                   Text(
-                    'Choose what you want to be notified about.',
+                    AppLocalizations.of(context)!.chooseWhatToNotify,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: context.sc.onSurfaceMuted,
                         ),
@@ -137,7 +138,7 @@ class _NotificationSettingsScreenState
                           const SizedBox(width: SphereSpacing.x12),
                           Expanded(
                             child: Text(
-                              'Notifications are blocked. Go to device Settings to enable them.',
+                              AppLocalizations.of(context)!.notificationsBlocked,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
@@ -162,14 +163,14 @@ class _NotificationSettingsScreenState
                       ),
                     ),
                   ] else ...[
-                    const SphereSectionLabel('General'),
+                    SphereSectionLabel(AppLocalizations.of(context)!.general),
                     const SizedBox(height: SphereSpacing.x12),
                     _NotifCard(
                       children: [
                         _NotifRow(
                           icon: LucideIcons.bell,
-                          label: 'Push notifications',
-                          subtitle: 'Receive all app notifications',
+                          label: AppLocalizations.of(context)!.pushNotifications,
+                          subtitle: AppLocalizations.of(context)!.receiveAllNotifications,
                           value: _pushEnabled,
                           onChanged: (v) {
                             setState(() => _pushEnabled = v);
@@ -179,14 +180,14 @@ class _NotificationSettingsScreenState
                       ],
                     ),
                     const SizedBox(height: SphereSpacing.x24),
-                    const SphereSectionLabel('Categories'),
+                    SphereSectionLabel(AppLocalizations.of(context)!.categories),
                     const SizedBox(height: SphereSpacing.x12),
                     _NotifCard(
                       children: [
                         _NotifRow(
                           icon: LucideIcons.calendar,
-                          label: 'Schedule reminders',
-                          subtitle: 'Training sessions and events',
+                          label: AppLocalizations.of(context)!.scheduleReminders,
+                          subtitle: AppLocalizations.of(context)!.trainingSessionsAndEvents,
                           value: _scheduleReminders && _pushEnabled,
                           enabled: _pushEnabled,
                           onChanged: (v) {
@@ -197,7 +198,7 @@ class _NotificationSettingsScreenState
                         Divider(color: context.sc.borderSubtle, height: 1),
                         _NotifRow(
                           icon: LucideIcons.receipt,
-                          label: 'Payment updates',
+                          label: AppLocalizations.of(context)!.paymentUpdates,
                           subtitle: 'Invoices, approvals, and confirmations',
                           value: _paymentUpdates && _pushEnabled,
                           enabled: _pushEnabled,
@@ -209,8 +210,8 @@ class _NotificationSettingsScreenState
                         Divider(color: context.sc.borderSubtle, height: 1),
                         _NotifRow(
                           icon: LucideIcons.award,
-                          label: 'Achievements',
-                          subtitle: 'Badges and milestone alerts',
+                          label: AppLocalizations.of(context)!.achievements,
+                          subtitle: AppLocalizations.of(context)!.badgesAndMilestones,
                           value: _achievements && _pushEnabled,
                           enabled: _pushEnabled,
                           onChanged: (v) {

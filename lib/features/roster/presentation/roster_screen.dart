@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/player_card.dart';
@@ -21,6 +22,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     final rosterAsync = ref.watch(rosterNotifierProvider);
 
     return Scaffold(
@@ -43,7 +45,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                     children: [
                       Expanded(
                         child: Text(
-                          'Roster',
+                          l.roster,
                           style: Theme.of(context)
                               .textTheme
                               .displayLarge
@@ -146,7 +148,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                 if (filtered.isEmpty && query.isNotEmpty) {
                   return Center(
                     child: Text(
-                      "No results for '$_searchQuery'.",
+                      l.noPlayersFound,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: context.sc.onSurfaceMuted,
                           ),
@@ -158,7 +160,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
                 if (filtered.isEmpty) {
                   return Center(
                     child: Text(
-                      'No players in your club yet.',
+                      l.noPlayers,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: context.sc.onSurfaceMuted,
                           ),
@@ -189,9 +191,9 @@ class _SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       onChanged: onChanged,
-      decoration: const InputDecoration(
-        hintText: 'Search players...',
-        prefixIcon: Icon(LucideIcons.search, size: 18),
+      decoration: InputDecoration(
+        hintText: AppLocalizations.of(context)!.searchPlayers,
+        prefixIcon: const Icon(LucideIcons.search, size: 18),
       ),
     );
   }
@@ -215,7 +217,7 @@ class _PlayerList extends ConsumerWidget {
               child: TextButton(
                 onPressed: () =>
                     ref.read(rosterNotifierProvider.notifier).loadMore(),
-                child: const Text('Load more'),
+                child: Text(AppLocalizations.of(context)!.loadMore),
               ),
             ),
           );

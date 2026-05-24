@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../domain/scouting_profile.dart';
 import 'scout_providers.dart';
 
@@ -12,18 +13,19 @@ class ScoutScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final state = ref.watch(scoutProfileNotifierProvider);
 
     return Scaffold(
       backgroundColor: context.sc.background,
       appBar: AppBar(
-        title: const Text('Scout Profile'),
+        title: Text(l.scoutProfile),
         actions: [
           state.whenOrNull(
             data: (profile) => profile != null
                 ? IconButton(
                     icon: const Icon(LucideIcons.pencil),
-                    tooltip: 'Edit',
+                    tooltip: l.edit,
                     onPressed: () => context.push('/scout/edit'),
                   )
                 : null,
@@ -47,6 +49,7 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     final tt = Theme.of(context).textTheme;
     return Center(
       child: Padding(
@@ -64,7 +67,7 @@ class _EmptyState extends StatelessWidget {
               child: Icon(LucideIcons.searchCheck, size: 44, color: context.sc.primary),
             ),
             const SizedBox(height: 24),
-            Text('Get Discovered', style: tt.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+            Text(l.getDiscovered, style: tt.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
             Text(
               'Create your scouting profile so clubs and coaches can find you. You control when you\'re visible.',
@@ -75,7 +78,7 @@ class _EmptyState extends StatelessWidget {
             FilledButton.icon(
               onPressed: onCreate,
               icon: const Icon(LucideIcons.plus, size: 18),
-              label: const Text('Create Scout Profile'),
+              label: Text(l.createScoutProfile),
               style: FilledButton.styleFrom(
                 minimumSize: const Size(220, 52),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -106,6 +109,7 @@ class _ProfileView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final tt = Theme.of(context).textTheme;
 
     return RefreshIndicator(
@@ -130,7 +134,7 @@ class _ProfileView extends ConsumerWidget {
             ),
           SliverToBoxAdapter(
             child: _SectionCard(
-              title: 'Availability',
+              title: l.availability,
               icon: LucideIcons.clock,
               child: _AvailabilityRow(availability: profile.availability),
             ),
@@ -146,7 +150,7 @@ class _ProfileView extends ConsumerWidget {
           if ((profile.achievements ?? '').isNotEmpty)
             SliverToBoxAdapter(
               child: _SectionCard(
-                title: 'Achievements',
+                title: l.achievements,
                 icon: LucideIcons.trophy,
                 child: Text(profile.achievements!, style: tt.bodyMedium),
               ),
@@ -310,6 +314,7 @@ class _VisibilityToggle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final tt = Theme.of(context).textTheme;
     final isOpen = profile.isOpen;
     final isLoading = ref.watch(scoutProfileNotifierProvider).isLoading;
@@ -336,15 +341,15 @@ class _VisibilityToggle extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isOpen ? 'Visible to clubs' : 'Hidden from clubs',
+                  isOpen ? l.visibleToClubs : l.hiddenFromClubs,
                   style: tt.titleMedium?.copyWith(
                     color: isOpen ? context.sc.primary : context.sc.onSurface,
                   ),
                 ),
                 Text(
                   isOpen
-                      ? 'Your card is live — clubs can find you'
-                      : 'Turn on to be discoverable by clubs',
+                      ? l.playerCardLive
+                      : l.turnOnDiscoverable,
                   style: tt.bodySmall,
                 ),
               ],
@@ -461,7 +466,6 @@ class _AvailabilityRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
     return Wrap(
       spacing: 8,
       runSpacing: 8,
@@ -554,6 +558,7 @@ class _ErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -562,7 +567,7 @@ class _ErrorView extends StatelessWidget {
           children: [
             Icon(LucideIcons.cloudOff, size: 48, color: context.sc.onSurfaceMuted),
             const SizedBox(height: 16),
-            Text('Could not load scout profile', style: Theme.of(context).textTheme.titleMedium),
+            Text(l.couldNotLoadScoutProfile, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             Text(error,
                 textAlign: TextAlign.center,
@@ -571,7 +576,7 @@ class _ErrorView extends StatelessWidget {
                     .bodySmall
                     ?.copyWith(color: context.sc.onSurfaceMuted)),
             const SizedBox(height: 24),
-            OutlinedButton(onPressed: onRetry, child: const Text('Retry')),
+            OutlinedButton(onPressed: onRetry, child: Text(l.retry)),
           ],
         ),
       ),

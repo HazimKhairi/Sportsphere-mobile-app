@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../l10n/app_localizations.dart';
 
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
@@ -35,7 +36,8 @@ class ProfileScreen extends ConsumerWidget {
         ?? (role == AppRole.staff ? 'Coach' : 'Player');
     final firstName = displayName.split(' ').first;
     final email = user?.email ?? '';
-    final roleLabel = role == AppRole.staff ? 'Staff' : 'Player';
+    final l = AppLocalizations.of(context)!;
+    final roleLabel = role == AppRole.staff ? l.staff : l.player;
     final isPlayer = role == AppRole.player;
 
     return SafeArea(
@@ -56,7 +58,7 @@ class ProfileScreen extends ConsumerWidget {
                   child: Row(
                     children: [
                       Text(
-                        'Profile',
+                        AppLocalizations.of(context)!.profile,
                         style: Theme.of(context).textTheme.displayLarge,
                       ),
                       const Spacer(),
@@ -94,9 +96,9 @@ class ProfileScreen extends ConsumerWidget {
                 const SizedBox(height: SphereSpacing.x32),
 
                 // ── Account section ───────────────────────────────────────────
-                const SphereEntrance(
+                SphereEntrance(
                   delayMs: 180,
-                  child: SphereSectionLabel('Account'),
+                  child: SphereSectionLabel(AppLocalizations.of(context)!.account),
                 ),
                 const SizedBox(height: SphereSpacing.x12),
                 SphereEntrance(
@@ -105,8 +107,8 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       ProfileRow(
                         icon: LucideIcons.userPen,
-                        label: 'Edit profile',
-                        subtitle: 'Update your personal details',
+                        label: AppLocalizations.of(context)!.editProfile,
+                        subtitle: AppLocalizations.of(context)!.updateYourDetails,
                         onTap: () => context.push('/profile/edit'),
                       ),
                       if (isPlayer) ...[
@@ -118,8 +120,8 @@ class ProfileScreen extends ConsumerWidget {
                         ),
                         ProfileRow(
                           icon: LucideIcons.receipt,
-                          label: 'Payment history',
-                          subtitle: 'View your transactions',
+                          label: AppLocalizations.of(context)!.paymentHistory,
+                          subtitle: AppLocalizations.of(context)!.viewYourTransactions,
                           onTap: () => context.push('/profile/payments'),
                         ),
                         ProfileRow(
@@ -131,14 +133,14 @@ class ProfileScreen extends ConsumerWidget {
                       ],
                       ProfileRow(
                         icon: LucideIcons.shield,
-                        label: 'My Club',
-                        subtitle: 'View club details',
+                        label: AppLocalizations.of(context)!.myClub,
+                        subtitle: AppLocalizations.of(context)!.viewClubDetails,
                         onTap: () => context.push('/club'),
                       ),
                       ProfileRow(
                         icon: LucideIcons.bell,
-                        label: 'Notifications',
-                        subtitle: 'Manage alerts and push settings',
+                        label: AppLocalizations.of(context)!.notifications,
+                        subtitle: AppLocalizations.of(context)!.manageAlerts,
                         onTap: () => context.push('/profile/notifications'),
                       ),
                     ],
@@ -147,9 +149,9 @@ class ProfileScreen extends ConsumerWidget {
                 const SizedBox(height: SphereSpacing.x24),
 
                 // ── App section ───────────────────────────────────────────────
-                const SphereEntrance(
+                SphereEntrance(
                   delayMs: 260,
-                  child: SphereSectionLabel('App'),
+                  child: SphereSectionLabel(AppLocalizations.of(context)!.app),
                 ),
                 const SizedBox(height: SphereSpacing.x12),
                 SphereEntrance(
@@ -158,28 +160,28 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       ProfileRow(
                         icon: LucideIcons.palette,
-                        label: 'Theme',
+                        label: AppLocalizations.of(context)!.theme,
                         subtitle: 'Dark / Light mode',
                         trailingText: 'Dark',
                         onTap: () => context.push('/profile/theme'),
                       ),
                       ProfileRow(
                         icon: LucideIcons.languages,
-                        label: 'Language',
-                        subtitle: 'App display language',
+                        label: AppLocalizations.of(context)!.language,
+                        subtitle: AppLocalizations.of(context)!.appDisplayLanguage,
                         trailingText: 'EN',
                         onTap: () => context.push('/profile/language'),
                       ),
                       ProfileRow(
                         icon: LucideIcons.circleHelp,
-                        label: 'Help and FAQ',
+                        label: AppLocalizations.of(context)!.help,
                         subtitle: 'Get support or browse answers',
                         onTap: () => context.push('/profile/help'),
                       ),
                       ProfileRow(
                         icon: LucideIcons.info,
                         label: 'About',
-                        subtitle: 'Version info and legal',
+                        subtitle: AppLocalizations.of(context)!.versionInfo,
                         onTap: () => context.push('/profile/about'),
                       ),
                     ],
@@ -194,7 +196,7 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       ProfileRow(
                         icon: LucideIcons.logOut,
-                        label: 'Sign out',
+                        label: AppLocalizations.of(context)!.signOut,
                         danger: true,
                         onTap: () => _confirmSignOut(context, ref),
                       ),
@@ -342,7 +344,7 @@ class _AvatarHeroState extends ConsumerState<_AvatarHero> {
             const SizedBox(height: 12),
             ListTile(
               leading: Icon(LucideIcons.camera, color: context.sc.onSurface),
-              title: Text('Take photo', style: TextStyle(color: context.sc.onSurface)),
+              title: Text(AppLocalizations.of(context)!.takePhoto, style: TextStyle(color: context.sc.onSurface)),
               onTap: () {
                 Navigator.pop(context);
                 _pickAndUpload(true);
@@ -350,7 +352,7 @@ class _AvatarHeroState extends ConsumerState<_AvatarHero> {
             ),
             ListTile(
               leading: Icon(LucideIcons.image, color: context.sc.onSurface),
-              title: Text('Choose from gallery', style: TextStyle(color: context.sc.onSurface)),
+              title: Text(AppLocalizations.of(context)!.chooseFromGallery, style: TextStyle(color: context.sc.onSurface)),
               onTap: () {
                 Navigator.pop(context);
                 _pickAndUpload(false);
@@ -555,8 +557,8 @@ class _PlayerQuickGrid extends StatelessWidget {
             badge: 'MY',
             icon: LucideIcons.idCard,
             accentColor: context.sc.primary,
-            title: 'Player Card',
-            subtitle: 'View your digital ID',
+            title: AppLocalizations.of(context)!.playerCard,
+            subtitle: AppLocalizations.of(context)!.viewYourDigitalId,
             onTap: () => context.push('/player-card'),
           ),
         ),
@@ -566,8 +568,8 @@ class _PlayerQuickGrid extends StatelessWidget {
             badge: 'NEW',
             icon: LucideIcons.award,
             accentColor: const Color(0xFFF59E0B),
-            title: 'Achievements',
-            subtitle: 'Track your milestones',
+            title: AppLocalizations.of(context)!.achievements,
+            subtitle: AppLocalizations.of(context)!.trackMilestones,
             onTap: () => context.push('/profile/achievements'),
           ),
         ),
@@ -588,8 +590,8 @@ class _StaffQuickGrid extends StatelessWidget {
             badge: 'TEAM',
             icon: LucideIcons.users,
             accentColor: context.sc.primary,
-            title: 'Roster',
-            subtitle: 'View and manage players',
+            title: AppLocalizations.of(context)!.roster,
+            subtitle: AppLocalizations.of(context)!.viewAndManagePlayers,
             onTap: () => context.push('/staff/roster'),
           ),
         ),
@@ -599,8 +601,8 @@ class _StaffQuickGrid extends StatelessWidget {
             badge: 'PLAN',
             icon: LucideIcons.dumbbell,
             accentColor: const Color(0xFFF97316),
-            title: 'Training',
-            subtitle: 'Manage workouts & plans',
+            title: AppLocalizations.of(context)!.training,
+            subtitle: AppLocalizations.of(context)!.manageWorkouts,
             onTap: () => context.push('/staff/training'),
           ),
         ),

@@ -11,6 +11,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../domain/player_card_data.dart';
 import '_widgets/sphere_player_fifa_card.dart';
 import 'player_card_providers.dart';
+import '../../../l10n/app_localizations.dart';
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 
@@ -93,10 +94,11 @@ class _CardBodyState extends State<_CardBody> {
         name: 'sportsphere_card_${widget.card.playerName.replaceAll(' ', '_')}',
       );
       if (!mounted) return;
+      final l = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Card saved to gallery!',
-              style: TextStyle(fontFamily: 'Lexend')),
+          content: Text(l.cardSavedToGallery,
+              style: const TextStyle(fontFamily: 'Lexend')),
           backgroundColor: const Color(0xFF22C55E),
           behavior: SnackBarBehavior.floating,
           shape:
@@ -106,8 +108,9 @@ class _CardBodyState extends State<_CardBody> {
       );
     } catch (e) {
       if (!mounted) return;
+      final l = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Failed to save card.')));
+          .showSnackBar(SnackBar(content: Text(l.failedToSaveCard)));
     } finally {
       if (mounted) setState(() => _downloading = false);
     }
@@ -145,6 +148,7 @@ class _DownloadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: loading ? null : onTap,
       child: AnimatedContainer(
@@ -163,15 +167,15 @@ class _DownloadButton extends StatelessWidget {
                 child: CircularProgressIndicator(
                     strokeWidth: 2, color: Colors.white54),
               )
-            : const Row(
+            : Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(LucideIcons.download,
+                  const Icon(LucideIcons.download,
                       size: 16, color: Color(0xFF0A0A0A)),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
-                    'Save Card to Gallery',
-                    style: TextStyle(
+                    l.saveCardToGallery,
+                    style: const TextStyle(
                       fontFamily: 'Lexend',
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -228,7 +232,7 @@ class _ErrorView extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.white,
                   ),
-                  child: const Text('Retry'),
+                  child: Text(AppLocalizations.of(context)!.retry),
                 ),
               ],
             ),

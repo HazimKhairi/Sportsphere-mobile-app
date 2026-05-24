@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../auth/presentation/auth_providers.dart';
 import '../../club/presentation/club_providers.dart';
 import '../../player_card/presentation/player_card_providers.dart';
@@ -19,11 +20,12 @@ import 'player_home_providers.dart';
 class PlayerHomeScreen extends ConsumerWidget {
   const PlayerHomeScreen({super.key});
 
-  String _greeting() {
+  String _greeting(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     final h = DateTime.now().hour;
-    if (h < 12) return 'Good morning';
-    if (h < 18) return 'Good afternoon';
-    return 'Good evening';
+    if (h < 12) return l.goodMorning;
+    if (h < 18) return l.goodAfternoon;
+    return l.goodEvening;
   }
 
   String _timeAgo(DateTime when) {
@@ -38,6 +40,7 @@ class PlayerHomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final displayName = ref.watch(userDisplayNameProvider).valueOrNull ?? 'Player';
     final firstName = displayName.split(' ').first;
 
@@ -59,13 +62,13 @@ class PlayerHomeScreen extends ConsumerWidget {
               child: cardAsync.when(
                 data: (data) => SpherePlayerHeroCard(
                   card: data.card,
-                  greeting: _greeting(),
+                  greeting: _greeting(context),
                   firstName: firstName,
                   clubLogoUrl: clubLogoUrl,
                   onTap: () => context.push('/player-card'),
                 ),
                 loading: () => _CardShimmer(
-                  greeting: _greeting(),
+                  greeting: _greeting(context),
                   firstName: firstName,
                 ),
                 error: (e, st) => _CardPlaceholder(
@@ -104,9 +107,9 @@ class PlayerHomeScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: SphereSpacing.x32),
 
-                  const SphereEntrance(
+                  SphereEntrance(
                     delayMs: 200,
-                    child: SphereSectionLabel('Today'),
+                    child: SphereSectionLabel(l.today),
                   ),
                   const SizedBox(height: SphereSpacing.x16),
 
@@ -119,7 +122,7 @@ class PlayerHomeScreen extends ConsumerWidget {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Text(
-                              'No activity yet. Train today to start your streak.',
+                              l.noActivityYet,
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: context.sc.onSurfaceMuted,
                                   ),

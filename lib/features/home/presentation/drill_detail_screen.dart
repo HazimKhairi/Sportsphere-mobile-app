@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../data/drill_completion_repository.dart';
@@ -473,7 +474,7 @@ class _ContentState extends State<_Content> {
               label: Text(
                 _completedToday
                     ? 'Watched (+${_result?.pointsEarned ?? 10} pts)'
-                    : 'Mark as watched',
+                    : AppLocalizations.of(context)!.markAsWatched,
               ),
               style: OutlinedButton.styleFrom(
                 foregroundColor: _completedToday
@@ -503,7 +504,7 @@ class _ContentState extends State<_Content> {
             child: ElevatedButton.icon(
               onPressed: widget.onStartPractice,
               icon: const Icon(LucideIcons.play, size: 18),
-              label: const Text('Start Practice'),
+              label: Text(AppLocalizations.of(context)!.startPractice),
               style: ElevatedButton.styleFrom(
                 backgroundColor: context.sc.primary,
                 foregroundColor: context.sc.onPrimary,
@@ -628,7 +629,7 @@ class _NotFound extends StatelessWidget {
             _CircleIconButton(icon: LucideIcons.chevronLeft, onTap: onBack),
             const SizedBox(height: SphereSpacing.x32),
             Text(
-              'Drill not found',
+              AppLocalizations.of(context)!.drillNotFound,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: SphereSpacing.x8),

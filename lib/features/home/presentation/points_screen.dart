@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/points_entry.dart';
 import '../domain/points_summary.dart';
@@ -17,6 +18,7 @@ class PointsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final summaryAsync = ref.watch(pointsSummaryProvider);
 
     return Scaffold(
@@ -50,7 +52,7 @@ class PointsScreen extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Could not load points.',
+                            l.couldNotLoadPoints,
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: context.sc.onSurfaceMuted,
                                 ),
@@ -180,7 +182,7 @@ class _HeroCard extends StatelessWidget {
           Expanded(
             child: _StatColumn(
               value: summary.totalPoints,
-              label: 'Total earned',
+              label: AppLocalizations.of(context)!.totalEarned,
             ),
           ),
           Container(

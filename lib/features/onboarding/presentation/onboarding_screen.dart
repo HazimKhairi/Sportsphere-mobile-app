@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_colors.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -281,9 +282,9 @@ class _BottomPanel extends StatelessWidget {
               if (!isLast)
                 GestureDetector(
                   onTap: onSkip,
-                  child: const Text(
-                    'Skip',
-                    style: TextStyle(
+                  child: Text(
+                    AppLocalizations.of(context)!.skip,
+                    style: const TextStyle(
                       fontFamily: 'Lexend',
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -297,7 +298,9 @@ class _BottomPanel extends StatelessWidget {
 
           // CTA button
           _PillButton(
-            label: isLast ? 'Get Started' : 'Next',
+            label: isLast
+                ? AppLocalizations.of(context)!.getStarted
+                : AppLocalizations.of(context)!.next,
             onTap: onNext,
           ),
         ],

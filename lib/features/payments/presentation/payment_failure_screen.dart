@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 
@@ -41,6 +42,7 @@ class _PaymentFailureScreenState extends State<PaymentFailureScreen>
         ? 'Something went wrong. Please try again.'
         : widget.reason!;
 
+    final l = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: context.sc.surface,
       body: SafeArea(
@@ -82,7 +84,7 @@ class _PaymentFailureScreenState extends State<PaymentFailureScreen>
               ),
               const SizedBox(height: SphereSpacing.x32),
               Text(
-                'Payment failed',
+                l.paymentFailed,
                 style: Theme.of(context).textTheme.displayLarge?.copyWith(
                       color: context.sc.onSurface,
                     ),
@@ -120,7 +122,7 @@ class _PaymentFailureScreenState extends State<PaymentFailureScreen>
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  child: const Text('Try again'),
+                  child: Text(l.tryAgain),
                 ),
               ),
               const SizedBox(height: SphereSpacing.x12),
@@ -136,9 +138,9 @@ class _PaymentFailureScreenState extends State<PaymentFailureScreen>
                       borderRadius: SphereRadius.pillRect,
                     ),
                   ),
-                  child: const Text(
-                    'Back to home',
-                    style: TextStyle(fontWeight: FontWeight.w600),
+                  child: Text(
+                    l.backToHome,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
               ),

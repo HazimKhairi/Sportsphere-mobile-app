@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../auth/presentation/auth_providers.dart';
 import '../../notifications/presentation/notifications_sheet.dart';
@@ -21,11 +22,12 @@ import 'staff_home_providers.dart';
 class StaffHomeScreen extends ConsumerWidget {
   const StaffHomeScreen({super.key});
 
-  String _greeting() {
+  String _greeting(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     final h = DateTime.now().hour;
-    if (h < 12) return 'Good morning';
-    if (h < 18) return 'Good afternoon';
-    return 'Good evening';
+    if (h < 12) return l.goodMorning;
+    if (h < 18) return l.goodAfternoon;
+    return l.goodEvening;
   }
 
   String _formattedDate() {
@@ -38,6 +40,7 @@ class StaffHomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final user = ref.watch(currentUserProvider).valueOrNull;
     final firstName = (user?.displayName ?? 'Coach').split(' ').first;
 
@@ -77,7 +80,7 @@ class StaffHomeScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${_greeting()},',
+                              '${_greeting(context)},',
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: context.sc.onSurfaceMuted,
                                   ),
@@ -126,7 +129,7 @@ class StaffHomeScreen extends ConsumerWidget {
                       children: [
                         SphereQuickActionChip(
                           icon: LucideIcons.scanLine,
-                          label: 'Take attendance',
+                          label: l.takeAttendance,
                           onTap: () {
                             final session = nextSession;
                             if (session == null) {
@@ -158,9 +161,9 @@ class StaffHomeScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: SphereSpacing.x32),
 
-                const SphereEntrance(
+                SphereEntrance(
                   delayMs: 200,
-                  child: SphereSectionLabel('Up next'),
+                  child: SphereSectionLabel(l.upNext),
                 ),
                 const SizedBox(height: SphereSpacing.x16),
                 SphereEntrance(
@@ -187,9 +190,9 @@ class StaffHomeScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: SphereSpacing.x32),
 
-                const SphereEntrance(
+                SphereEntrance(
                   delayMs: 300,
-                  child: SphereSectionLabel('Your team'),
+                  child: SphereSectionLabel(l.yourTeam),
                 ),
                 const SizedBox(height: SphereSpacing.x16),
                 SphereEntrance(
@@ -220,7 +223,7 @@ class StaffHomeScreen extends ConsumerWidget {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                'Tap to manage roster',
+                                l.tapToManageRoster,
                                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: context.sc.onSurfaceMuted,
                                     ),

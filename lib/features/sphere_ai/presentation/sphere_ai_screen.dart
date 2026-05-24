@@ -14,6 +14,7 @@ import '../../../app/theme/sphere_spacing.dart';
 import '../data/chat_persistence_repository.dart';
 import '../domain/chat_message.dart';
 import 'ai_chat_providers.dart';
+import '../../../l10n/app_localizations.dart';
 
 class SphereAiScreen extends ConsumerStatefulWidget {
   const SphereAiScreen({super.key});
@@ -101,9 +102,10 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final l = AppLocalizations.of(context)!;
         setState(() {
           assistant.text = assistant.text.isEmpty
-              ? 'Sorry, I lost connection. Try again.'
+              ? l.connectionDropped
               : '${assistant.text}\n\n_Connection dropped._';
         });
       }
@@ -174,8 +176,9 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final l = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not attach image. Try again.')),
+          SnackBar(content: Text(l.couldNotAttachImage)),
         );
       }
     } finally {
@@ -223,14 +226,19 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const Spacer(),
-                  IconButton(
-                    icon: Icon(
-                      LucideIcons.rotateCcw,
-                      size: 18,
-                      color: context.sc.onSurfaceMuted,
-                    ),
-                    tooltip: 'New chat',
-                    onPressed: _clearChat,
+                  Builder(
+                    builder: (context) {
+                      final l = AppLocalizations.of(context)!;
+                      return IconButton(
+                        icon: Icon(
+                          LucideIcons.rotateCcw,
+                          size: 18,
+                          color: context.sc.onSurfaceMuted,
+                        ),
+                        tooltip: l.newChat,
+                        onPressed: _clearChat,
+                      );
+                    },
                   ),
                 ],
               ),
@@ -554,6 +562,7 @@ class _Composer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: context.sc.surfaceElev2,
@@ -592,7 +601,7 @@ class _Composer extends StatelessWidget {
               onSubmitted: onSubmit,
               style: TextStyle(color: context.sc.onSurface),
               decoration: InputDecoration(
-                hintText: 'Ask Sphere AI...',
+                hintText: l.askSphereAi,
                 hintStyle: TextStyle(color: context.sc.onSurfaceMuted),
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,

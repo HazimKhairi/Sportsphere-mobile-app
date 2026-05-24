@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../auth/presentation/auth_providers.dart';
 import '../domain/recovery_log.dart';
 import 'recovery_providers.dart';
@@ -77,7 +78,7 @@ class _WellnessCheckInScreenState extends ConsumerState<WellnessCheckInScreen> {
           onPressed: () => context.pop(),
         ),
         title: Text(
-          'Daily Wellness',
+          AppLocalizations.of(context)!.dailyWellness,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -100,7 +101,7 @@ class _WellnessCheckInScreenState extends ConsumerState<WellnessCheckInScreen> {
               ),
               Center(
                 child: Text(
-                  'Wellness score',
+                  AppLocalizations.of(context)!.wellnessScore,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: context.sc.onSurfaceMuted,
                       ),
@@ -108,31 +109,31 @@ class _WellnessCheckInScreenState extends ConsumerState<WellnessCheckInScreen> {
               ),
               const SizedBox(height: SphereSpacing.x32),
               _HooperSlider(
-                label: 'Sleep Quality',
+                label: AppLocalizations.of(context)!.sleepQuality,
                 description: '1 = very restful · 7 = insomnia',
                 value: _sleep,
                 onChanged: (v) => setState(() => _sleep = v),
               ),
               _HooperSlider(
-                label: 'Fatigue',
+                label: AppLocalizations.of(context)!.fatigue,
                 description: '1 = very fresh · 7 = very tired',
                 value: _fatigue,
                 onChanged: (v) => setState(() => _fatigue = v),
               ),
               _HooperSlider(
-                label: 'Muscle Soreness',
+                label: AppLocalizations.of(context)!.muscleSoreness,
                 description: '1 = no soreness · 7 = very sore',
                 value: _soreness,
                 onChanged: (v) => setState(() => _soreness = v),
               ),
               _HooperSlider(
-                label: 'Stress',
+                label: AppLocalizations.of(context)!.stress,
                 description: '1 = very relaxed · 7 = highly stressed',
                 value: _stress,
                 onChanged: (v) => setState(() => _stress = v),
               ),
               _HooperSlider(
-                label: 'Mood',
+                label: AppLocalizations.of(context)!.mood,
                 description: '1 = very positive · 7 = highly irritable',
                 value: _mood,
                 onChanged: (v) => setState(() => _mood = v),
@@ -166,7 +167,7 @@ class _WellnessCheckInScreenState extends ConsumerState<WellnessCheckInScreen> {
                             color: Colors.white,
                           ),
                         )
-                      : const Text('Save Check-In'),
+                      : Text(AppLocalizations.of(context)!.saveCheckIn),
                 ),
               ),
             ],

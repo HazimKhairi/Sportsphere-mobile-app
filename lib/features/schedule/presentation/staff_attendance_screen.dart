@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/staff_home_providers.dart';
 import '../data/attendance_repository.dart';
 
@@ -182,7 +183,7 @@ class _StaffAttendanceScreenState extends ConsumerState<StaffAttendanceScreen> {
                   : roster == null || roster.isEmpty
                       ? Center(
                           child: Text(
-                            'No players found',
+                            AppLocalizations.of(context)!.noPlayersFound,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge

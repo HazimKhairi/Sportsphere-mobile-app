@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../domain/scouting_profile.dart';
 import 'scout_providers.dart';
 
@@ -39,7 +40,6 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
   int _travelRadius = 50;
   bool _paidTrials = false;
   final Map<String, double> _skills = {};
-  bool _loaded = false;
 
   @override
   void initState() {
@@ -73,7 +73,6 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
       _skills
         ..clear()
         ..addAll(profile.skills);
-      _loaded = true;
     });
   }
 
@@ -150,12 +149,13 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     final tt = Theme.of(context).textTheme;
 
     return Scaffold(
       backgroundColor: context.sc.background,
       appBar: AppBar(
-        title: const Text('Edit Scout Profile'),
+        title: Text(l.editScoutProfile),
         actions: [
           _saving
               ? const Padding(
@@ -168,7 +168,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                 )
               : TextButton(
                   onPressed: _save,
-                  child: const Text('Save'),
+                  child: Text(l.save),
                 ),
         ],
       ),
@@ -184,9 +184,9 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                 children: [
                   _field(
                     controller: _nameCtrl,
-                    label: 'Display Name',
+                    label: l.displayName,
                     validator: (v) =>
-                        (v ?? '').length < 2 ? 'Min 2 characters' : null,
+                        (v ?? '').length < 2 ? l.nameMinChars : null,
                   ),
                   const SizedBox(height: 12),
                   _field(
@@ -300,7 +300,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            _SectionHeader(title: 'Self-Rate Skills', icon: LucideIcons.zap),
+            _SectionHeader(title: l.selfRateSkills, icon: LucideIcons.zap),
             const SizedBox(height: 12),
             _card(
               child: Column(
@@ -340,21 +340,21 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            _SectionHeader(title: 'Availability', icon: LucideIcons.clock),
+            _SectionHeader(title: l.availability, icon: LucideIcons.clock),
             const SizedBox(height: 12),
             _card(
               child: Column(
                 children: [
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('Available weekdays'),
+                    title: Text(l.availableWeekdays),
                     value: _weekday,
                     activeThumbColor: context.sc.primary,
                     onChanged: (v) => setState(() => _weekday = v),
                   ),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('Available weekends'),
+                    title: Text(l.availableWeekends),
                     value: _weekend,
                     activeThumbColor: context.sc.primary,
                     onChanged: (v) => setState(() => _weekend = v),
@@ -412,7 +412,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                 children: [
                   _field(
                     controller: _videoCtrl,
-                    label: 'Highlight Video URL (optional)',
+                    label: l.highlightVideoUrl,
                     hint: 'https://youtube.com/...',
                     keyboardType: TextInputType.url,
                   ),
@@ -442,7 +442,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                       child: CircularProgressIndicator(
                           strokeWidth: 2, color: Colors.white),
                     )
-                  : const Text('Save Profile'),
+                  : Text(l.saveProfile),
             ),
             const SizedBox(height: 32),
           ],

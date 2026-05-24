@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_avatar_stack.dart';
@@ -328,7 +329,7 @@ class _Content extends StatelessWidget {
                             child: ElevatedButton.icon(
                               onPressed: onShowQr,
                               icon: const Icon(LucideIcons.qrCode, size: 16),
-                              label: const Text('Show QR'),
+                              label: Text(AppLocalizations.of(context)!.showQr),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: context.sc.primary,
                                 foregroundColor: context.sc.onPrimary,
@@ -363,7 +364,7 @@ class _Content extends StatelessWidget {
                       child: OutlinedButton.icon(
                         onPressed: onMedia,
                         icon: const Icon(LucideIcons.image, size: 16),
-                        label: Text(sessionEnded ? 'View / Upload Media' : 'Upload Media'),
+                        label: Text(sessionEnded ? 'View / Upload Media' : AppLocalizations.of(context)!.uploadMedia),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: context.sc.onSurface,
                           side: BorderSide(color: context.sc.borderSubtle),
@@ -382,7 +383,7 @@ class _Content extends StatelessWidget {
                       child: ElevatedButton.icon(
                         onPressed: onCheckIn,
                         icon: const Icon(LucideIcons.qrCode, size: 18),
-                        label: const Text('Scan to Check In'),
+                        label: Text(AppLocalizations.of(context)!.scanToCheckIn),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: context.sc.primary,
                           foregroundColor: context.sc.onPrimary,
@@ -400,7 +401,7 @@ class _Content extends StatelessWidget {
                         child: OutlinedButton.icon(
                           onPressed: onMedia,
                           icon: const Icon(LucideIcons.images, size: 16),
-                          label: const Text('View Session Media'),
+                          label: Text(AppLocalizations.of(context)!.viewSessionMedia),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: context.sc.onSurface,
                             side: BorderSide(color: context.sc.borderSubtle),
@@ -500,7 +501,7 @@ class _NotFound extends StatelessWidget {
           _CircleIconButton(icon: LucideIcons.chevronLeft, onTap: onBack),
           const SizedBox(height: SphereSpacing.x32),
           Text(
-            'Session not found',
+            AppLocalizations.of(context)!.sessionNotFound,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: SphereSpacing.x8),

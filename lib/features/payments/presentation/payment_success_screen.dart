@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 
@@ -43,6 +44,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: context.sc.surface,
       body: SafeArea(
@@ -123,7 +125,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
                     ),
                     const SizedBox(height: SphereSpacing.x8),
                     Text(
-                      'Your registration is confirmed. We sent a receipt to your email.',
+                      l.registrationConfirmed,
                       textAlign: TextAlign.center,
                       style:
                           Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -150,7 +152,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
                           '/profile/payments/${widget.registrationId}',
                         ),
                         icon: const Icon(LucideIcons.fileText, size: 18),
-                        label: const Text('View receipt'),
+                        label: Text(l.viewReceipt),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: context.sc.primary,
                           foregroundColor: context.sc.onPrimary,
@@ -178,9 +180,9 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
                             borderRadius: SphereRadius.pillRect,
                           ),
                         ),
-                        child: const Text(
-                          'Back to home',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        child: Text(
+                          l.backToHome,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),

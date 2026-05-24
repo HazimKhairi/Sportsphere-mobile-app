@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
@@ -34,6 +35,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final historyAsync = ref.watch(myPaymentHistoryProvider);
 
     return Stack(
@@ -78,7 +80,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
                     const SizedBox(width: SphereSpacing.x12),
                     Expanded(
                       child: Text(
-                        'Payments',
+                        l.payments,
                         style:
                             Theme.of(context).textTheme.displayLarge?.copyWith(
                                   height: 1.1,
@@ -89,13 +91,13 @@ class PaymentHistoryScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: SphereSpacing.x8),
                 Text(
-                  'Your last 10 transactions.',
+                  l.yourLast10Transactions,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: context.sc.onSurfaceMuted,
                       ),
                 ),
                 const SizedBox(height: SphereSpacing.x32),
-                const SphereSectionLabel('Recent'),
+                SphereSectionLabel(l.recent),
                 const SizedBox(height: SphereSpacing.x16),
                 historyAsync.when(
                   data: (records) {
@@ -111,7 +113,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'No payments yet',
+                              l.noPaymentsYet,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium
@@ -122,7 +124,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Register for a program to see your payment history here.',
+                              l.registerForProgram,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -163,7 +165,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
                   error: (e, _) => Column(
                     children: [
                       Text(
-                        'Could not load your payments.',
+                        l.couldNotLoadPayments,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: context.sc.onSurfaceMuted,
                             ),
@@ -172,7 +174,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
                       TextButton(
                         onPressed: () => ref.invalidate(myPaymentHistoryProvider),
                         child: Text(
-                          'Retry',
+                          l.retry,
                           style: TextStyle(color: context.sc.primary),
                         ),
                       ),

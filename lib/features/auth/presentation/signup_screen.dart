@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../role_pick/presentation/role_providers.dart';
@@ -244,7 +245,7 @@ class _PlayerSignupForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Create your account',
+            AppLocalizations.of(context)!.createYourAccount,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: SphereSpacing.x8),
@@ -255,11 +256,11 @@ class _PlayerSignupForm extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: SphereSpacing.x24),
-          const _FieldLabel('Full name'),
+          _FieldLabel(AppLocalizations.of(context)!.fullName),
           const SizedBox(height: 6),
-          _SphereInput(controller: nameCtrl, hint: 'Your full name'),
+          _SphereInput(controller: nameCtrl, hint: AppLocalizations.of(context)!.yourFullName),
           const SizedBox(height: SphereSpacing.x16),
-          const _FieldLabel('Email'),
+          _FieldLabel(AppLocalizations.of(context)!.email),
           const SizedBox(height: 6),
           _SphereInput(
             controller: emailCtrl,
@@ -267,11 +268,11 @@ class _PlayerSignupForm extends StatelessWidget {
             keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox(height: SphereSpacing.x16),
-          const _FieldLabel('Password'),
+          _FieldLabel(AppLocalizations.of(context)!.password),
           const SizedBox(height: 6),
           _SphereInput(
             controller: passwordCtrl,
-            hint: 'At least 8 characters',
+            hint: AppLocalizations.of(context)!.passwordMinChars,
             obscureText: !passwordVisible,
             trailing: IconButton(
               icon: Icon(
@@ -283,11 +284,11 @@ class _PlayerSignupForm extends StatelessWidget {
             ),
           ),
           const SizedBox(height: SphereSpacing.x16),
-          const _FieldLabel('Confirm password'),
+          _FieldLabel(AppLocalizations.of(context)!.confirmPassword),
           const SizedBox(height: 6),
           _SphereInput(
             controller: confirmCtrl,
-            hint: 'Re-type your password',
+            hint: AppLocalizations.of(context)!.reTypePassword,
             obscureText: !passwordVisible,
           ),
           if (error != null) ...[
@@ -299,7 +300,7 @@ class _PlayerSignupForm extends StatelessWidget {
           ],
           const SizedBox(height: SphereSpacing.x24),
           _PillButton(
-            label: 'Create account',
+            label: AppLocalizations.of(context)!.createAccount,
             busy: busy,
             onTap: busy ? null : onSubmit,
           ),
@@ -310,13 +311,13 @@ class _PlayerSignupForm extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               child: Text.rich(
                 TextSpan(
-                  text: 'Already have an account? ',
+                  text: AppLocalizations.of(context)!.alreadyHaveAccount + ' ',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: context.sc.onSurfaceMuted,
                       ),
                   children: [
                     TextSpan(
-                      text: 'Log in',
+                      text: AppLocalizations.of(context)!.logIn,
                       style: TextStyle(
                         color: context.sc.primary,
                         fontWeight: FontWeight.w600,
@@ -350,7 +351,7 @@ class _StaffInviteOnly extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Staff is invite only',
+            AppLocalizations.of(context)!.staffInviteOnly,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: SphereSpacing.x8),

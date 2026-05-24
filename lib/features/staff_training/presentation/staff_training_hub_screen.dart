@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/_widgets/sphere_entrance.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import 'staff_training_providers.dart';
@@ -23,7 +24,7 @@ class StaffTrainingHubScreen extends ConsumerWidget {
         final count = list.length;
         return '$count template${count == 1 ? '' : 's'}';
       },
-      loading: () => 'Loading...',
+      loading: () => AppLocalizations.of(context)!.loading,
       error: (e, st) => 'Tap to manage',
     );
 
@@ -32,7 +33,7 @@ class StaffTrainingHubScreen extends ConsumerWidget {
         final count = list.length;
         return '$count plan${count == 1 ? '' : 's'}';
       },
-      loading: () => 'Loading...',
+      loading: () => AppLocalizations.of(context)!.loading,
       error: (e, st) => 'Tap to manage',
     );
 
@@ -52,9 +53,10 @@ class StaffTrainingHubScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SphereEntrance(
+              SphereEntrance(
                 delayMs: 0,
-                child: SphereSectionLabel('Workouts'),
+                child: SphereSectionLabel(
+                    AppLocalizations.of(context)!.workoutTemplates),
               ),
               const SizedBox(height: SphereSpacing.x12),
               SphereEntrance(
@@ -62,15 +64,16 @@ class StaffTrainingHubScreen extends ConsumerWidget {
                 child: _HubCard(
                   icon: LucideIcons.dumbbell,
                   accentColor: const Color(0xFFF97316),
-                  title: 'Workout Templates',
+                  title: AppLocalizations.of(context)!.workoutTemplates,
                   subtitle: workoutSubtitle,
                   onTap: () => context.push('/staff/training/workouts'),
                 ),
               ),
               const SizedBox(height: SphereSpacing.x24),
-              const SphereEntrance(
+              SphereEntrance(
                 delayMs: 160,
-                child: SphereSectionLabel('Training Plans'),
+                child: SphereSectionLabel(
+                    AppLocalizations.of(context)!.trainingPlans),
               ),
               const SizedBox(height: SphereSpacing.x12),
               SphereEntrance(
@@ -78,7 +81,7 @@ class StaffTrainingHubScreen extends ConsumerWidget {
                 child: _HubCard(
                   icon: LucideIcons.clipboardList,
                   accentColor: const Color(0xFF3B82F6),
-                  title: 'Training Plans',
+                  title: AppLocalizations.of(context)!.trainingPlans,
                   subtitle: planSubtitle,
                   onTap: () => context.push('/staff/training/plans'),
                 ),

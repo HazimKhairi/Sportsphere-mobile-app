@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import 'auth_providers.dart';
@@ -196,7 +197,7 @@ class _FormContent extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          'Forgot password',
+          AppLocalizations.of(context)!.forgotPassword,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         const SizedBox(height: SphereSpacing.x8),
@@ -207,11 +208,11 @@ class _FormContent extends StatelessWidget {
               ),
         ),
         const SizedBox(height: SphereSpacing.x24),
-        const _FieldLabel('Email'),
+        _FieldLabel(AppLocalizations.of(context)!.email),
         const SizedBox(height: 6),
         _SphereInput(
           controller: email,
-          hint: 'Enter your email',
+          hint: AppLocalizations.of(context)!.enterYourEmail,
           keyboardType: TextInputType.emailAddress,
         ),
         if (error != null) ...[
@@ -223,7 +224,7 @@ class _FormContent extends StatelessWidget {
         ],
         const SizedBox(height: SphereSpacing.x24),
         _PillButton(
-          label: 'Send reset link',
+          label: AppLocalizations.of(context)!.sendResetLink,
           busy: busy,
           onTap: onSubmit,
         ),
@@ -252,7 +253,7 @@ class _SuccessContent extends StatelessWidget {
         ),
         const SizedBox(height: SphereSpacing.x20),
         Text(
-          'Check your inbox',
+          AppLocalizations.of(context)!.checkYourInbox,
           style: Theme.of(context).textTheme.headlineMedium,
           textAlign: TextAlign.center,
         ),

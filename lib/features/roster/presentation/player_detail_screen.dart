@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../data/roster_repository.dart';
@@ -50,7 +51,7 @@ class PlayerDetailScreen extends ConsumerWidget {
               ),
               const SizedBox(height: SphereSpacing.x16),
               Text(
-                'Player not found',
+                AppLocalizations.of(context)!.playerNotFound,
                 style: TextStyle(
                   color: context.sc.onSurface,
                   fontSize: 18,
@@ -60,7 +61,7 @@ class PlayerDetailScreen extends ConsumerWidget {
               const SizedBox(height: SphereSpacing.x24),
               TextButton(
                 onPressed: () => _back(context),
-                child: const Text('Go back'),
+                child: Text(AppLocalizations.of(context)!.goBack),
               ),
             ],
           ),

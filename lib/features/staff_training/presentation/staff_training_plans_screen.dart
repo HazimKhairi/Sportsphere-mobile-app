@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/_widgets/sphere_entrance.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../../training_plans/domain/training_plan.dart';
@@ -21,7 +22,7 @@ class StaffTrainingPlansScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(onPressed: () => context.pop()),
-        title: const Text('Training Plans'),
+        title: Text(AppLocalizations.of(context)!.trainingPlans),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: SphereSpacing.x16),
@@ -71,7 +72,7 @@ class StaffTrainingPlansScreen extends ConsumerWidget {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   ),
                   error: (e, st) => Text(
-                    'Could not load plans.',
+                    AppLocalizations.of(context)!.couldNotLoadPlans,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: context.sc.onSurfaceMuted,
                         ),
@@ -156,7 +157,7 @@ class _EmptyState extends StatelessWidget {
               size: 32, color: context.sc.onSurfaceMuted),
           const SizedBox(height: SphereSpacing.x12),
           Text(
-            'No plans yet.',
+            AppLocalizations.of(context)!.noPlans,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   color: context.sc.onSurface,
                   fontWeight: FontWeight.w600,
@@ -164,7 +165,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: SphereSpacing.x4),
           Text(
-            'Tap + to create your first training plan.',
+            AppLocalizations.of(context)!.createFirstPlan,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: context.sc.onSurfaceMuted,
                 ),

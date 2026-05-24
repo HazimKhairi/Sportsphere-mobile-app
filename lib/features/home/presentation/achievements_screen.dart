@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/achievement.dart';
@@ -50,6 +51,7 @@ class AchievementsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final async = ref.watch(myAchievementsProvider);
 
     return Stack(
@@ -102,7 +104,7 @@ class AchievementsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: SphereSpacing.x8),
                 Text(
-                  'Earn badges as you train. The harder the tier, the rarer the unlock.',
+                  l.earnBadges,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: context.sc.onSurfaceMuted,
                         height: 1.4,
@@ -124,7 +126,7 @@ class AchievementsScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'No badges yet',
+                              l.noBadgesYet,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium
@@ -192,7 +194,7 @@ class AchievementsScreen extends ConsumerWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Badges unlocked',
+                                      l.badgesUnlocked,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleLarge

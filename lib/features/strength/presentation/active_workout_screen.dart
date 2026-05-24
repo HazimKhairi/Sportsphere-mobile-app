@@ -10,6 +10,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import 'active_workout_providers.dart';
 
 class ActiveWorkoutScreen extends ConsumerStatefulWidget {
@@ -69,7 +70,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
           onPressed: () => context.pop(),
         ),
         title: Text(
-          'Active Workout',
+          AppLocalizations.of(context)!.activeWorkout,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -90,7 +91,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                   },
                 ),
               Text(
-                'Log Set',
+                AppLocalizations.of(context)!.logSet,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -100,14 +101,14 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                 children: [
                   Expanded(
                     child: _NumberField(
-                      label: 'Reps',
+                      label: AppLocalizations.of(context)!.reps,
                       controller: _repsController,
                     ),
                   ),
                   const SizedBox(width: SphereSpacing.x12),
                   Expanded(
                     child: _NumberField(
-                      label: 'Weight (kg)',
+                      label: AppLocalizations.of(context)!.weightKg,
                       controller: _weightController,
                     ),
                   ),
@@ -135,7 +136,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> {
                     ),
                     padding: const EdgeInsets.symmetric(vertical: SphereSpacing.x16),
                   ),
-                  child: const Text('Log Set + Start Rest'),
+                  child: Text(AppLocalizations.of(context)!.logSetStartRest),
                 ),
               ),
               const SizedBox(height: SphereSpacing.x24),
@@ -173,7 +174,7 @@ class _RestTimerCard extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Rest',
+            AppLocalizations.of(context)!.restSeconds,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   color: context.sc.warning,
                   fontWeight: FontWeight.w600,
@@ -188,7 +189,7 @@ class _RestTimerCard extends StatelessWidget {
           ),
           TextButton(
             onPressed: onSkip,
-            child: const Text('Skip rest'),
+            child: Text(AppLocalizations.of(context)!.skipRest),
           ),
         ],
       ),

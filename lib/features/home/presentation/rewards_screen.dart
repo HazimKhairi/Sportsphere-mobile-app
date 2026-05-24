@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/reward.dart';
 import '../domain/voucher.dart';
@@ -68,6 +69,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     final rewardsAsync = ref.watch(myRewardsCatalogProvider);
     final balanceAsync = ref.watch(myPointsBalanceProvider);
     final balance = balanceAsync.valueOrNull ?? 0;
@@ -122,7 +124,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                 ),
                 const SizedBox(height: SphereSpacing.x8),
                 Text(
-                  'Spend points on stuff your club has stocked.',
+                  l.spendPoints,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: context.sc.onSurfaceMuted,
                         height: 1.4,
@@ -149,7 +151,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                           ),
                           alignment: Alignment.center,
                           child: Text(
-                            'Rewards',
+                            l.rewards,
                             style: TextStyle(
                               color: _tabIndex == 0
                                   ? Colors.black
@@ -175,7 +177,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                           ),
                           alignment: Alignment.center,
                           child: Text(
-                            'My Vouchers',
+                            l.myVouchers,
                             style: TextStyle(
                               color: _tabIndex == 1
                                   ? Colors.black
@@ -209,7 +211,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'No rewards yet',
+                                l.noRewardsYet,
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleMedium
@@ -220,7 +222,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'Your coach can publish rewards from the dashboard.',
+                                l.coachCanPublishRewards,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
@@ -276,7 +278,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                       ),
                     ),
                     error: (_, _) => Text(
-                      'Could not load rewards.',
+                      l.couldNotLoadRewards,
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium
@@ -309,6 +311,7 @@ class _VouchersTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final vouchersAsync = ref.watch(myVouchersProvider);
 
     return vouchersAsync.when(
@@ -359,7 +362,7 @@ class _VouchersTab extends ConsumerWidget {
         child: Column(
           children: [
             Text(
-              'Could not load vouchers.',
+              l.couldNotLoadVouchers,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: context.sc.onSurfaceMuted,
                   ),

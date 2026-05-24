@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../l10n/app_localizations.dart';
 
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
@@ -204,7 +205,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             ),
             ListTile(
               leading: const Icon(LucideIcons.image),
-              title: const Text('Photo library'),
+              title: Text(AppLocalizations.of(context)!.photoLibrary),
               onTap: () => Navigator.pop(context, ImageSource.gallery),
             ),
             const SizedBox(height: 8),
@@ -271,7 +272,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated.')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.profileUpdated)),
         );
         if (context.canPop()) context.pop();
       }
@@ -329,7 +330,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         ),
                       ),
                       const SizedBox(width: SphereSpacing.x12),
-                      Text('Edit Profile',
+                      Text(AppLocalizations.of(context)!.editProfile,
                           style: Theme.of(context).textTheme.displayLarge),
                     ],
                   ),
@@ -442,7 +443,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                 AlwaysStoppedAnimation(Colors.black),
                           ),
                         )
-                      : const Text('Save changes'),
+                      : Text(AppLocalizations.of(context)!.saveChanges),
                 ),
               ),
             ),

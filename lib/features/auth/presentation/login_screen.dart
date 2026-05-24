@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import 'auth_providers.dart';
@@ -165,7 +166,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        'Welcome back',
+                        AppLocalizations.of(context)!.welcomeBack,
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       const SizedBox(height: SphereSpacing.x8),
@@ -177,19 +178,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 ),
                       ),
                       const SizedBox(height: SphereSpacing.x24),
-                      const _FieldLabel('Email'),
+                      _FieldLabel(AppLocalizations.of(context)!.email),
                       const SizedBox(height: 6),
                       _SphereInput(
                         controller: _email,
-                        hint: 'Enter your email',
+                        hint: AppLocalizations.of(context)!.enterYourEmail,
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: SphereSpacing.x16),
-                      const _FieldLabel('Password'),
+                      _FieldLabel(AppLocalizations.of(context)!.password),
                       const SizedBox(height: 6),
                       _SphereInput(
                         controller: _password,
-                        hint: 'Enter your password',
+                        hint: AppLocalizations.of(context)!.enterYourPassword,
                         obscureText: !_passwordVisible,
                         trailing: IconButton(
                           icon: Icon(
@@ -210,7 +211,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         child: TextButton(
                           onPressed: () => context.push('/auth/forgot-password'),
                           child: Text(
-                            'Forgot password?',
+                            AppLocalizations.of(context)!.forgotPassword,
                             style: TextStyle(color: context.sc.primary),
                           ),
                         ),
@@ -224,12 +225,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ],
                       const SizedBox(height: SphereSpacing.x16),
                       _PillButton(
-                        label: 'Log In',
+                        label: AppLocalizations.of(context)!.logIn,
                         busy: _busy,
                         onTap: _busy ? null : _submit,
                       ),
                       const SizedBox(height: SphereSpacing.x24),
-                      const _DividerWithLabel(label: 'Or continue with'),
+                      _DividerWithLabel(label: AppLocalizations.of(context)!.orContinueWith),
                       const SizedBox(height: SphereSpacing.x20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -268,7 +269,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           behavior: HitTestBehavior.opaque,
                           child: Text.rich(
                             TextSpan(
-                              text: 'New here? ',
+                              text: AppLocalizations.of(context)!.newHere + ' ',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -277,7 +278,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   ),
                               children: [
                                 TextSpan(
-                                  text: 'Sign up',
+                                  text: AppLocalizations.of(context)!.signUp,
                                   style: TextStyle(
                                     color: context.sc.primary,
                                     fontWeight: FontWeight.w600,

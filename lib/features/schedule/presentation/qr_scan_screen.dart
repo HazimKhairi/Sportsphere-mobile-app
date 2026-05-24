@@ -10,6 +10,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../../../l10n/app_localizations.dart';
 import '../data/check_in_repository.dart';
 import 'check_in_providers.dart';
 
@@ -223,29 +224,30 @@ class _StatusBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     final (text, color, icon) = switch (status) {
       _ScanStatus.scanning => (
-        'Align the QR code inside the frame.',
+        l.alignQrCode,
         Colors.white,
         LucideIcons.scanLine,
       ),
       _ScanStatus.submitting => (
-        'Checking you in...',
+        l.checkingIn,
         Colors.white,
         LucideIcons.loader,
       ),
       _ScanStatus.success => (
-        'Checked in. Welcome!',
+        l.checkedIn,
         context.sc.success,
         LucideIcons.check,
       ),
       _ScanStatus.mismatch => (
-        'Wrong QR for this session.',
+        l.wrongQr,
         context.sc.danger,
         LucideIcons.x,
       ),
       _ScanStatus.alreadyCheckedIn => (
-        'Already checked in to this session.',
+        l.alreadyCheckedIn,
         context.sc.success,
         LucideIcons.check,
       ),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/drill.dart';
@@ -54,6 +55,7 @@ class TrainScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final allAsync = ref.watch(allDrillsProvider);
     final todayAsync = ref.watch(todayDrillProvider);
 
@@ -135,7 +137,7 @@ class TrainScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'No drills available',
+                              l.noDrillsAvailable,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium
@@ -146,7 +148,7 @@ class TrainScreen extends ConsumerWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Your coach can publish drills from the dashboard.',
+                              l.coachCanPublishDrills,
                               style:
                                   Theme.of(context).textTheme.bodyMedium?.copyWith(
                                         color: context.sc.onSurfaceMuted,

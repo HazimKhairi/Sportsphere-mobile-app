@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/training_session.dart';
@@ -38,6 +39,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     final sessionsAsync = ref.watch(monthSessionsProvider(focusedMonth: _focusedDay));
 
     return Scaffold(
@@ -57,7 +59,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                   SphereSpacing.x8,
                 ),
                 child: Text(
-                  'Schedule',
+                  l.schedule,
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
               ),
@@ -194,7 +196,7 @@ class _DaySessionsList extends StatelessWidget {
               border: Border.all(color: context.sc.borderSubtle),
             ),
             child: Text(
-              'No sessions on this day.',
+              AppLocalizations.of(context)!.noSessionsToday,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: context.sc.onSurfaceMuted,
                   ),

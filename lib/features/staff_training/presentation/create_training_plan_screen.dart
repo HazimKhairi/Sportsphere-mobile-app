@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/theme/sphere_spacing.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/staff_home_providers.dart';
 import 'staff_training_providers.dart';
 
@@ -75,10 +76,11 @@ class _CreateTrainingPlanScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(onPressed: () => context.pop()),
-        title: const Text('New Training Plan'),
+        title: Text(l.newTrainingPlan),
         actions: [
           TextButton(
             onPressed: _saving ? null : _save,
@@ -88,7 +90,7 @@ class _CreateTrainingPlanScreenState
                     height: 16,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('Save'),
+                : Text(l.save),
           ),
         ],
       ),
@@ -101,7 +103,7 @@ class _CreateTrainingPlanScreenState
               TextField(
                 controller: _titleCtrl,
                 autofocus: true,
-                decoration: const InputDecoration(labelText: 'Plan title'),
+                decoration: InputDecoration(labelText: l.planTitle),
               ),
               const SizedBox(height: SphereSpacing.x16),
               DropdownButtonFormField<String>(
@@ -123,8 +125,7 @@ class _CreateTrainingPlanScreenState
                 controller: _weeksCtrl,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration:
-                    const InputDecoration(labelText: 'Duration (weeks)'),
+                decoration: InputDecoration(labelText: l.durationWeeks),
               ),
             ],
           ),

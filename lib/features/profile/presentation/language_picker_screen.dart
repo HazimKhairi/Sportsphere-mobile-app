@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../../../l10n/app_localizations.dart';
 
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/locale_provider.dart';
@@ -59,20 +60,20 @@ class LanguagePickerScreen extends ConsumerWidget {
                       ),
                       const SizedBox(width: SphereSpacing.x12),
                       Text(
-                        'Language',
+                        AppLocalizations.of(context)!.language,
                         style: Theme.of(context).textTheme.displayLarge,
                       ),
                     ],
                   ),
                   const SizedBox(height: SphereSpacing.x8),
                   Text(
-                    'Select your preferred display language.',
+                    AppLocalizations.of(context)!.languageSelectHint,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: context.sc.onSurfaceMuted,
                         ),
                   ),
                   const SizedBox(height: SphereSpacing.x32),
-                  const SphereSectionLabel('Available languages'),
+                  SphereSectionLabel(AppLocalizations.of(context)!.availableLanguages),
                   const SizedBox(height: SphereSpacing.x12),
                   Container(
                     decoration: BoxDecoration(
