@@ -123,18 +123,6 @@ class ProfileScreen extends ConsumerWidget {
                           onTap: () => context.push('/profile/payments'),
                         ),
                         ProfileRow(
-                          icon: LucideIcons.gift,
-                          label: 'Rewards',
-                          subtitle: 'Redeem your earned rewards',
-                          onTap: () => context.push('/profile/rewards'),
-                        ),
-                        ProfileRow(
-                          icon: LucideIcons.star,
-                          label: 'Points & History',
-                          subtitle: 'Track your points balance',
-                          onTap: () => context.push('/profile/points'),
-                        ),
-                        ProfileRow(
                           icon: LucideIcons.activity,
                           label: 'Body composition',
                           subtitle: 'Monitor your physique progress',
