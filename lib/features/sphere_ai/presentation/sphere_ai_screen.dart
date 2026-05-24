@@ -261,7 +261,7 @@ class _SphereAiScreenState extends ConsumerState<SphereAiScreen> {
                 SphereSpacing.x16,
                 SphereSpacing.x8,
                 SphereSpacing.x16,
-                SphereSpacing.bottomNavSafe,
+                SphereSpacing.x16,
               ),
               child: _Composer(
                 controller: _composer,
