@@ -106,8 +106,10 @@ class _ClubContent extends StatelessWidget {
             padding: const EdgeInsets.all(SphereSpacing.x16),
             child: _CircleIconButton(
               onTap: () {
-                if (Navigator.of(context).canPop()) {
-                  Navigator.of(context).pop();
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go('/home');
                 }
               },
             ),
