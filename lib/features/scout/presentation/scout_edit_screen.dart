@@ -552,7 +552,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            _SectionHeader(title: 'Basic Info', icon: LucideIcons.user),
+            const _SectionHeader(title: 'Basic Info', icon: LucideIcons.user),
             const SizedBox(height: 12),
             _card(
               child: Column(
@@ -596,7 +596,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            _SectionHeader(title: 'Sport & Position', icon: LucideIcons.dumbbell),
+            const _SectionHeader(title: 'Sport & Position', icon: LucideIcons.dumbbell),
             const SizedBox(height: 12),
             _card(
               child: Column(
@@ -780,7 +780,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            _SectionHeader(title: 'Media & Achievements', icon: LucideIcons.video),
+            const _SectionHeader(title: 'Media & Achievements', icon: LucideIcons.video),
             const SizedBox(height: 12),
             _card(
               child: Column(
@@ -803,7 +803,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            _SectionHeader(title: 'Past Clubs', icon: LucideIcons.building2),
+            const _SectionHeader(title: 'Past Clubs', icon: LucideIcons.building2),
             const SizedBox(height: 12),
             _card(
               child: _CareerListSection<PastClubEntry>(
@@ -817,7 +817,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            _SectionHeader(title: 'Representative History', icon: LucideIcons.medal),
+            const _SectionHeader(title: 'Representative History', icon: LucideIcons.medal),
             const SizedBox(height: 12),
             _card(
               child: _CareerListSection<RepresentativeEntry>(
@@ -831,7 +831,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            _SectionHeader(title: 'Tournament History', icon: LucideIcons.trophy),
+            const _SectionHeader(title: 'Tournament History', icon: LucideIcons.trophy),
             const SizedBox(height: 12),
             _card(
               child: _CareerListSection<TournamentEntry>(

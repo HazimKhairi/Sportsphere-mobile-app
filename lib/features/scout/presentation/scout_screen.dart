@@ -487,9 +487,9 @@ class _AvailabilityRow extends StatelessWidget {
       runSpacing: 8,
       children: [
         if (availability.weekday)
-          _InfoChip(label: 'Weekdays', icon: LucideIcons.calendarDays),
+          const _InfoChip(label: 'Weekdays', icon: LucideIcons.calendarDays),
         if (availability.weekend)
-          _InfoChip(label: 'Weekends', icon: LucideIcons.calendarCheck),
+          const _InfoChip(label: 'Weekends', icon: LucideIcons.calendarCheck),
         _InfoChip(
           label: '${availability.hoursPerWeek}h/week',
           icon: LucideIcons.clock,
@@ -499,7 +499,7 @@ class _AvailabilityRow extends StatelessWidget {
           icon: LucideIcons.mapPin,
         ),
         if (availability.paidTrialsAccepted)
-          _InfoChip(label: 'Paid trials OK', icon: LucideIcons.circleCheck),
+          const _InfoChip(label: 'Paid trials OK', icon: LucideIcons.circleCheck),
       ],
     );
   }
