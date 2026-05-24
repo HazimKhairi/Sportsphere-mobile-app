@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../domain/registration_status.dart';
 
 class RegistrationRepository {
   RegistrationRepository({
     FirebaseFirestore? firestore,
-    required Dio dio,
+    FirebaseAuth? auth,
   })  : _db = firestore ?? FirebaseFirestore.instance,
-        _dio = dio;
+        _auth = auth ?? FirebaseAuth.instance;
 
   final FirebaseFirestore _db;
-  final Dio _dio;
+  final FirebaseAuth _auth;
 
   Future<bool> isRegistered({
     required String clubId,
@@ -37,26 +37,38 @@ class RegistrationRepository {
     required String programId,
     required String paymentIntentId,
   }) async {
-    try {
-      final res = await _dio.post<Map<String, dynamic>>(
-        '/api/programs/register',
-        data: {
-          'programId': programId,
-          'paymentIntentId': paymentIntentId,
-        },
-      );
-      final data = res.data ?? const <String, dynamic>{};
-      return RegistrationResult(
-        registrationId: data['registrationId'] as String,
-        status: RegistrationStatusKind.fromString(data['status'] as String?),
-      );
-    } on DioException catch (e) {
-      throw RegistrationException(
-        e.response?.data is Map
-            ? (e.response!.data as Map)['error']?.toString() ?? 'Registration failed'
-            : 'Registration failed',
-        statusCode: e.response?.statusCode,
-      );
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) throw RegistrationException('Not signed in');
+
+    // Resolve club from user doc
+    final userDoc = await _db.collection('users').doc(uid).get();
+    final clubId = userDoc.data()?['activeClubId'] as String?;
+    if (clubId == null || clubId.isEmpty) {
+      throw RegistrationException('No active club found');
     }
+
+    // Write registrant doc with uid as key — Firestore rule allows
+    // create when doc ID == request.auth.uid (isOwner check).
+    final registrantRef = _db
+        .collection('clubs')
+        .doc(clubId)
+        .collection('programs')
+        .doc(programId)
+        .collection('registrants')
+        .doc(uid);
+
+    await registrantRef.set({
+      'playerId': uid,
+      'registeredBy': uid,
+      'paymentIntentId': paymentIntentId,
+      'status': 'pending',
+      'paymentStatus': 'Pending',
+      'registrationDate': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+
+    return RegistrationResult(
+      registrationId: uid,
+      status: RegistrationStatusKind.pending,
+    );
   }
 }

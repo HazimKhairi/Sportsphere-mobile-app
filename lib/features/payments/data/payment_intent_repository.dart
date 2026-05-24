@@ -15,12 +15,8 @@ class PaymentIntentRepository {
   }) async {
     try {
       final res = await _dio.post<Map<String, dynamic>>(
-        '/api/payments/create-payment-intent',
-        data: {
-          'programId': programId,
-          'amount': amountCents,
-          'currency': currency,
-        },
+        '/api/payments/mobile/payment-intent',
+        data: {'programId': programId},
       );
       final data = res.data ?? const <String, dynamic>{};
       return PaymentIntent(
