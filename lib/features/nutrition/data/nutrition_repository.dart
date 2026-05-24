@@ -19,11 +19,19 @@ class NutritionRepository {
   }
 
   Stream<List<NutritionLog>> logsForDateStream(String userId, String dateStr) {
+    final parts = dateStr.split('-');
+    final startOfDay = DateTime(
+      int.parse(parts[0]),
+      int.parse(parts[1]),
+      int.parse(parts[2]),
+    );
+    final endOfDay = startOfDay.add(const Duration(days: 1));
     return _db
         .collection('users')
         .doc(userId)
         .collection('nutritionLogs')
-        .where('dateStr', isEqualTo: dateStr)
+        .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+        .where('date', isLessThan: Timestamp.fromDate(endOfDay))
         .orderBy('date', descending: false)
         .limit(50)
         .snapshots()
@@ -73,6 +81,35 @@ class NutritionRepository {
             ? (e.response!.data as Map)['error']?.toString() ??
                 'Photo analysis failed'
             : 'Photo analysis failed',
+        statusCode: e.response?.statusCode,
+      );
+    }
+  }
+
+  Future<NutritionLog> logMeal({
+    required String description,
+    required MealType mealType,
+    required String authToken,
+  }) async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        '/api/nutrition/log-text',
+        data: {
+          'description': description,
+          'mealType': mealType.name,
+        },
+        options: Options(headers: {'Authorization': 'Bearer $authToken'}),
+      );
+      final data = res.data ?? const <String, dynamic>{};
+      final log = data['log'] as Map<String, dynamic>;
+      final id = log['id'] as String? ?? '';
+      return NutritionLog.fromDoc(id, log);
+    } on DioException catch (e) {
+      throw NutritionException(
+        e.response?.data is Map
+            ? (e.response!.data as Map)['error']?.toString() ??
+                'Failed to log meal'
+            : 'Failed to log meal',
         statusCode: e.response?.statusCode,
       );
     }
