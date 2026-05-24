@@ -44,7 +44,10 @@ import '../features/schedule/presentation/schedule_screen.dart';
 import '../features/schedule/presentation/session_detail_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
 import '../features/approvals/presentation/approvals_screen.dart';
+import '../features/staff_training/presentation/create_workout_template_screen.dart';
 import '../features/staff_training/presentation/staff_training_hub_screen.dart';
+import '../features/staff_training/presentation/staff_workout_templates_screen.dart';
+import '../features/staff_training/presentation/workout_template_detail_screen.dart';
 import '../features/roster/presentation/player_detail_screen.dart';
 import '../features/roster/presentation/roster_screen.dart';
 import '../features/player_card/presentation/player_card_screen.dart';
@@ -342,13 +345,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/staff/training/workouts',
-            builder: (_, _) => const SizedBox(), // placeholder — Task #16 will replace
+            builder: (_, _) => const StaffWorkoutTemplatesScreen(),
           ),
           GoRoute(
             path: '/staff/training/workouts/:id',
             builder: (_, state) {
               final id = state.pathParameters['id']!;
-              return SizedBox(key: ValueKey(id)); // placeholder — Task #16 will replace
+              if (id == 'new') return const CreateWorkoutTemplateScreen();
+              return WorkoutTemplateDetailScreen(templateId: id);
             },
           ),
           GoRoute(
