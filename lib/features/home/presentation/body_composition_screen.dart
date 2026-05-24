@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/body_composition_entry.dart';
@@ -25,6 +26,7 @@ class BodyCompositionScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context)!;
     final async = ref.watch(myBodyCompositionProvider);
 
     return Stack(
@@ -77,7 +79,7 @@ class BodyCompositionScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: SphereSpacing.x8),
                 Text(
-                  'Track weight, height, and composition over time.',
+                  l.trackWeightHeight,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: context.sc.onSurfaceMuted,
                         height: 1.4,
@@ -106,7 +108,7 @@ class BodyCompositionScreen extends ConsumerWidget {
                               ),
                             ),
                             child: Text(
-                              'Log another entry to start tracking changes.',
+                              l.logEntry,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -148,7 +150,7 @@ class BodyCompositionScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Could not load entries.',
+                        l.couldNotLoadEntries,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: context.sc.onSurfaceMuted,
                             ),
@@ -460,7 +462,7 @@ class _EmptyState extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'No entries yet',
+            AppLocalizations.of(context)!.noEntries,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: context.sc.onSurface,
                   fontWeight: FontWeight.w700,
@@ -468,7 +470,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Tap Add entry to log your first measurement.',
+            AppLocalizations.of(context)!.tapAddEntry,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: context.sc.onSurfaceMuted,
                 ),

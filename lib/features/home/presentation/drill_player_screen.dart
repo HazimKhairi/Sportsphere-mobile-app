@@ -10,6 +10,7 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../data/drill_analyzer/drill_mode.dart';
@@ -575,9 +576,9 @@ class _NotFound extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: SphereSpacing.x32),
-              const Text(
-                'Drill not found',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.drillNotFound,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.w700,

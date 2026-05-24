@@ -577,7 +577,7 @@ class _BalanceCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Your balance',
+                  AppLocalizations.of(context)!.yourBalance,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: context.sc.onSurfaceMuted,
                         letterSpacing: 0.8,

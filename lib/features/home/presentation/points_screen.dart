@@ -242,7 +242,7 @@ class _HistoryList extends StatelessWidget {
     if (history.isEmpty) {
       return Center(
         child: Text(
-          'No points activity yet.',
+          AppLocalizations.of(context)!.noPointsActivity,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: context.sc.onSurfaceMuted,
               ),
