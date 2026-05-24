@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../../home/presentation/staff_home_providers.dart';
 import '../data/attendance_repository.dart';
 
 class StaffAttendanceScreen extends ConsumerStatefulWidget {
@@ -28,6 +29,7 @@ class StaffAttendanceScreen extends ConsumerStatefulWidget {
 
 class _StaffAttendanceScreenState extends ConsumerState<StaffAttendanceScreen> {
   final _repo = AttendanceRepository();
+  String _clubId = '';
 
   List<PlayerAttendanceRecord>? _roster;
   Set<String> _presentIds = {};
@@ -37,18 +39,35 @@ class _StaffAttendanceScreenState extends ConsumerState<StaffAttendanceScreen> {
   @override
   void initState() {
     super.initState();
+    // widget.clubId may arrive empty if activeClubIdProvider hasn't resolved yet
+    _clubId = widget.clubId;
+    if (_clubId.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _clubId = ref.read(activeClubIdProvider).valueOrNull ?? '';
+        _init();
+      });
+    } else {
+      _init();
+    }
+  }
+
+  void _init() {
     _loadRoster();
     _sub = _repo
-        .attendeesStream(clubId: widget.clubId, sessionId: widget.sessionId)
+        .attendeesStream(clubId: _clubId, sessionId: widget.sessionId)
         .listen((ids) {
       if (mounted) setState(() => _presentIds = ids);
     });
   }
 
   Future<void> _loadRoster() async {
+    if (_clubId.isEmpty) {
+      if (mounted) setState(() => _loading = false);
+      return;
+    }
     try {
       final roster = await _repo.getRoster(
-        clubId: widget.clubId,
+        clubId: _clubId,
         sessionId: widget.sessionId,
       );
       if (mounted) {
@@ -68,7 +87,7 @@ class _StaffAttendanceScreenState extends ConsumerState<StaffAttendanceScreen> {
 
   Future<void> _toggle(PlayerAttendanceRecord record, bool markPresent) async {
     await _repo.toggleAttendance(
-      clubId: widget.clubId,
+      clubId: _clubId,
       sessionId: widget.sessionId,
       playerId: record.playerId,
       markPresent: markPresent,
