@@ -9,6 +9,7 @@ class ProfileRow extends StatelessWidget {
     super.key,
     required this.icon,
     required this.label,
+    this.subtitle,
     this.trailingText,
     this.onTap,
     this.danger = false,
@@ -16,6 +17,7 @@ class ProfileRow extends StatelessWidget {
 
   final IconData icon;
   final String label;
+  final String? subtitle;
   final String? trailingText;
   final VoidCallback? onTap;
   final bool danger;
@@ -45,12 +47,26 @@ class ProfileRow extends StatelessWidget {
             ),
             const SizedBox(width: SphereSpacing.x12),
             Expanded(
-              child: Text(
-                label,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: labelColor,
-                      fontWeight: FontWeight.w600,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: labelColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle!,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: context.sc.onSurfaceMuted,
+                          ),
                     ),
+                  ],
+                ],
               ),
             ),
             if (trailingText != null) ...[

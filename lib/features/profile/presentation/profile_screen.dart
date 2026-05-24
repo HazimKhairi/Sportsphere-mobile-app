@@ -3,10 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
+import '../../../app/theme/sphere_theme_ext.dart';
 import '../../auth/presentation/auth_providers.dart';
+import '../../home/presentation/_widgets/sphere_entrance.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../../role_pick/presentation/role_providers.dart';
@@ -33,8 +34,10 @@ class ProfileScreen extends ConsumerWidget {
     final role = ref.watch(selectedRoleProvider);
     final displayName = ref.watch(userDisplayNameProvider).valueOrNull
         ?? (role == AppRole.staff ? 'Coach' : 'Player');
+    final firstName = displayName.split(' ').first;
     final email = user?.email ?? '';
     final roleLabel = role == AppRole.staff ? 'Staff' : 'Player';
+    final isPlayer = role == AppRole.player;
 
     return Stack(
       children: [
@@ -46,148 +49,179 @@ class ProfileScreen extends ConsumerWidget {
               SphereSpacing.x24,
               SphereSpacing.x16,
               SphereSpacing.x24,
-              90,
+              SphereSpacing.bottomNavSafe,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
+                // ── Top bar ──────────────────────────────────────────────────
+                SphereEntrance(
+                  delayMs: 0,
+                  child: Row(
+                    children: [
+                      Text(
                         'Profile',
                         style: Theme.of(context).textTheme.displayLarge,
                       ),
-                    ),
-                    _BellIconButton(onTap: () {}),
-                  ],
-                ),
-                const SizedBox(height: SphereSpacing.x24),
-
-                _IdentityCard(
-                  displayName: displayName,
-                  email: email,
-                  initials: _initialsFrom(displayName),
-                  roleLabel: roleLabel,
-                  photoUrl: user?.photoUrl,
+                      const Spacer(),
+                      _IconBtn(
+                        icon: LucideIcons.settings,
+                        onTap: () => context.push('/profile/notifications'),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: SphereSpacing.x32),
 
-                const SphereSectionLabel('My account'),
+                // ── Avatar hero (centered) ────────────────────────────────────
+                SphereEntrance(
+                  delayMs: 60,
+                  child: _AvatarHero(
+                    displayName: displayName,
+                    firstName: firstName,
+                    email: email,
+                    initials: _initialsFrom(displayName),
+                    roleLabel: roleLabel,
+                    photoUrl: user?.photoUrl,
+                    isPlayer: isPlayer,
+                  ),
+                ),
+                const SizedBox(height: SphereSpacing.x32),
+
+                // ── Quick action 2-col grid ───────────────────────────────────
+                SphereEntrance(
+                  delayMs: 120,
+                  child: isPlayer
+                      ? _PlayerQuickGrid()
+                      : _StaffQuickGrid(),
+                ),
+                const SizedBox(height: SphereSpacing.x32),
+
+                // ── Account section ───────────────────────────────────────────
+                const SphereEntrance(
+                  delayMs: 180,
+                  child: SphereSectionLabel('Account'),
+                ),
                 const SizedBox(height: SphereSpacing.x12),
-                ProfileSectionCard(
-                  children: [
-                    ProfileRow(
-                      icon: LucideIcons.userPen,
-                      label: 'Edit profile',
-                      onTap: () => GoRouter.of(context).push('/profile/edit'),
-                    ),
-                    if (role == AppRole.player) ...[
+                SphereEntrance(
+                  delayMs: 200,
+                  child: ProfileSectionCard(
+                    children: [
                       ProfileRow(
-                        icon: LucideIcons.layoutGrid,
-                        label: 'Browse programs',
-                        onTap: () => GoRouter.of(context).push('/programs'),
+                        icon: LucideIcons.userPen,
+                        label: 'Edit profile',
+                        subtitle: 'Update your personal details',
+                        onTap: () => context.push('/profile/edit'),
+                      ),
+                      if (isPlayer) ...[
+                        ProfileRow(
+                          icon: LucideIcons.layoutGrid,
+                          label: 'Browse programs',
+                          subtitle: 'Enrol in training programs',
+                          onTap: () => context.push('/programs'),
+                        ),
+                        ProfileRow(
+                          icon: LucideIcons.receipt,
+                          label: 'Payment history',
+                          subtitle: 'View your transactions',
+                          onTap: () => context.push('/profile/payments'),
+                        ),
+                        ProfileRow(
+                          icon: LucideIcons.gift,
+                          label: 'Rewards',
+                          subtitle: 'Redeem your earned rewards',
+                          onTap: () => context.push('/profile/rewards'),
+                        ),
+                        ProfileRow(
+                          icon: LucideIcons.star,
+                          label: 'Points & History',
+                          subtitle: 'Track your points balance',
+                          onTap: () => context.push('/profile/points'),
+                        ),
+                        ProfileRow(
+                          icon: LucideIcons.activity,
+                          label: 'Body composition',
+                          subtitle: 'Monitor your physique progress',
+                          onTap: () => context.push('/profile/body-composition'),
+                        ),
+                      ],
+                      ProfileRow(
+                        icon: LucideIcons.shield,
+                        label: 'My Club',
+                        subtitle: 'View club details',
+                        onTap: () => context.push('/club'),
                       ),
                       ProfileRow(
-                        icon: LucideIcons.receipt,
-                        label: 'Payment history',
-                        onTap: () =>
-                            GoRouter.of(context).push('/profile/payments'),
-                      ),
-                      ProfileRow(
-                        icon: LucideIcons.gift,
-                        label: 'Rewards',
-                        onTap: () =>
-                            GoRouter.of(context).push('/profile/rewards'),
-                      ),
-                      ProfileRow(
-                        icon: LucideIcons.star,
-                        label: 'Points & History',
-                        onTap: () =>
-                            GoRouter.of(context).push('/profile/points'),
-                      ),
-                      ProfileRow(
-                        icon: LucideIcons.award,
-                        label: 'Achievements',
-                        onTap: () =>
-                            GoRouter.of(context).push('/profile/achievements'),
-                      ),
-                      ProfileRow(
-                        icon: LucideIcons.idCard,
-                        label: 'My Player Card',
-                        onTap: () => GoRouter.of(context).push('/player-card'),
-                      ),
-                      ProfileRow(
-                        icon: LucideIcons.searchCheck,
-                        label: 'Scout Profile',
-                        onTap: () => GoRouter.of(context).push('/scout'),
-                      ),
-                      ProfileRow(
-                        icon: LucideIcons.activity,
-                        label: 'Body composition',
-                        onTap: () => GoRouter.of(context)
-                            .push('/profile/body-composition'),
+                        icon: LucideIcons.bell,
+                        label: 'Notifications',
+                        subtitle: 'Manage alerts and push settings',
+                        onTap: () => context.push('/profile/notifications'),
                       ),
                     ],
-                    ProfileRow(
-                      icon: LucideIcons.shield,
-                      label: 'My Club',
-                      onTap: () => GoRouter.of(context).push('/club'),
-                    ),
-                    ProfileRow(
-                      icon: LucideIcons.bell,
-                      label: 'Notifications',
-                      onTap: () => GoRouter.of(context).push('/profile/notifications'),
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: SphereSpacing.x24),
 
-                const SphereSectionLabel('App'),
+                // ── App section ───────────────────────────────────────────────
+                const SphereEntrance(
+                  delayMs: 260,
+                  child: SphereSectionLabel('App'),
+                ),
                 const SizedBox(height: SphereSpacing.x12),
-                ProfileSectionCard(
-                  children: [
-                    ProfileRow(
-                      icon: LucideIcons.palette,
-                      label: 'Theme',
-                      trailingText: 'Dark',
-                      onTap: () => GoRouter.of(context).push('/profile/theme'),
-                    ),
-                    ProfileRow(
-                      icon: LucideIcons.languages,
-                      label: 'Language',
-                      trailingText: 'EN',
-                      onTap: () => GoRouter.of(context).push('/profile/language'),
-                    ),
-                    ProfileRow(
-                      icon: LucideIcons.circleHelp,
-                      label: 'Help and FAQ',
-                      onTap: () => GoRouter.of(context).push('/profile/help'),
-                    ),
-                    ProfileRow(
-                      icon: LucideIcons.info,
-                      label: 'About',
-                      onTap: () => GoRouter.of(context).push('/profile/about'),
-                    ),
-                  ],
+                SphereEntrance(
+                  delayMs: 280,
+                  child: ProfileSectionCard(
+                    children: [
+                      ProfileRow(
+                        icon: LucideIcons.palette,
+                        label: 'Theme',
+                        subtitle: 'Dark / Light mode',
+                        trailingText: 'Dark',
+                        onTap: () => context.push('/profile/theme'),
+                      ),
+                      ProfileRow(
+                        icon: LucideIcons.languages,
+                        label: 'Language',
+                        subtitle: 'App display language',
+                        trailingText: 'EN',
+                        onTap: () => context.push('/profile/language'),
+                      ),
+                      ProfileRow(
+                        icon: LucideIcons.circleHelp,
+                        label: 'Help and FAQ',
+                        subtitle: 'Get support or browse answers',
+                        onTap: () => context.push('/profile/help'),
+                      ),
+                      ProfileRow(
+                        icon: LucideIcons.info,
+                        label: 'About',
+                        subtitle: 'Version info and legal',
+                        onTap: () => context.push('/profile/about'),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: SphereSpacing.x24),
 
-                ProfileSectionCard(
-                  children: [
-                    ProfileRow(
-                      icon: LucideIcons.logOut,
-                      label: 'Sign out',
-                      danger: true,
-                      onTap: () => _confirmSignOut(context, ref),
-                    ),
-                  ],
+                // ── Sign out ──────────────────────────────────────────────────
+                SphereEntrance(
+                  delayMs: 320,
+                  child: ProfileSectionCard(
+                    children: [
+                      ProfileRow(
+                        icon: LucideIcons.logOut,
+                        label: 'Sign out',
+                        danger: true,
+                        onTap: () => _confirmSignOut(context, ref),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: SphereSpacing.x24),
 
                 Center(
                   child: Text(
-                    'v1.0.0+1 · 2026-05-22',
+                    'v1.0.0+1 · SportSphere',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: context.sc.onSurfaceMuted,
                         ),
@@ -216,26 +250,32 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-class _IdentityCard extends ConsumerStatefulWidget {
-  const _IdentityCard({
+// ── Avatar hero section ────────────────────────────────────────────────────────
+
+class _AvatarHero extends ConsumerStatefulWidget {
+  const _AvatarHero({
     required this.displayName,
+    required this.firstName,
     required this.email,
     required this.initials,
     required this.roleLabel,
+    required this.isPlayer,
     this.photoUrl,
   });
 
   final String displayName;
+  final String firstName;
   final String email;
   final String initials;
   final String roleLabel;
+  final bool isPlayer;
   final String? photoUrl;
 
   @override
-  ConsumerState<_IdentityCard> createState() => _IdentityCardState();
+  ConsumerState<_AvatarHero> createState() => _AvatarHeroState();
 }
 
-class _IdentityCardState extends ConsumerState<_IdentityCard> {
+class _AvatarHeroState extends ConsumerState<_AvatarHero> {
   bool _uploading = false;
 
   Future<void> _pickAndUpload(bool fromCamera) async {
@@ -252,13 +292,11 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
             : 'Photo updated';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Row(
-              children: [
-                const Icon(Icons.check_circle, color: Colors.white, size: 18),
-                const SizedBox(width: 8),
-                Expanded(child: Text(msg)),
-              ],
-            ),
+            content: Row(children: [
+              const Icon(Icons.check_circle, color: Colors.white, size: 18),
+              const SizedBox(width: 8),
+              Expanded(child: Text(msg)),
+            ]),
             backgroundColor: context.sc.primary,
           ),
         );
@@ -348,13 +386,11 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
     if (adopted && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Row(
-            children: [
-              Icon(Icons.check_circle, color: Colors.white, size: 18),
-              SizedBox(width: 8),
-              Text('Pro photo set as your profile picture!'),
-            ],
-          ),
+          content: Row(children: [
+            const Icon(Icons.check_circle, color: Colors.white, size: 18),
+            const SizedBox(width: 8),
+            const Text('Pro photo set as your profile picture!'),
+          ]),
           backgroundColor: context.sc.primary,
         ),
       );
@@ -363,196 +399,318 @@ class _IdentityCardState extends ConsumerState<_IdentityCard> {
 
   @override
   Widget build(BuildContext context) {
-    final isPlayer = ref.watch(selectedRoleProvider) == AppRole.player;
-    return Container(
-      padding: const EdgeInsets.all(SphereSpacing.x20),
-      decoration: BoxDecoration(
-        color: context.sc.surfaceElev1,
-        borderRadius: SphereRadius.cardRect,
-        border: Border.all(color: context.sc.borderSubtle),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            context.sc.surfaceElev1,
-            context.sc.primary.withValues(alpha: 0.04),
-          ],
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-        children: [
-          GestureDetector(
-            onTap: _showPhotoOptions,
-            child: SizedBox(
-              width: 72,
-              height: 72,
-              child: Stack(
-                children: [
-                  Container(
-                    width: 72,
-                    height: 72,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: context.sc.primary.withValues(alpha: 0.18),
-                      border: Border.all(
-                        color: context.sc.primary.withValues(alpha: 0.4),
-                        width: 1,
-                      ),
+    return Column(
+      children: [
+        // Avatar
+        GestureDetector(
+          onTap: _showPhotoOptions,
+          child: SizedBox(
+            width: 100,
+            height: 100,
+            child: Stack(
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: context.sc.primary.withValues(alpha: 0.15),
+                    border: Border.all(
+                      color: context.sc.primary.withValues(alpha: 0.5),
+                      width: 2,
                     ),
-                    child: widget.photoUrl != null && !_uploading
-                        ? ClipOval(
-                            child: Image.network(
-                              widget.photoUrl!,
-                              width: 72,
-                              height: 72,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, e, s) => Text(
-                                widget.initials,
-                                style: TextStyle(
-                                  color: context.sc.primary,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                  ),
+                  child: widget.photoUrl != null && !_uploading
+                      ? ClipOval(
+                          child: Image.network(
+                            widget.photoUrl!,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, e, __) => Text(
+                              widget.initials,
+                              style: TextStyle(
+                                color: context.sc.primary,
+                                fontSize: 32,
+                                fontWeight: FontWeight.w800,
                               ),
                             ),
-                          )
-                        : _uploading
-                            ? SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation(context.sc.primary),
-                                ),
-                              )
-                            : Text(
-                                widget.initials,
-                                style: TextStyle(
-                                  color: context.sc.primary,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                  ),
-                  if (!_uploading)
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        width: 22,
-                        height: 22,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: context.sc.primary,
-                          border: Border.all(
-                            color: context.sc.surface,
-                            width: 2,
                           ),
-                        ),
-                        child: Icon(
-                          LucideIcons.pencil,
-                          size: 10,
-                          color: context.sc.onPrimary,
-                        ),
+                        )
+                      : _uploading
+                          ? SizedBox(
+                              width: 28,
+                              height: 28,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation(context.sc.primary),
+                              ),
+                            )
+                          : Text(
+                              widget.initials,
+                              style: TextStyle(
+                                color: context.sc.primary,
+                                fontSize: 32,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                ),
+                if (!_uploading)
+                  Positioned(
+                    bottom: 2,
+                    right: 2,
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: context.sc.primary,
+                        border: Border.all(color: context.sc.surface, width: 2),
+                      ),
+                      child: Icon(
+                        LucideIcons.pencil,
+                        size: 12,
+                        color: context.sc.onPrimary,
                       ),
                     ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: SphereSpacing.x16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.displayName,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: context.sc.onSurface,
-                        fontWeight: FontWeight.w700,
-                      ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 6),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: context.sc.primary.withValues(alpha: 0.18),
-                    borderRadius: SphereRadius.pillRect,
-                    border: Border.all(
-                      color: context.sc.primary.withValues(alpha: 0.4),
-                    ),
                   ),
-                  child: Text(
-                    widget.roleLabel.toUpperCase(),
-                    style: TextStyle(
-                      color: context.sc.primary,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                ),
-                if (widget.email.isNotEmpty) ...[
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.email,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: context.sc.onSurfaceMuted,
-                        ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
               ],
             ),
           ),
+        ),
+        const SizedBox(height: SphereSpacing.x16),
+
+        // Name greeting
+        Text(
+          'Hello, ${widget.firstName}',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+                color: context.sc.onSurface,
+              ),
+          textAlign: TextAlign.center,
+        ),
+        if (widget.email.isNotEmpty) ...[
+          const SizedBox(height: SphereSpacing.x4),
+          Text(
+            widget.email,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: context.sc.onSurfaceMuted,
+                ),
+            textAlign: TextAlign.center,
+          ),
         ],
-      ),
-          if (isPlayer && !_uploading) ...[
-            const SizedBox(height: SphereSpacing.x12),
-            GestureDetector(
-              onTap: _showProPhotoSheet,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: context.sc.primary.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: context.sc.primary.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(LucideIcons.sparkles, size: 14, color: context.sc.primary),
-                    SizedBox(width: 6),
-                    Text(
-                      'Generate AI Pro Photo',
-                      style: TextStyle(
-                        color: context.sc.primary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
+        const SizedBox(height: SphereSpacing.x12),
+
+        // Role badge
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x12, vertical: 4),
+          decoration: BoxDecoration(
+            color: context.sc.primary.withValues(alpha: 0.15),
+            borderRadius: SphereRadius.pillRect,
+            border: Border.all(color: context.sc.primary.withValues(alpha: 0.4)),
+          ),
+          child: Text(
+            widget.roleLabel.toUpperCase(),
+            style: TextStyle(
+              color: context.sc.primary,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.2,
+            ),
+          ),
+        ),
+
+        // AI Pro photo button (player only)
+        if (widget.isPlayer && !_uploading) ...[
+          const SizedBox(height: SphereSpacing.x16),
+          GestureDetector(
+            onTap: _showProPhotoSheet,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: SphereSpacing.x16,
+                vertical: SphereSpacing.x8,
+              ),
+              decoration: BoxDecoration(
+                color: context.sc.primary.withValues(alpha: 0.08),
+                borderRadius: SphereRadius.pillRect,
+                border: Border.all(color: context.sc.primary.withValues(alpha: 0.3)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(LucideIcons.sparkles, size: 14, color: context.sc.primary),
+                  const SizedBox(width: 6),
+                  Text(
+                    'Generate AI Pro Photo',
+                    style: TextStyle(
+                      color: context.sc.primary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ],
+      ],
+    );
+  }
+}
+
+// ── Quick action grids ─────────────────────────────────────────────────────────
+
+class _PlayerQuickGrid extends StatelessWidget {
+  const _PlayerQuickGrid();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _QuickCard(
+            badge: 'MY',
+            icon: LucideIcons.idCard,
+            accentColor: context.sc.primary,
+            title: 'Player Card',
+            subtitle: 'View your digital ID',
+            onTap: () => context.push('/player-card'),
+          ),
+        ),
+        const SizedBox(width: SphereSpacing.x12),
+        Expanded(
+          child: _QuickCard(
+            badge: 'NEW',
+            icon: LucideIcons.award,
+            accentColor: const Color(0xFFF59E0B),
+            title: 'Achievements',
+            subtitle: 'Track your milestones',
+            onTap: () => context.push('/profile/achievements'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _StaffQuickGrid extends StatelessWidget {
+  const _StaffQuickGrid();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _QuickCard(
+            badge: 'TEAM',
+            icon: LucideIcons.users,
+            accentColor: context.sc.primary,
+            title: 'Roster',
+            subtitle: 'View and manage players',
+            onTap: () => context.push('/staff/roster'),
+          ),
+        ),
+        const SizedBox(width: SphereSpacing.x12),
+        Expanded(
+          child: _QuickCard(
+            badge: 'PLAN',
+            icon: LucideIcons.dumbbell,
+            accentColor: const Color(0xFFF97316),
+            title: 'Training',
+            subtitle: 'Manage workouts & plans',
+            onTap: () => context.push('/staff/training'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _QuickCard extends StatelessWidget {
+  const _QuickCard({
+    required this.badge,
+    required this.icon,
+    required this.accentColor,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  final String badge;
+  final IconData icon;
+  final Color accentColor;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 120,
+        padding: const EdgeInsets.all(SphereSpacing.x16),
+        decoration: BoxDecoration(
+          color: context.sc.surfaceElev1,
+          borderRadius: SphereRadius.cardRect,
+          border: Border.all(color: context.sc.borderSubtle),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: accentColor.withValues(alpha: 0.15),
+                    borderRadius: SphereRadius.pillRect,
+                  ),
+                  child: Text(
+                    badge,
+                    style: TextStyle(
+                      color: accentColor,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Icon(icon, size: 18, color: accentColor),
+              ],
+            ),
+            const Spacer(),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: context.sc.onSurface,
+                  ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              subtitle,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: context.sc.onSurfaceMuted,
+                    fontSize: 10,
+                  ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _BellIconButton extends StatelessWidget {
-  const _BellIconButton({required this.onTap});
+// ── Small helpers ──────────────────────────────────────────────────────────────
+
+class _IconBtn extends StatelessWidget {
+  const _IconBtn({required this.icon, required this.onTap});
+  final IconData icon;
   final VoidCallback onTap;
 
   @override
@@ -564,8 +722,8 @@ class _BellIconButton extends StatelessWidget {
         onTap: onTap,
         customBorder: const CircleBorder(),
         child: Padding(
-          padding: EdgeInsets.all(11),
-          child: Icon(LucideIcons.bell, size: 20, color: context.sc.onSurface),
+          padding: const EdgeInsets.all(11),
+          child: Icon(icon, size: 20, color: context.sc.onSurface),
         ),
       ),
     );
