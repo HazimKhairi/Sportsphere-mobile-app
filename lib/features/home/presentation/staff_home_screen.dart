@@ -152,7 +152,9 @@ class StaffHomeScreen extends ConsumerWidget {
                   child: SphereNextSessionCard(
                     session: nextSession,
                     loading: nextSessionLoading,
-                    onCheckIn: () {},
+                    onCheckIn: nextSession == null
+                        ? null
+                        : () => context.push('/qr-scan/${nextSession.id}'),
                   ),
                 ),
                 const SizedBox(height: SphereSpacing.x32),
