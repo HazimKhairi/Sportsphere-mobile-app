@@ -112,6 +112,11 @@ service cloud.firestore {
         allow write: if isClubStaff(clubId);
       }
 
+      match /training_sessions/{sessionId} {
+        allow read: if isClubMember(clubId) || isClubStaff(clubId);
+        allow write: if isClubStaff(clubId);
+      }
+
       match /members/{memberId} {
         allow read: if isClubMember(clubId) || isOwner(memberId) || isClubStaff(clubId);
         allow write: if isClubStaff(clubId);
