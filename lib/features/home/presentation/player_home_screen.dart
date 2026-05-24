@@ -41,12 +41,12 @@ class PlayerHomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context)!;
-    final displayName = ref.watch(userDisplayNameProvider).valueOrNull ?? 'Player';
-    final firstName = displayName.split(' ').first;
-
     final streakAsync = ref.watch(playerStreakProvider);
     final activityAsync = ref.watch(activityTimelineProvider);
     final cardAsync = ref.watch(playerCardProvider);
+    final firstName = cardAsync.valueOrNull?.card.playerName.split(' ').first
+        ?? ref.watch(userDisplayNameProvider).valueOrNull?.split(' ').first
+        ?? 'Player';
     final clubLogoUrl = ref.watch(myClubProvider).valueOrNull?.logoUrl;
 
     return SafeArea(
