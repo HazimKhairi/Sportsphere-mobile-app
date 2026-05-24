@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../features/auth/domain/app_user.dart';
 import '../features/auth/presentation/auth_providers.dart';
 import '../features/notifications/presentation/fcm_providers.dart';
 import '../features/role_pick/presentation/role_providers.dart';
+import 'locale_provider.dart';
 import 'router.dart';
 import 'theme/sphere_theme.dart';
 import 'theme/theme_provider.dart';
@@ -28,6 +30,7 @@ class _SphereAppState extends ConsumerState<SphereApp> {
     Future.microtask(() {
       ref.read(selectedRoleProvider.notifier).load();
       ref.read(themeModeNotifierProvider.notifier).load();
+      ref.read(localeNotifierProvider.notifier).load();
     });
     _initFcmHandlers();
   }
@@ -66,6 +69,7 @@ class _SphereAppState extends ConsumerState<SphereApp> {
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
     final themeMode = ref.watch(themeModeNotifierProvider);
+    final locale = ref.watch(localeNotifierProvider);
 
     ref.listen<AsyncValue<AppUser?>>(currentUserProvider, (prev, next) {
       next.whenData((user) {
@@ -81,6 +85,9 @@ class _SphereAppState extends ConsumerState<SphereApp> {
       theme: buildSphereLightTheme(),
       darkTheme: buildSphereDarkTheme(),
       themeMode: themeMode,
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       routerConfig: router,
     );
   }
