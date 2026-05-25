@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../l10n/app_localizations.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
@@ -46,7 +47,8 @@ class ProfileScreen extends ConsumerWidget {
     final roleLabel = role == AppRole.staff ? l.staff : l.player;
     final isPlayer = role == AppRole.player;
 
-    return SafeArea(
+    return SphereFieldBackground(
+      child: SafeArea(
       bottom: false,
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(
@@ -222,7 +224,8 @@ class ProfileScreen extends ConsumerWidget {
               ],
             ),
           ),
-        );
+      ),
+    );
   }
 
   Future<void> _confirmSignOut(BuildContext context, WidgetRef ref) async {

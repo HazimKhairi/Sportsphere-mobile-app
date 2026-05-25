@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../l10n/app_localizations.dart';
@@ -49,7 +50,8 @@ class PlayerHomeScreen extends ConsumerWidget {
         ?? 'Player';
     final clubLogoUrl = ref.watch(myClubProvider).valueOrNull?.logoUrl;
 
-    return SafeArea(
+    return SphereFieldBackground(
+      child: SafeArea(
       bottom: false,
       child: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 90),
@@ -170,6 +172,7 @@ class PlayerHomeScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

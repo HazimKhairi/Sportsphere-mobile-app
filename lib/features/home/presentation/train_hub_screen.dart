@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../l10n/app_localizations.dart';
@@ -40,6 +41,14 @@ class TrainHubScreen extends ConsumerWidget {
 
     return Stack(
       children: [
+        Positioned.fill(
+          child: Image.asset(
+            'assets/brand/field_bg.webp',
+            fit: BoxFit.cover,
+            color: Colors.black.withValues(alpha: 0.82),
+            colorBlendMode: BlendMode.darken,
+          ),
+        ),
         const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         SafeArea(
           bottom: false,

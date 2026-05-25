@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_field_background.dart';
+import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
@@ -43,8 +44,8 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
     final sessionsAsync = ref.watch(monthSessionsProvider(focusedMonth: _focusedDay));
 
     return Scaffold(
-      backgroundColor: context.sc.surface,
-      body: SafeArea(
+      backgroundColor: Colors.transparent,
+      body: SphereFieldBackground(child: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
           padding: const EdgeInsets.only(bottom: 90),
@@ -92,7 +93,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 
