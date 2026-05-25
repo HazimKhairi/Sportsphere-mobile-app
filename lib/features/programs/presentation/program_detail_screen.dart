@@ -7,6 +7,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../coach/domain/coach_profile.dart';
@@ -75,8 +76,9 @@ class _ProgramDetailScreenState extends ConsumerState<ProgramDetailScreen> {
   Widget build(BuildContext context) {
     final detailAsync =
         ref.watch(programDetailProvider(programId: widget.programId));
-    return Scaffold(
-      backgroundColor: context.sc.surface,
+    return SphereFieldBackground(
+      child: Scaffold(
+      backgroundColor: Colors.transparent,
       body: detailAsync.when(
         data: (program) {
           if (program == null) return _NotFound(onBack: () => _back(context));
@@ -104,6 +106,7 @@ class _ProgramDetailScreenState extends ConsumerState<ProgramDetailScreen> {
           ),
         ),
         error: (_, _) => _NotFound(onBack: () => _back(context)),
+      ),
       ),
     );
   }

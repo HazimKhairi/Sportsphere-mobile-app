@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
@@ -118,8 +119,8 @@ class _QrScanScreenState extends ConsumerState<QrScanScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
+      backgroundColor: Colors.transparent,
+      body: SphereFieldBackground(child: Stack(
         children: [
           AnimatedBuilder(
             animation: _shake,
@@ -180,7 +181,7 @@ class _QrScanScreenState extends ConsumerState<QrScanScreen>
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }

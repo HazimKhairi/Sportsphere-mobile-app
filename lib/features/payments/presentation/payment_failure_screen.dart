@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 
@@ -43,8 +44,9 @@ class _PaymentFailureScreenState extends State<PaymentFailureScreen>
         : widget.reason!;
 
     final l = AppLocalizations.of(context)!;
-    return Scaffold(
-      backgroundColor: context.sc.surface,
+    return SphereFieldBackground(
+      child: Scaffold(
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(SphereSpacing.x24),
@@ -147,6 +149,7 @@ class _PaymentFailureScreenState extends State<PaymentFailureScreen>
             ],
           ),
         ),
+      ),
       ),
     );
   }

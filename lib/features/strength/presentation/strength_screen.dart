@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
@@ -20,7 +21,8 @@ class StrengthScreen extends ConsumerWidget {
     final workoutsAsync = ref.watch(assignedWorkoutsProvider);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -35,7 +37,7 @@ class StrengthScreen extends ConsumerWidget {
               ),
         ),
       ),
-      body: SafeArea(
+      body: SphereFieldBackground(child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(
             SphereSpacing.x24, SphereSpacing.x8,
@@ -77,7 +79,7 @@ class StrengthScreen extends ConsumerWidget {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }

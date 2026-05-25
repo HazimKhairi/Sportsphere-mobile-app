@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
@@ -26,8 +27,8 @@ class StaffQrDisplayScreen extends StatelessWidget {
     final sc = context.sc;
 
     return Scaffold(
-      backgroundColor: sc.surface,
-      body: SafeArea(
+      backgroundColor: Colors.transparent,
+      body: SphereFieldBackground(child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: SphereSpacing.x16),
           child: Column(
@@ -147,7 +148,7 @@ class StaffQrDisplayScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }

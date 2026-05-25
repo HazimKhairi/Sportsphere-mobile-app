@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
@@ -120,11 +121,13 @@ class _StaffMediaUploadScreenState
     );
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: BackButton(onPressed: () => context.pop()),
         title: const Text('Session Photos & Videos'),
       ),
-      body: Stack(
+      body: SphereFieldBackground(child: Stack(
         children: [
           StreamBuilder<List<SessionMediaItem>>(
             stream: stream,
@@ -188,7 +191,7 @@ class _StaffMediaUploadScreenState
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }

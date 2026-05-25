@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
@@ -17,7 +18,8 @@ class RecoveryContentDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -26,7 +28,7 @@ class RecoveryContentDetailScreen extends StatelessWidget {
           onPressed: () => context.pop(),
         ),
       ),
-      body: FutureBuilder<RecoveryContent?>(
+      body: SphereFieldBackground(child: FutureBuilder<RecoveryContent?>(
         future: RecoveryRepository()
             .contentStream()
             .first
@@ -135,7 +137,7 @@ class RecoveryContentDetailScreen extends StatelessWidget {
             ),
           );
         },
-      ),
+      )),
     );
   }
 }

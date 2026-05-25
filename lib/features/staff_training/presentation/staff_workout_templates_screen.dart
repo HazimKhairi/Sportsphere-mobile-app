@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
@@ -20,6 +21,8 @@ class StaffWorkoutTemplatesScreen extends ConsumerWidget {
     final workoutsAsync = ref.watch(staffWorkoutTemplatesProvider);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: BackButton(onPressed: () => context.pop()),
         title: Text(AppLocalizations.of(context)!.workoutTemplates),
@@ -43,7 +46,7 @@ class StaffWorkoutTemplatesScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: SafeArea(
+      body: SphereFieldBackground(child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(
             SphereSpacing.x24,
@@ -84,7 +87,7 @@ class StaffWorkoutTemplatesScreen extends ConsumerWidget {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }

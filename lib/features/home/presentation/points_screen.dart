@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_spacing.dart';
@@ -22,8 +23,8 @@ class PointsScreen extends ConsumerWidget {
     final summaryAsync = ref.watch(pointsSummaryProvider);
 
     return Scaffold(
-      backgroundColor: context.sc.surface,
-      body: Stack(
+      backgroundColor: Colors.transparent,
+      body: SphereFieldBackground(child: Stack(
         children: [
           const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
           SafeArea(
@@ -74,7 +75,7 @@ class PointsScreen extends ConsumerWidget {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }

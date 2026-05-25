@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../auth/presentation/auth_providers.dart';
@@ -56,7 +57,8 @@ class StaffHomeScreen extends ConsumerWidget {
 
     final rosterCount = rosterCountAsync.valueOrNull ?? 0;
 
-    return Stack(
+    return SphereFieldBackground(
+      child: Stack(
       children: [
         const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         SafeArea(
@@ -243,7 +245,7 @@ class StaffHomeScreen extends ConsumerWidget {
           ),
         ),
       ],
-    );
+    ));
   }
 }
 

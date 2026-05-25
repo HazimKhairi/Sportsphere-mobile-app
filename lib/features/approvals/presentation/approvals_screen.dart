@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:sportsphere_mobile/app/theme/sphere_field_background.dart';
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
@@ -16,8 +17,8 @@ class ApprovalsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: context.sc.surface,
-      body: Column(
+      backgroundColor: Colors.transparent,
+      body: SphereFieldBackground(child: Column(
         children: [
           SafeArea(
             bottom: false,
@@ -46,7 +47,7 @@ class ApprovalsScreen extends StatelessWidget {
           const SizedBox(height: 16),
           const Expanded(child: _ApprovalsList()),
         ],
-      ),
+      )),
     );
   }
 }

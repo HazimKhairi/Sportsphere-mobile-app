@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
@@ -21,7 +22,7 @@ class NutritionScreen extends ConsumerWidget {
     final summary = ref.watch(todayNutritionSummaryProvider);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+      backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => NutritionLogSheet.show(context, ref),
         backgroundColor: context.sc.primary,
@@ -32,7 +33,7 @@ class NutritionScreen extends ConsumerWidget {
           style: TextStyle(fontWeight: FontWeight.w700),
         ),
       ),
-      body: SafeArea(
+      body: SphereFieldBackground(child: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(
@@ -131,7 +132,7 @@ class NutritionScreen extends ConsumerWidget {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }

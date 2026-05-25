@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/scouting_profile.dart';
 import 'scout_providers.dart';
@@ -17,7 +18,8 @@ class ScoutScreen extends ConsumerWidget {
     final state = ref.watch(scoutProfileNotifierProvider);
 
     return Scaffold(
-      backgroundColor: context.sc.background,
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(l.scoutProfile),
         actions: [
@@ -32,13 +34,13 @@ class ScoutScreen extends ConsumerWidget {
           ) ?? const SizedBox.shrink(),
         ],
       ),
-      body: state.when(
+      body: SphereFieldBackground(child: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => _ErrorView(error: e.toString(), onRetry: () => ref.invalidate(scoutProfileNotifierProvider)),
         data: (profile) => profile == null
             ? _EmptyState(onCreate: () => context.push('/scout/edit'))
             : _ProfileView(profile: profile),
-      ),
+      )),
     );
   }
 }

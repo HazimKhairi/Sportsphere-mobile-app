@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../l10n/app_localizations.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../auth/presentation/auth_providers.dart';
@@ -293,7 +294,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return SphereFieldBackground(
+      child: Stack(
       children: [
         const Positioned(
             top: 0, left: 0, right: 0, child: SphereHeroGradient()),
@@ -450,6 +452,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           ),
         ),
       ],
+      ),
     );
   }
 }

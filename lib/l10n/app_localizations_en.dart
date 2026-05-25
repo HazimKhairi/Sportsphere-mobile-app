@@ -1166,7 +1166,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get foodsDetected => 'Foods detected';
 
   @override
-  String kcalTotal(int calories) => '$calories kcal total';
+  String kcalTotal(int calories) {
+    return '$calories kcal total';
+  }
 
   @override
   String get deleteMealLog => 'Delete meal log';

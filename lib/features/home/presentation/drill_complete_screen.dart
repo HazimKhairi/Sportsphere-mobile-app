@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
@@ -52,8 +53,8 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.sc.surface,
-      body: SafeArea(
+      backgroundColor: Colors.transparent,
+      body: SphereFieldBackground(child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(SphereSpacing.x24),
           child: Column(
@@ -228,7 +229,7 @@ class _DrillCompleteScreenState extends State<DrillCompleteScreen>
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }

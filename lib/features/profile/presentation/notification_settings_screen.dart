@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../l10n/app_localizations.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
@@ -73,7 +74,8 @@ class _NotificationSettingsScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return SphereFieldBackground(
+      child: Stack(
       children: [
         const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         Scaffold(
@@ -228,6 +230,7 @@ class _NotificationSettingsScreenState
           ),
         ),
       ],
+      ),
     );
   }
 }

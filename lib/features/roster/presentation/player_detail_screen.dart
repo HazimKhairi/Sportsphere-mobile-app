@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:sportsphere_mobile/app/theme/sphere_field_background.dart';
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
@@ -31,16 +32,16 @@ class PlayerDetailScreen extends ConsumerWidget {
 
     return detailAsync.when(
       loading: () => Scaffold(
-        backgroundColor: context.sc.surface,
-        body: Center(
+        backgroundColor: Colors.transparent,
+        body: SphereFieldBackground(child: Center(
           child: CircularProgressIndicator(
             color: context.sc.primary,
           ),
-        ),
+        )),
       ),
       error: (_, e) => Scaffold(
-        backgroundColor: context.sc.surface,
-        body: SafeArea(
+        backgroundColor: Colors.transparent,
+        body: SphereFieldBackground(child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -65,7 +66,7 @@ class PlayerDetailScreen extends ConsumerWidget {
               ),
             ],
           ),
-        ),
+        )),
       ),
       data: (player) => _PlayerDetailContent(
         player: player,
@@ -87,8 +88,8 @@ class _PlayerDetailContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.sc.surface,
-      body: Stack(
+      backgroundColor: Colors.transparent,
+      body: SphereFieldBackground(child: Stack(
         children: [
           // Hero gradient top
           const Positioned(
@@ -254,7 +255,7 @@ class _PlayerDetailContent extends StatelessWidget {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }

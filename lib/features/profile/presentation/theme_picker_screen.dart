@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../l10n/app_localizations.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/theme_provider.dart';
@@ -18,7 +19,8 @@ class ThemePickerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentMode = ref.watch(themeModeNotifierProvider);
 
-    return Stack(
+    return SphereFieldBackground(
+      child: Stack(
       children: [
         const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         Scaffold(
@@ -115,6 +117,7 @@ class ThemePickerScreen extends ConsumerWidget {
           ),
         ),
       ],
+      ),
     );
   }
 }

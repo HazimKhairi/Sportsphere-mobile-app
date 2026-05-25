@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
@@ -114,8 +115,8 @@ class _StaffAttendanceScreenState extends ConsumerState<StaffAttendanceScreen> {
     final totalCount = roster?.length ?? 0;
 
     return Scaffold(
-      backgroundColor: sc.surface,
-      body: SafeArea(
+      backgroundColor: Colors.transparent,
+      body: SphereFieldBackground(child: SafeArea(
         child: Column(
           children: [
             Padding(
@@ -290,7 +291,7 @@ class _StaffAttendanceScreenState extends ConsumerState<StaffAttendanceScreen> {
             ),
           ],
         ),
-      ),
+      )),
     );
   }
 }

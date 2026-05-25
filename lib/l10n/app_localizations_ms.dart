@@ -1170,13 +1170,16 @@ class AppLocalizationsMs extends AppLocalizations {
   String get foodsDetected => 'Makanan dikesan';
 
   @override
-  String kcalTotal(int calories) => '$calories kcal jumlah';
+  String kcalTotal(int calories) {
+    return '$calories kcal jumlah';
+  }
 
   @override
   String get deleteMealLog => 'Padam log hidangan';
 
   @override
-  String get deleteMealLogConfirm => 'Buang hidangan ini daripada log hari ini?';
+  String get deleteMealLogConfirm =>
+      'Buang hidangan ini daripada log hari ini?';
 
   @override
   String get nutritionTracker => 'Pemakanan';

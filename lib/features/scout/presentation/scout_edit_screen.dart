@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/scouting_profile.dart';
 import 'scout_providers.dart';
@@ -528,7 +529,8 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
     final tt = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: context.sc.background,
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(l.editScoutProfile),
         actions: [
@@ -547,7 +549,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
                 ),
         ],
       ),
-      body: Form(
+      body: SphereFieldBackground(child: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.all(16),
@@ -864,7 +866,7 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
             const SizedBox(height: 32),
           ],
         ),
-      ),
+      )),
     );
   }
 

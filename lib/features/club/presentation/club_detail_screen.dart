@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
@@ -23,8 +24,8 @@ class ClubDetailScreen extends ConsumerWidget {
     final clubAsync = ref.watch(myClubProvider);
 
     return Scaffold(
-      backgroundColor: context.sc.surface,
-      body: clubAsync.when(
+      backgroundColor: Colors.transparent,
+      body: SphereFieldBackground(child: clubAsync.when(
         data: (ClubInfo? club) {
           if (club == null) {
             return _ErrorView(onRetry: () => ref.invalidate(myClubProvider));
@@ -44,7 +45,7 @@ class ClubDetailScreen extends ConsumerWidget {
         error: (_, s) => _ErrorView(
           onRetry: () => ref.invalidate(myClubProvider),
         ),
-      ),
+      )),
     );
   }
 }

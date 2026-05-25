@@ -10,6 +10,7 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
@@ -260,7 +261,8 @@ class _DrillPlayerScreenState extends ConsumerState<DrillPlayerScreen>
     final drillAsync = ref.watch(
       drillDetailProvider(drillId: widget.drillId),
     );
-    return drillAsync.when(
+    return SphereFieldBackground(
+      child: drillAsync.when(
       data: (drill) {
         if (drill == null) return _NotFound(onExit: _exit);
         // Lazy-init camera once we have the drill.
@@ -298,7 +300,7 @@ class _DrillPlayerScreenState extends ConsumerState<DrillPlayerScreen>
         ),
       ),
       error: (_, _) => _NotFound(onExit: _exit),
-    );
+    ));
   }
 }
 

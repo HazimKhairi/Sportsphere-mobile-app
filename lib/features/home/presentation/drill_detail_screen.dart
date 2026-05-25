@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
@@ -95,8 +96,8 @@ class DrillDetailScreen extends ConsumerWidget {
     final async = ref.watch(drillDetailProvider(drillId: drillId));
 
     return Scaffold(
-      backgroundColor: context.sc.surface,
-      body: async.when(
+      backgroundColor: Colors.transparent,
+      body: SphereFieldBackground(child: async.when(
         data: (drill) {
           if (drill == null) return _NotFound(onBack: () => _back(context));
           final videoId = _youtubeId(drill.youtubeUrl);
@@ -126,7 +127,7 @@ class DrillDetailScreen extends ConsumerWidget {
           ),
         ),
         error: (_, _) => _NotFound(onBack: () => _back(context)),
-      ),
+      )),
     );
   }
 }

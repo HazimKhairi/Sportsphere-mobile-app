@@ -2288,24 +2288,118 @@ abstract class AppLocalizations {
   /// **'Try again later.'**
   String get tryAgainLater;
 
+  /// No description provided for @trackMeals.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your meals and fuel your performance.'**
   String get trackMeals;
+
+  /// No description provided for @todaysMeals.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Meals'**
   String get todaysMeals;
+
+  /// No description provided for @noMealsLoggedToday.
+  ///
+  /// In en, this message translates to:
+  /// **'No meals logged today'**
   String get noMealsLoggedToday;
+
+  /// No description provided for @tapToLogMeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + to log your first meal'**
   String get tapToLogMeal;
+
+  /// No description provided for @logMeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Meal'**
   String get logMeal;
+
+  /// No description provided for @analysePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyse'**
   String get analysePhoto;
+
+  /// No description provided for @retake.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake'**
   String get retake;
+
+  /// No description provided for @mealType.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal type'**
   String get mealType;
+
+  /// No description provided for @breakfast.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakfast'**
   String get breakfast;
+
+  /// No description provided for @lunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunch'**
   String get lunch;
+
+  /// No description provided for @dinner.
+  ///
+  /// In en, this message translates to:
+  /// **'Dinner'**
   String get dinner;
+
+  /// No description provided for @snack.
+  ///
+  /// In en, this message translates to:
+  /// **'Snack'**
   String get snack;
+
+  /// No description provided for @photoAnalysisFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo analysis failed. Try again.'**
   String get photoAnalysisFailed;
+
+  /// No description provided for @saveLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
   String get saveLog;
+
+  /// No description provided for @foodsDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'Foods detected'**
   String get foodsDetected;
+
+  /// No description provided for @kcalTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal total'**
   String kcalTotal(int calories);
+
+  /// No description provided for @deleteMealLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete meal log'**
   String get deleteMealLog;
+
+  /// No description provided for @deleteMealLogConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this meal from today\'s log?'**
   String get deleteMealLogConfirm;
+
+  /// No description provided for @nutritionTracker.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrition'**
   String get nutritionTracker;
 }
 

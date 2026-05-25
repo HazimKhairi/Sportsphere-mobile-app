@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/staff_home_providers.dart';
@@ -78,6 +79,8 @@ class _CreateTrainingPlanScreenState
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: BackButton(onPressed: () => context.pop()),
         title: Text(l.newTrainingPlan),
@@ -94,7 +97,7 @@ class _CreateTrainingPlanScreenState
           ),
         ],
       ),
-      body: SafeArea(
+      body: SphereFieldBackground(child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(SphereSpacing.x24),
           child: Column(
@@ -130,7 +133,7 @@ class _CreateTrainingPlanScreenState
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }

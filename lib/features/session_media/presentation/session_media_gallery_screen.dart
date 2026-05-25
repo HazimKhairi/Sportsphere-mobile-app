@@ -11,6 +11,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
@@ -127,6 +128,8 @@ class _SessionMediaGalleryScreenState
       builder: (context, snapshot) {
         final items = snapshot.data ?? [];
         return Scaffold(
+          backgroundColor: Colors.transparent,
+          extendBodyBehindAppBar: true,
           appBar: AppBar(
             leading: BackButton(onPressed: () => context.pop()),
             title: Text(AppLocalizations.of(context)!.sessionMedia),
@@ -147,7 +150,7 @@ class _SessionMediaGalleryScreenState
                 ),
             ],
           ),
-          body: Builder(builder: (context) {
+          body: SphereFieldBackground(child: Builder(builder: (context) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
@@ -226,7 +229,7 @@ class _SessionMediaGalleryScreenState
                 );
               },
             );
-          }),
+          })),
         );
       },
     );

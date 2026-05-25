@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
@@ -26,8 +27,8 @@ class CoachProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: context.sc.surface,
-      body: Stack(
+      backgroundColor: Colors.transparent,
+      body: SphereFieldBackground(child: Stack(
         children: [
           _Header(coach: coach),
           SingleChildScrollView(
@@ -98,7 +99,7 @@ class CoachProfileScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }

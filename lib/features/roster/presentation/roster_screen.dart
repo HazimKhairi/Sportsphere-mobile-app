@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import 'package:sportsphere_mobile/app/theme/sphere_field_background.dart';
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
@@ -26,8 +27,8 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
     final rosterAsync = ref.watch(rosterNotifierProvider);
 
     return Scaffold(
-      backgroundColor: context.sc.surface,
-      body: Column(
+      backgroundColor: Colors.transparent,
+      body: SphereFieldBackground(child: Column(
         children: [
           SafeArea(
             bottom: false,
@@ -177,7 +178,7 @@ class _RosterScreenState extends ConsumerState<RosterScreen> {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }

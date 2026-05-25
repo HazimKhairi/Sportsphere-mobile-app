@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
@@ -86,14 +87,18 @@ class WorkoutTemplateDetailScreen extends ConsumerWidget {
 
     if (template == null) {
       return Scaffold(
+        backgroundColor: Colors.transparent,
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
           leading: BackButton(onPressed: () => context.pop()),
         ),
-        body: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+        body: const SphereFieldBackground(child: Center(child: CircularProgressIndicator(strokeWidth: 2))),
       );
     }
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: BackButton(onPressed: () => context.pop()),
         title: Text(template.title),
@@ -105,7 +110,7 @@ class WorkoutTemplateDetailScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: SafeArea(
+      body: SphereFieldBackground(child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(
             SphereSpacing.x24,
@@ -150,7 +155,7 @@ class WorkoutTemplateDetailScreen extends ConsumerWidget {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }

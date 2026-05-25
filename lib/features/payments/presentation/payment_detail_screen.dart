@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
@@ -74,8 +75,9 @@ class PaymentDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(paymentDetailProvider(paymentId: paymentId));
 
-    return Scaffold(
-      backgroundColor: context.sc.surface,
+    return SphereFieldBackground(
+      child: Scaffold(
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         bottom: false,
         child: async.when(
@@ -104,6 +106,7 @@ class PaymentDetailScreen extends ConsumerWidget {
           ),
           error: (_, _) => _NotFound(onBack: () => _back(context)),
         ),
+      ),
       ),
     );
   }
