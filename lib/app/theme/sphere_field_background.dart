@@ -9,11 +9,17 @@ class SphereFieldBackground extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.asset(
-          'assets/brand/field_bg.webp',
-          fit: BoxFit.cover,
-          color: Colors.black.withValues(alpha: 0.82),
-          colorBlendMode: BlendMode.darken,
+        Positioned(
+          right: -60,
+          bottom: 80,
+          child: Opacity(
+            opacity: 0.07,
+            child: Image.asset(
+              'assets/brand/app_icon.png',
+              width: 380,
+              height: 380,
+            ),
+          ),
         ),
         child,
       ],
