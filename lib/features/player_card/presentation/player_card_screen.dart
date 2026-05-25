@@ -11,11 +11,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../domain/player_card_data.dart';
 import '_widgets/sphere_player_fifa_card.dart';
 import 'player_card_providers.dart';
+import '../../../app/theme/sphere_field_background.dart';
 import '../../../l10n/app_localizations.dart';
-
-// ─── CONSTANTS ────────────────────────────────────────────────────────────────
-
-const _kDark = Color(0xFF0A0A0A);
 
 // ─── SCREEN ───────────────────────────────────────────────────────────────────
 
@@ -29,16 +26,18 @@ class PlayerCardScreen extends ConsumerWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        backgroundColor: _kDark,
+        backgroundColor: Colors.transparent,
         extendBodyBehindAppBar: true,
-        body: state.when(
-          loading: () => const _LoadingView(),
-          error: (e, _) =>
-              _ErrorView(onRetry: () => ref.invalidate(playerCardProvider)),
-          data: (data) => _CardBody(
-            card: data.card,
-            summary: data.summary,
-            onRefresh: () => ref.invalidate(playerCardProvider),
+        body: SphereFieldBackground(
+          child: state.when(
+            loading: () => const _LoadingView(),
+            error: (e, _) =>
+                _ErrorView(onRetry: () => ref.invalidate(playerCardProvider)),
+            data: (data) => _CardBody(
+              card: data.card,
+              summary: data.summary,
+              onRefresh: () => ref.invalidate(playerCardProvider),
+            ),
           ),
         ),
       ),
