@@ -10,7 +10,6 @@ import '../../../l10n/app_localizations.dart';
 import '_widgets/sphere_drill_of_day_card.dart';
 import '_widgets/sphere_entrance.dart';
 import '_widgets/sphere_feature_grid_card.dart';
-import '_widgets/sphere_hero_gradient.dart';
 import '_widgets/sphere_section_label.dart';
 import '../domain/today_drill.dart';
 import 'train_providers.dart';
@@ -41,19 +40,14 @@ class TrainHubScreen extends ConsumerWidget {
 
     return Stack(
       children: [
-        Positioned(
-          right: -60,
-          bottom: 80,
-          child: Opacity(
-            opacity: 0.07,
-            child: Image.asset(
-              'assets/brand/app_icon.png',
-              width: 380,
-              height: 380,
-            ),
+        Positioned.fill(
+          child: Image.asset(
+            'assets/brand/field_bg.webp',
+            fit: BoxFit.cover,
+            color: Colors.black.withValues(alpha: 0.50),
+            colorBlendMode: BlendMode.darken,
           ),
         ),
-        const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         SafeArea(
           bottom: false,
           child: SingleChildScrollView(
