@@ -9,7 +9,6 @@ import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/theme_provider.dart';
-import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 
 class ThemePickerScreen extends ConsumerWidget {
@@ -22,7 +21,6 @@ class ThemePickerScreen extends ConsumerWidget {
     return SphereFieldBackground(
       child: Stack(
       children: [
-        const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         Scaffold(
           backgroundColor: Colors.transparent,
           body: SafeArea(

@@ -11,7 +11,6 @@ import '../../../app/theme/sphere_spacing.dart';
 import '../domain/drill.dart';
 import '_widgets/sphere_drill_of_day_card.dart';
 import '_widgets/sphere_entrance.dart';
-import '_widgets/sphere_hero_gradient.dart';
 import '_widgets/sphere_section_label.dart';
 import 'player_home_providers.dart';
 import 'train_providers.dart';
@@ -63,7 +62,6 @@ class TrainScreen extends ConsumerWidget {
     return SphereFieldBackground(
       child: Stack(
       children: [
-        const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         SafeArea(
           bottom: false,
           child: SingleChildScrollView(

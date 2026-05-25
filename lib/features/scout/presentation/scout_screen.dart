@@ -21,6 +21,8 @@ class ScoutScreen extends ConsumerWidget {
       backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         title: Text(l.scoutProfile),
         actions: [
           state.whenOrNull(

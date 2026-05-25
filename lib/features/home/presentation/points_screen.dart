@@ -10,7 +10,6 @@ import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/points_entry.dart';
 import '../domain/points_summary.dart';
-import '_widgets/sphere_hero_gradient.dart';
 import '_widgets/sphere_section_label.dart';
 import 'points_providers.dart';
 
@@ -26,7 +25,6 @@ class PointsScreen extends ConsumerWidget {
       backgroundColor: Colors.transparent,
       body: SphereFieldBackground(child: Stack(
         children: [
-          const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
           SafeArea(
             bottom: false,
             child: Column(

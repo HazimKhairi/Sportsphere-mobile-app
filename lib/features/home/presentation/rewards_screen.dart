@@ -12,7 +12,6 @@ import '../../../app/theme/sphere_spacing.dart';
 import '../domain/reward.dart';
 import '../domain/voucher.dart';
 import '_widgets/reward_redeem_sheet.dart';
-import '_widgets/sphere_hero_gradient.dart';
 import '_widgets/sphere_section_label.dart';
 import 'rewards_providers.dart';
 
@@ -78,7 +77,6 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
     return SphereFieldBackground(
       child: Stack(
       children: [
-        const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         SafeArea(
           bottom: false,
           child: SingleChildScrollView(

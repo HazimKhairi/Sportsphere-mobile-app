@@ -13,7 +13,6 @@ import '../../auth/presentation/auth_providers.dart';
 import '../../notifications/presentation/notifications_sheet.dart';
 import '_widgets/sphere_avatar_stack.dart';
 import '_widgets/sphere_entrance.dart';
-import '_widgets/sphere_hero_gradient.dart';
 import '_widgets/sphere_next_session_card.dart';
 import '_widgets/sphere_pending_approvals_card.dart';
 import '_widgets/sphere_quick_action_chip.dart';
@@ -60,7 +59,6 @@ class StaffHomeScreen extends ConsumerWidget {
     return SphereFieldBackground(
       child: Stack(
       children: [
-        const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         SafeArea(
           bottom: false,
           child: SingleChildScrollView(

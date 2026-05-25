@@ -532,6 +532,8 @@ class _ScoutEditScreenState extends ConsumerState<ScoutEditScreen> {
       backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         title: Text(l.editScoutProfile),
         actions: [
           _saving

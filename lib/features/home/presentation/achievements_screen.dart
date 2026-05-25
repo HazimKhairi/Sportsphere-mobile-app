@@ -9,7 +9,6 @@ import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/achievement.dart';
-import '_widgets/sphere_hero_gradient.dart';
 import '_widgets/sphere_section_label.dart';
 import 'achievements_providers.dart';
 
@@ -58,7 +57,6 @@ class AchievementsScreen extends ConsumerWidget {
     return SphereFieldBackground(
       child: Stack(
       children: [
-        const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         SafeArea(
           bottom: false,
           child: SingleChildScrollView(

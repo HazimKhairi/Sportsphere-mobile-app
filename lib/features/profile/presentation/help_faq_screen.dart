@@ -7,7 +7,6 @@ import 'package:sportsphere_mobile/app/theme/sphere_theme_ext.dart';
 import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
-import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 
 const _faqs = [
@@ -61,7 +60,6 @@ class HelpFaqScreen extends StatelessWidget {
     return SphereFieldBackground(
       child: Stack(
       children: [
-        const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         Scaffold(
           backgroundColor: Colors.transparent,
           body: SafeArea(

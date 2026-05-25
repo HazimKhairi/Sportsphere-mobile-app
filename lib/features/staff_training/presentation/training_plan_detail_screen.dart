@@ -89,6 +89,8 @@ class TrainingPlanDetailScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           leading: BackButton(onPressed: () => context.pop()),
         ),
         body: const SphereFieldBackground(child: Center(child: CircularProgressIndicator(strokeWidth: 2))),
@@ -99,6 +101,8 @@ class TrainingPlanDetailScreen extends ConsumerWidget {
       backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: BackButton(onPressed: () => context.pop()),
         title: Text(plan.title),
         actions: [

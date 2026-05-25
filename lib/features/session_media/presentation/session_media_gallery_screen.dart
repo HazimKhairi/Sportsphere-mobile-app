@@ -131,6 +131,8 @@ class _SessionMediaGalleryScreenState
           backgroundColor: Colors.transparent,
           extendBodyBehindAppBar: true,
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
             leading: BackButton(onPressed: () => context.pop()),
             title: Text(AppLocalizations.of(context)!.sessionMedia),
             actions: [
@@ -275,6 +277,7 @@ class _FullScreenViewerState extends State<_FullScreenViewer> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(LucideIcons.x, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),

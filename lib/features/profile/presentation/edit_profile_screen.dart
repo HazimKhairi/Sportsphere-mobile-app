@@ -14,7 +14,6 @@ import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../../../app/theme/sphere_theme_ext.dart';
 import '../../auth/presentation/auth_providers.dart';
-import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
 import '../../role_pick/presentation/role_providers.dart';
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
@@ -297,8 +296,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     return SphereFieldBackground(
       child: Stack(
       children: [
-        const Positioned(
-            top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         Scaffold(
           backgroundColor: Colors.transparent,
           body: SafeArea(

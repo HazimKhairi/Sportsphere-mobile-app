@@ -8,7 +8,6 @@ import '../../../l10n/app_localizations.dart';
 import '../../../app/theme/sphere_field_background.dart';
 import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
-import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../domain/payment_record.dart';
 import 'payment_history_providers.dart';
@@ -42,7 +41,6 @@ class PaymentHistoryScreen extends ConsumerWidget {
     return SphereFieldBackground(
       child: Stack(
       children: [
-        const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         SafeArea(
           bottom: false,
           child: SingleChildScrollView(

@@ -42,6 +42,8 @@ class StaffTrainingHubScreen extends ConsumerWidget {
       backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: BackButton(onPressed: () => context.pop()),
         title: const Text('Training'),
       ),

@@ -11,7 +11,6 @@ import '../../../app/theme/sphere_spacing.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../coach/domain/coach_profile.dart';
 import '../../coach/presentation/coach_providers.dart';
-import '../../home/presentation/_widgets/sphere_hero_gradient.dart';
 import '../../home/presentation/_widgets/sphere_section_label.dart';
 import '../domain/club_info.dart';
 import 'club_providers.dart';
@@ -59,12 +58,6 @@ class _ClubContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        const Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: SphereHeroGradient(height: 240),
-        ),
         SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.only(

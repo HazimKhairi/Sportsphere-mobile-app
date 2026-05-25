@@ -10,7 +10,6 @@ import '../../../app/theme/sphere_radius.dart';
 import '../../../app/theme/sphere_spacing.dart';
 import '../domain/body_composition_entry.dart';
 import '_widgets/body_composition_add_sheet.dart';
-import '_widgets/sphere_hero_gradient.dart';
 import '_widgets/sphere_section_label.dart';
 import 'body_composition_providers.dart';
 
@@ -33,7 +32,6 @@ class BodyCompositionScreen extends ConsumerWidget {
     return SphereFieldBackground(
       child: Stack(
       children: [
-        const Positioned(top: 0, left: 0, right: 0, child: SphereHeroGradient()),
         SafeArea(
           bottom: false,
           child: SingleChildScrollView(

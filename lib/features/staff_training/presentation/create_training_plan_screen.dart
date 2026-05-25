@@ -82,6 +82,8 @@ class _CreateTrainingPlanScreenState
       backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: BackButton(onPressed: () => context.pop()),
         title: Text(l.newTrainingPlan),
         actions: [
